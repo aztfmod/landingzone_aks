@@ -8,7 +8,7 @@ module "blueprint_aks_rbac" {
   convention              = var.blueprint_aks.convention
   tags                    = local.tags
   blueprint_aks           = var.blueprint_aks
-  subnet_id               = lookup(local.subnet_id_by_name, var.blueprint_aks.aks_subnet_name, null)
+  subnet_id               = local.subnet_keys[var.blueprint_aks.aks_subnet_name].id 
 
   log_analytics_workspace = local.log_analytics_workspace
   diagnostics_map         = local.diagnostics_map
@@ -37,7 +37,7 @@ resource "azurerm_role_definition" "aks_networking_owner" {
 }
 
 resource "azurerm_role_assignment" "subnet_aks_to_aks_cluster" {
-  scope               = local.subnet_id_by_name[var.blueprint_aks.aks_subnet_name]
+  scope               = local.subnet_keys[var.blueprint_aks.aks_subnet_name].id
   role_definition_id  = azurerm_role_definition.aks_networking_owner.id
   principal_id        = module.blueprint_aks_rbac.identity.0.principal_id
 }

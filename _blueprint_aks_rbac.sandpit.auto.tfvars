@@ -1,7 +1,7 @@
 tags = {}
 blueprint_aks = {
     convention          = "cafrandom"
-    aks_subnet_name     = "aks"
+    aks_subnet_name     = "aks-system"
 
     cluster = {
         name                = "akscluster-001"

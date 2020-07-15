@@ -66,9 +66,9 @@ locals {
   diagnostics_map                   = local.caf_foundations_accounting.diagnostics_map
   log_analytics_workspace           = local.caf_foundations_accounting.log_analytics_workspace
   
-  vnet_name                 = data.terraform_remote_state.landingzone_networking.outputs.vnet.vnet_name
-  subnet_id_by_name         = data.terraform_remote_state.landingzone_networking.outputs.subnet_id_by_name
-  subnet_keys               = data.terraform_remote_state.landingzone_networking.outputs.subnet_id_by_key
+  vnet_name                 = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.vnet_obj.name
+  #subnet_id_by_name         = data.terraform_remote_state.landingzone_networking.outputs.subnet_id_by_name
+  subnet_keys               = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.subnet_ids_map
 }
 
 
