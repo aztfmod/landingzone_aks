@@ -36,7 +36,8 @@ rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad -env asia
 rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars -env asia
 rover -lz /tf/caf/landingzones/landingzone_hub_spoke/ -a apply -var-file /tf/caf/configuration/landingzone_hub_spoke.tfvars -env asia -tfstate landingzone_networking.tfstate
 
-
+# Run AKS landing zone
+rover -lz /tf/caf/ -env asia -tfstate landingzone_aks.tfstate -a plan
 ```
 
 Review the configuration and if you are ok with it, deploy it by running:
