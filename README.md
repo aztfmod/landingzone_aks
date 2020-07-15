@@ -36,20 +36,21 @@ rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad -env asia
 rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars -env asia
 rover -lz /tf/caf/landingzones/landingzone_hub_spoke/ -a apply -var-file /tf/caf/configuration/landingzone_hub_spoke.tfvars -env asia -tfstate landingzone_networking.tfstate
 
-# Run AKS landing zone
+# Run AKS landing zone deployment
 rover -lz /tf/caf/ -env asia -tfstate landingzone_aks.tfstate -a plan
-```
-
-Review the configuration and if you are ok with it, deploy it by running:
-
-```bash
-rover /tf/caf/landingzones/landingzone_hub_spoke apply
 ```
 
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
 
 ```bash
-rover /tf/caf/landingzones/landingzone_hub_spoke destroy
+rover -lz /tf/caf/ -env asia -tfstate landingzone_aks.tfstate -a destroy -auto-approve
+rover -lz /tf/caf/landingzones/landingzone_hub_spoke/ -a destroy -var-file /tf/caf/configuration/landingzone_hub_spoke.tfvars -env asia -tfstate landingzone_networking.tfstate
+rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a destroy -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars -env asia
+
+# to destroy the launchpad you need to conifrm you are connected with your user. If not reconnect with
+rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
+
+rover -lz /tf/caf/landingzones/launchpad -a destroy -launchpad -env asia
 ```
 
 More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
