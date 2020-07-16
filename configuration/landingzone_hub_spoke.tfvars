@@ -32,7 +32,7 @@ core_networking = {
     subnets = {
       aks-system = {
         name = "aks-system"
-        cidr  = ["10.10.2.0/25"]
+        cidr  = ["10.10.3.0/25"]
         nsg_name = "aks-system_nsg"
         nsg = [
           {
@@ -50,7 +50,7 @@ core_networking = {
       }
       subnet1 = {
         name     = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
-        cidr     = ["10.10.0.128/25"]
+        cidr     = ["10.10.2.128/25"]
         nsg_name = "AzureBastionSubnet_nsg"
         nsg = [
           {
