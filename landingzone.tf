@@ -21,7 +21,7 @@ module "blueprint_aks_rbac" {
 # Grant AKS Control plane System Assigned Identity reader + join role on the subnet AKS
 #
 resource "azurerm_role_definition" "aks_networking_owner" {
-  name               = "caf-aks-networking_owner"
+  name               = format("%s-caf-aks-networking_owner",local.prefix)
   scope              = data.azurerm_subscription.primary.id
 
   permissions {

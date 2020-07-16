@@ -106,7 +106,7 @@ resource "random_string" "prefix" {
 #
 locals {
   register_aks_msi_preview_feature_command = <<EOT
-    az feature register -n MSIPreview --namespace Microsoft.ContainerService
+    az feature register -n AAD-V2 --namespace Microsoft.ContainerService
 
     isRegistered=$(az feature list --query properties.state=="Registered")
 
