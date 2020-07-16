@@ -17,22 +17,22 @@ core_networking = {
   shared_services_vnet = {
     vnet = {
       name          = "Core-Network"
-      address_space = ["10.0.0.0/8"]
+      address_space = ["10.10.0.0/16"]
     }
     specialsubnets = {
       AzureFirewallSubnet = {
         name = "AzureFirewallSubnet" #Must be called AzureFirewallSubnet 
-        cidr = ["10.0.4.0/24"]
+        cidr = ["10.10.1.0/24"]
       }
       GatewaySubnet = {
         name = "GatewaySubnet" #Must be called GateWaySubnet in order to host a Virtual Network Gateway
-        cidr = ["10.0.255.224/27"]
+        cidr = ["10.10.0.224/27"]
       }
     }
     subnets = {
       aks-system = {
         name = "aks-system"
-        cidr  = ["10.0.1.0/25"]
+        cidr  = ["10.10.2.0/25"]
         nsg_name = "aks-system_nsg"
         nsg = [
           {
