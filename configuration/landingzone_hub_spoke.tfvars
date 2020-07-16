@@ -50,7 +50,7 @@ core_networking = {
       }
       subnet1 = {
         name     = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
-        cidr     = ["10.0.0.128/25"]
+        cidr     = ["10.10.0.128/25"]
         nsg_name = "AzureBastionSubnet_nsg"
         nsg = [
           {
