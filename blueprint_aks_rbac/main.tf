@@ -13,7 +13,7 @@ terraform {
       source = "aztfmod/azurecaf"
     }
     azurerm = {
-      source  = "hashicorp/azurerm"
+      source = "hashicorp/azurerm"
     }
   }
 }
@@ -21,9 +21,9 @@ terraform {
 data "azurerm_client_config" "current" {}
 
 locals {
-  blueprint_tag           = {
+  blueprint_tag = {
     "blueprint" = basename(abspath(path.module))
   }
-  tags                    = merge(var.tags,local.blueprint_tag)
-  prefix                  = var.prefix
+  tags   = merge(var.tags, local.blueprint_tag)
+  prefix = var.prefix
 }

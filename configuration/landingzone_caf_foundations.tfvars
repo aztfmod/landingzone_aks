@@ -39,7 +39,7 @@ accounting_settings = {
   azure_activity_logs_retention = 365
   azure_activity_audit = {
     log = [
-       # ["Audit category name",  "Audit enabled)"] 
+      # ["Audit category name",  "Audit enabled)"] 
       ["Administrative", true],
       ["Security", true],
       ["ServiceHealth", true],
@@ -103,8 +103,8 @@ governance_settings = {
 
   policy_matrix = {
     #autoenroll_asc          = true - to be implemented via builtin policies
-    autoenroll_monitor_vm   = false
-    autoenroll_netwatcher   = false
+    autoenroll_monitor_vm = false
+    autoenroll_netwatcher = false
 
     no_public_ip_spoke     = false
     cant_create_ip_spoke   = false

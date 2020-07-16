@@ -3,7 +3,7 @@ terraform {
   }
   required_providers {
     azurecaf = {
-      source = "aztfmod/azurecaf"
+      source  = "aztfmod/azurecaf"
       version = "~>0.4.3"
     }
     azurerm = {
@@ -23,7 +23,7 @@ terraform {
       version = "~> 2.1.0"
     }
   }
-  
+
 }
 
 provider "azurerm" {
@@ -35,40 +35,42 @@ data "azurerm_subscription" "primary" {}
 data "terraform_remote_state" "landingzone_networking" {
   backend = "azurerm"
   config = {
-    storage_account_name  = var.lowerlevel_storage_account_name
-    container_name        = var.workspace 
-    resource_group_name   = var.lowerlevel_resource_group_name
-    key                   = "landingzone_networking.tfstate"
+    storage_account_name = var.lowerlevel_storage_account_name
+    container_name       = var.workspace
+    resource_group_name  = var.lowerlevel_resource_group_name
+    key                  = var.tfstate_landingzone_networking
   }
 }
 
 data "terraform_remote_state" "landingzone_caf_foundations" {
   backend = "azurerm"
   config = {
-    storage_account_name  = var.lowerlevel_storage_account_name
-    container_name        = var.workspace 
-    resource_group_name   = var.lowerlevel_resource_group_name
-    key                   = "landingzone_caf_foundations.tfstate"
+    storage_account_name = var.lowerlevel_storage_account_name
+    container_name       = var.workspace
+    resource_group_name  = var.lowerlevel_resource_group_name
+    key                  = var.tfstate_landingzone_caf_foundations
   }
 }
 
 
-locals {    
-  landingzone_tag          = {
+locals {
+  landingzone_tag = {
     "landingzone" = basename(abspath(path.root))
-    "workspace"   = var.workspace
   }
-  
-  prefix                    = data.terraform_remote_state.landingzone_caf_foundations.outputs.prefix
-  tags                      = merge(var.tags, local.landingzone_tag)
+
+  global_settings = data.terraform_remote_state.landingzone_caf_foundations.outputs.global_settings
+
+  prefix                     = local.global_settings.prefix
+  tags                       = merge(var.tags, local.landingzone_tag, { "environment" = local.global_settings.environment })
   caf_foundations_accounting = data.terraform_remote_state.landingzone_caf_foundations.outputs.foundations_accounting
 
-  diagnostics_map                   = local.caf_foundations_accounting.diagnostics_map
-  log_analytics_workspace           = local.caf_foundations_accounting.log_analytics_workspace
-  
-  vnet_name                 = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.vnet_obj.name
+  diagnostics_map         = local.caf_foundations_accounting.diagnostics_map
+  log_analytics_workspace = local.caf_foundations_accounting.log_analytics_workspace
+  vnets                   = data.terraform_remote_state.landingzone_networking.outputs.vnets
+  #vnet_name                 = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.vnet_obj.name
   #subnet_id_by_name         = data.terraform_remote_state.landingzone_networking.outputs.subnet_id_by_name
-  subnet_keys               = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.subnet_ids_map
+  #subnet_keys               = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.subnet_ids_map
+
 }
 
 

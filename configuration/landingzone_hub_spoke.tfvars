@@ -31,8 +31,8 @@ core_networking = {
     }
     subnets = {
       aks-system = {
-        name = "aks-system"
-        cidr  = ["10.10.3.0/25"]
+        name     = "aks-system"
+        cidr     = ["10.10.3.0/25"]
         nsg_name = "aks-system_nsg"
         nsg = [
           {
@@ -48,6 +48,43 @@ core_networking = {
           },
         ]
       }
+      aks-user1 = {
+        name     = "aks-user1"
+        cidr     = ["10.10.3.128/25"]
+        nsg_name = "aks-user1_nsg"
+        nsg = [
+          {
+            name                       = "ssh-in-allow-22",
+            priority                   = "150"
+            direction                  = "Inbound"
+            access                     = "Allow"
+            protocol                   = "tcp"
+            source_port_range          = "*"
+            destination_port_range     = "22"
+            source_address_prefix      = "*"
+            destination_address_prefix = "VirtualNetwork"
+          },
+        ]
+      }
+      aks-system1 = {
+        name     = "aks-system1"
+        cidr     = ["10.10.4.0/25"]
+        nsg_name = "aks-system1_nsg"
+        nsg = [
+          {
+            name                       = "ssh-in-allow-22",
+            priority                   = "150"
+            direction                  = "Inbound"
+            access                     = "Allow"
+            protocol                   = "tcp"
+            source_port_range          = "*"
+            destination_port_range     = "22"
+            source_address_prefix      = "*"
+            destination_address_prefix = "VirtualNetwork"
+          },
+        ]
+      }
+
       AzureBastionSubnet = {
         name     = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
         cidr     = ["10.10.2.128/25"]

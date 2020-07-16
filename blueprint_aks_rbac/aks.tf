@@ -25,15 +25,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = lookup(var.blueprint_aks.cluster, "dns_prefix", random_string.prefix.result)
   kubernetes_version  = lookup(var.blueprint_aks.cluster, "kubernetes_version")
   node_resource_group = azurecaf_naming_convention.rg_node.result
-  
+
   network_profile {
 
-    network_plugin        = var.blueprint_aks.cluster.network_policy.network_plugin
-    load_balancer_sku     = var.blueprint_aks.cluster.network_policy.load_balancer_sku
+    network_plugin    = var.blueprint_aks.cluster.network_policy.network_plugin
+    load_balancer_sku = var.blueprint_aks.cluster.network_policy.load_balancer_sku
 
     load_balancer_profile {
-      managed_outbound_ip_count   = lookup(var.blueprint_aks.cluster.load_balancer_profile, "managed_outbound_ip_count", null)
-      outbound_ip_prefix_ids   = lookup(var.blueprint_aks.cluster.load_balancer_profile, "outbound_ip_prefix_ids", null)
+      managed_outbound_ip_count = lookup(var.blueprint_aks.cluster.load_balancer_profile, "managed_outbound_ip_count", null)
+      outbound_ip_prefix_ids    = lookup(var.blueprint_aks.cluster.load_balancer_profile, "outbound_ip_prefix_ids", null)
       outbound_ip_address_ids   = lookup(var.blueprint_aks.cluster.load_balancer_profile, "outbound_ip_address_ids", null)
     }
 
@@ -42,32 +42,33 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   dynamic "default_node_pool" {
 
-    for_each = var.blueprint_aks.cluster.default_node_pool == null ? [0] : [1] 
+    for_each = var.blueprint_aks.cluster.default_node_pool == null ? [0] : [1]
 
     content {
       name                  = azurecaf_naming_convention.default_node_pool.result
       vm_size               = var.blueprint_aks.cluster.default_node_pool.vm_size
-      type                  = lookup( var.blueprint_aks.cluster.default_node_pool, "type", "VirtualMachineScaleSets")
-      os_disk_size_gb       = lookup( var.blueprint_aks.cluster.default_node_pool, "os_disk_size_gb", null)
-      availability_zones    = lookup( var.blueprint_aks.cluster.default_node_pool, "availability_zones", null)
+      type                  = lookup(var.blueprint_aks.cluster.default_node_pool, "type", "VirtualMachineScaleSets")
+      os_disk_size_gb       = lookup(var.blueprint_aks.cluster.default_node_pool, "os_disk_size_gb", null)
+      availability_zones    = lookup(var.blueprint_aks.cluster.default_node_pool, "availability_zones", null)
       enable_auto_scaling   = lookup(var.blueprint_aks.cluster.default_node_pool, "enable_auto_scaling", false)
       enable_node_public_ip = lookup(var.blueprint_aks.cluster.default_node_pool, "enable_node_public_ip", false)
       node_count            = lookup(var.blueprint_aks.cluster.default_node_pool, "node_count", 1)
       max_pods              = lookup(var.blueprint_aks.cluster.default_node_pool, "max_pods", 30)
       node_labels           = lookup(var.blueprint_aks.cluster.default_node_pool, "node_labels", null)
       node_taints           = lookup(var.blueprint_aks.cluster.default_node_pool, "node_taints", null)
-      vnet_subnet_id        = var.subnet_id
-      tags                  = merge(local.tags, lookup(var.blueprint_aks.cluster.default_node_pool, "tags", {}))
+      vnet_subnet_id        = var.subnet_ids[var.blueprint_aks.cluster.default_node_pool.subnet_name]
+
+      tags = merge(local.tags, lookup(var.blueprint_aks.cluster.default_node_pool, "tags", {}))
     }
 
   }
 
   dynamic "identity" {
 
-    for_each =  lookup(var.blueprint_aks.cluster, "identity", null) == null ? [] : [1]
+    for_each = lookup(var.blueprint_aks.cluster, "identity", null) == null ? [] : [1]
 
     content {
-      type  = var.blueprint_aks.cluster.identity.type
+      type = var.blueprint_aks.cluster.identity.type
     }
 
   }
@@ -77,7 +78,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   role_based_access_control {
     enabled = var.enable_rbac
     azure_active_directory {
-      managed = true
+      managed                = true
       admin_group_object_ids = [data.azurerm_client_config.current.object_id]
     }
   }
@@ -93,10 +94,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
 }
 
 resource "random_string" "prefix" {
-    length  = 10
-    special = false
-    upper   = false
-    number  = false
+  length  = 10
+  special = false
+  upper   = false
+  number  = false
 }
 
 
@@ -119,6 +120,19 @@ locals {
     echo "Feature registered"
     az provider register -n Microsoft.ContainerService
   EOT
+}
+
+resource "azurerm_kubernetes_cluster_node_pool" "nodepools" {
+  for_each              = var.blueprint_aks.node_pools
+  name                  = each.value.name
+  mode                  = lookup(each.value, "mode", "User")
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
+  vnet_subnet_id        = var.subnet_ids[each.value.subnet_name]
+  vm_size               = each.value.vm_size
+  node_count            = each.value.node_count
+  enable_auto_scaling   = lookup(each.value, "enable_auto_scaling", false)
+  os_disk_size_gb       = lookup(each.value, "os_disk_size_gb", 64)
+  orchestrator_version  = lookup(each.value, "orchestrator_version", var.blueprint_aks.cluster.kubernetes_version)
 }
 
 # Can take around 30 mins to register the feature
