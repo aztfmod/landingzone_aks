@@ -63,14 +63,7 @@ locals {
   prefix                     = local.global_settings.prefix
   tags                       = merge(var.tags, local.landingzone_tag, { "environment" = local.global_settings.environment })
   caf_foundations_accounting = data.terraform_remote_state.landingzone_caf_foundations.outputs.foundations_accounting
-
-  diagnostics_map         = local.caf_foundations_accounting.diagnostics_map
-  log_analytics_workspace = local.caf_foundations_accounting.log_analytics_workspace
   vnets                   = data.terraform_remote_state.landingzone_networking.outputs.vnets
-  #vnet_name                 = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.vnet_obj.name
-  #subnet_id_by_name         = data.terraform_remote_state.landingzone_networking.outputs.subnet_id_by_name
-  #subnet_keys               = data.terraform_remote_state.landingzone_networking.outputs.hub_network.core_network.subnet_ids_map
-
 }
 
 

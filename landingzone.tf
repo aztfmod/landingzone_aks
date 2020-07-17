@@ -10,8 +10,8 @@ module "blueprint_aks_rbac" {
   blueprint_aks = var.blueprint_aks
   subnet_ids    = local.vnets[var.blueprint_aks.cluster.vnet_key].vnet_subnets
 
-  log_analytics_workspace = local.log_analytics_workspace
-  diagnostics_map         = local.diagnostics_map
+  log_analytics_workspace = local.caf_foundations_accounting[var.blueprint_aks.cluster.location].log_analytics_workspace
+  diagnostics_map         = local.caf_foundations_accounting[var.blueprint_aks.cluster.location].diagnostics_map
 
   enable_rbac = var.enable_rbac
   node_pools  = var.blueprint_aks.node_pools
