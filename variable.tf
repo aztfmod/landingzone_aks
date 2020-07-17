@@ -5,7 +5,8 @@ variable "lowerlevel_resource_group_name" {}
 
 variable "workspace" {}
 
-variable "blueprint_aks" {}
+variable "clusters" {}
+variable "convention" {}
 
 variable "tags" {
   default = {}

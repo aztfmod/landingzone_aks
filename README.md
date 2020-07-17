@@ -31,7 +31,7 @@ export TF_VAR_environment={Your Environment}
 rover --clone-landingzones --clone-branch vnext13
 
 # Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad
+rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad -var location=westus
 
 ## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
 rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars

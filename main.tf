@@ -26,6 +26,10 @@ terraform {
 
 }
 
+provider "azurecaf" {
+  alias = "azcaf"
+}
+
 provider "azurerm" {
   features {}
 }

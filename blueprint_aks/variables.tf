@@ -12,8 +12,3 @@ variable "enable_rbac" {
   description = "(Optional) Enable rbac cluster [default=true]"
   type        = bool
 }
-
-variable "node_pools" {
-  description = "(Optional) Maps of node pools"
-  default     = {}
-}

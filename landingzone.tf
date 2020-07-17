@@ -1,21 +1,19 @@
 #
 # Deploy Azure Kubernetes Services with RBAC enabled with Azure Active Directory
 #
-module "blueprint_aks_rbac" {
-  source = "./blueprint_aks_rbac"
-
+module "blueprint_aks" {
+  source        = "./blueprint_aks"
+  for_each      = var.clusters
   prefix        = local.prefix
-  convention    = var.blueprint_aks.convention
+  convention    = var.convention
   tags          = local.tags
-  blueprint_aks = var.blueprint_aks
-  subnet_ids    = local.vnets[var.blueprint_aks.cluster.vnet_key].vnet_subnets
+  blueprint_aks = each.value
+  subnet_ids    = local.vnets[each.value.vnet_key].vnet_subnets
 
   log_analytics_workspace = local.log_analytics_workspace
   diagnostics_map         = local.diagnostics_map
 
-  enable_rbac = var.enable_rbac
-  node_pools  = var.blueprint_aks.node_pools
-
+  enable_rbac = each.value.enable_rbac
 }
 
 
@@ -23,7 +21,8 @@ module "blueprint_aks_rbac" {
 # Grant AKS Control plane System Assigned Identity reader + join role on the subnet AKS
 #
 resource "azurerm_role_definition" "aks_networking_owner" {
-  name  = format("%s-caf-aks-networking_owner", local.prefix)
+  for_each = var.clusters
+  name  = format("%s-caf-aks-networking_owner", "${local.prefix}-${each.value.name}")
   scope = data.azurerm_subscription.primary.id
 
   permissions {
@@ -39,7 +38,8 @@ resource "azurerm_role_definition" "aks_networking_owner" {
 }
 
 resource "azurerm_role_assignment" "subnet_aks_to_aks_cluster" {
-  scope              = local.vnets[var.blueprint_aks.cluster.vnet_key].vnet_obj.id
-  role_definition_id = azurerm_role_definition.aks_networking_owner.id
-  principal_id       = module.blueprint_aks_rbac.identity.0.principal_id
+  for_each = var.clusters
+  scope              = local.vnets[each.value.vnet_key].vnet_obj.id
+  role_definition_id = azurerm_role_definition.aks_networking_owner[each.key].id
+  principal_id       = module.blueprint_aks[each.key].identity.0.principal_id
 }
