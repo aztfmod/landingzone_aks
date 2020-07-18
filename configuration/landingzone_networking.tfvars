@@ -127,6 +127,7 @@ vnets = {
 
   spoke_aks_sg = {
     resource_group_key = "vnet_sg"
+    location           = "southeastasia"
     vnet = {
       name          = "aks"
       address_space = ["10.10.100.0/23"]

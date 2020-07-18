@@ -4,8 +4,8 @@
 global_settings = {
   #specifies the set of locations you are going to use in this landing zone
   location_map = {
-    region1 = "southeastasia"
-    region2 = "eastasia"
+    southeastasia = "southeastasia"
+    eastasia      = "eastasia"
   }
 
   #naming convention to be used as defined in naming convention module, accepted values are cafclassic, cafrandom, random, passthrough
@@ -17,104 +17,127 @@ global_settings = {
     deploymentType = "Terraform"
   }
 
-  # Set of resource groups to land the blueprint
+  # Set of resource groups to land the foundations
   resource_groups_hub = {
-    HUB-CORE-SEC = {
-      name     = "hub-core-sec"
-      location = "southeastasia"
+    southeastasia = {
+      HUB-CORE-SEC = {
+        name     = "hub-core-sec-sea"
+        location = "southeastasia"
+      }
+      HUB-OPERATIONS = {
+        name     = "hub-operations-sea"
+        location = "southeastasia"
+      }
     }
-    HUB-OPERATIONS = {
-      name     = "hub-operations"
-      location = "southeastasia"
+    eastasia = {
+      HUB-CORE-SEC = {
+        name     = "hub-core-sec-hk"
+        location = "eastasia"
+      }
+      HUB-OPERATIONS = {
+        name     = "hub-operations-hk"
+        location = "eastasia"
+      }
     }
   }
 }
 
 ## accounting settings
 accounting_settings = {
-  # Azure Subscription activity logs retention period 
-  azure_activity_log_enabled    = false
-  azure_activity_logs_name      = "actlogs"
-  azure_activity_logs_event_hub = false
-  azure_activity_logs_retention = 365
-  azure_activity_audit = {
-    log = [
-      # ["Audit category name",  "Audit enabled)"] 
-      ["Administrative", true],
-      ["Security", true],
-      ["ServiceHealth", true],
-      ["Alert", true],
-      ["Recommendation", true],
-      ["Policy", true],
-      ["Autoscale", true],
-      ["ResourceHealth", true],
-    ]
-  }
 
   # Azure diagnostics logs retention period
-  azure_diagnostics_logs_name      = "diaglogs"
-  azure_diagnostics_logs_event_hub = false
+  southeastasia = {
+    # Azure Subscription activity logs retention period
+    azure_activity_log_enabled    = false
+    azure_activity_logs_name      = "actlogsea"
+    azure_activity_logs_event_hub = false
+    azure_activity_logs_retention = 31
+    azure_activity_audit = {
+      log = [
+        # ["Audit category name",  "Audit enabled)"] 
+        ["Administrative", true],
+        ["Security", true],
+        ["ServiceHealth", true],
+        ["Alert", true],
+        ["Recommendation", true],
+        ["Policy", true],
+        ["Autoscale", true],
+        ["ResourceHealth", true],
+      ]
+    }
+    azure_diagnostics_logs_name      = "diaglogs"
+    azure_diagnostics_logs_event_hub = false
 
-  #Logging and monitoring 
-  analytics_workspace_name = "caflalogs"
+    #Logging and monitoring 
+    analytics_workspace_name = "caflalogs-sg"
 
-  ##Log analytics solutions to be deployed 
-  solution_plan_map = {
-    NetworkMonitoring = {
-      "publisher" = "Microsoft"
-      "product"   = "OMSGallery/NetworkMonitoring"
-    },
-    ContainerInsights = {
-      "publisher" = "Microsoft"
-      "product"   = "OMSGallery/ContainerInsights"
-    },
-    KeyVaultAnalytics = {
-      "publisher" = "Microsoft"
-      "product"   = "OMSGallery/KeyVaultAnalytics"
+    ##Log analytics solutions to be deployed 
+    solution_plan_map = {
+      KeyVaultAnalytics = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/KeyVaultAnalytics"
+      }
+    }
+  }
+  eastasia = {
+    # Azure Subscription activity logs retention period
+    azure_activity_log_enabled    = false
+    azure_activity_logs_name      = "actlogea"
+    azure_activity_logs_event_hub = false
+    azure_activity_logs_retention = 31
+    azure_activity_audit = {
+      log = [
+        # ["Audit category name",  "Audit enabled)"] 
+        ["Administrative", true],
+        ["Security", true],
+        ["ServiceHealth", true],
+        ["Alert", true],
+        ["Recommendation", true],
+        ["Policy", true],
+        ["Autoscale", true],
+        ["ResourceHealth", true],
+      ]
+    }
+    azure_diagnostics_logs_name      = "diaglogs"
+    azure_diagnostics_logs_event_hub = false
+
+    #Logging and monitoring 
+    analytics_workspace_name = "caflalogs-hk"
+
+    ##Log analytics solutions to be deployed 
+    solution_plan_map = {
+      KeyVaultAnalytics = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/KeyVaultAnalytics"
+      }
     }
   }
 }
 
+
 ## governance
 governance_settings = {
-  #current code supports only two levels of managemenr groups and one root
-  deploy_mgmt_groups = false
-  management_groups = {
-    root = {
-      name          = "caf-rootmgmtgroup"
-      subscriptions = []
-      #list your subscriptions ID in this field as ["GUID1", "GUID2"]
-      children = {
-        child1 = {
-          name          = "tree1child1"
-          subscriptions = []
-        }
-        child2 = {
-          name          = "tree1child2"
-          subscriptions = []
-        }
-        child3 = {
-          name          = "tree1child3"
-          subscriptions = []
-        }
-      }
+  southeastasia = {
+    #current code supports only two levels of managemenr groups and one root
+    deploy_mgmt_groups = false
+    management_groups = {}
+
+    policy_matrix = {
+      autoenroll_monitor_vm = true
+      autoenroll_netwatcher = false
+
+      no_public_ip_spoke     = false
+      cant_create_ip_spoke   = false
+      managed_disks_only     = true
+      restrict_locations     = false
+      list_of_allowed_locs   = ["southeastasia", "eastasia"]
+      restrict_supported_svc = false
+      list_of_supported_svc  = ["Microsoft.Network/publicIPAddresses", "Microsoft.Compute/disks"]
+      msi_location           = "southeastasia"
     }
   }
 
-  policy_matrix = {
-    #autoenroll_asc          = true - to be implemented via builtin policies
-    autoenroll_monitor_vm = false
-    autoenroll_netwatcher = false
-
-    no_public_ip_spoke     = false
-    cant_create_ip_spoke   = false
-    managed_disks_only     = false
-    restrict_locations     = false
-    list_of_allowed_locs   = ["southeastasia", "eastasia"]
-    restrict_supported_svc = false
-    list_of_supported_svc  = ["Microsoft.Network/publicIPAddresses", "Microsoft.Compute/disks"]
-    msi_location           = "southeastasia"
-  }
+  eastasia = {}
 }
 
 ## security 
