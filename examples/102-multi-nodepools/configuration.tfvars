@@ -1,8 +1,8 @@
 tags       = {}
 convention = "cafrandom"
 clusters = {
-  cluster1 = {
-    name                = "akscluster-001"
+  seacluster = {
+    name                = "seacluster-001"
     location            = "southeastasia"
     resource_group_name = "aks"
     os_type             = "Linux"

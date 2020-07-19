@@ -123,16 +123,23 @@ locals {
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "nodepools" {
-  for_each              = var.blueprint_aks.node_pools
+  for_each              = lookup(var.blueprint_aks, "node_pools", {})
   name                  = each.value.name
   mode                  = lookup(each.value, "mode", "User")
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-  vnet_subnet_id        = var.subnet_ids[each.value.subnet_name]
+  vnet_subnet_id        = var.subnet_ids[lookup(each.value, "subnet_name", var.blueprint_aks.default_node_pool.subnet_name)]
   vm_size               = each.value.vm_size
-  node_count            = each.value.node_count
+  os_disk_size_gb       = lookup(each.value, "os_disk_size_gb", null)
+  availability_zones    = lookup(each.value, "availability_zones", null)
   enable_auto_scaling   = lookup(each.value, "enable_auto_scaling", false)
-  os_disk_size_gb       = lookup(each.value, "os_disk_size_gb", 64)
+  enable_node_public_ip = lookup(each.value, "enable_node_public_ip", false)
+  node_count            = lookup(each.value, "node_count", 1)
+  max_pods              = lookup(each.value, "max_pods", 30)
+  node_labels           = lookup(each.value, "node_labels", null)
+  node_taints           = lookup(each.value, "node_taints", null)
   orchestrator_version  = lookup(each.value, "orchestrator_version", var.blueprint_aks.kubernetes_version)
+
+
 }
 
 # Can take around 30 mins to register the feature

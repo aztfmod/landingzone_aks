@@ -31,11 +31,11 @@ global_settings = {
     }
     eastasia = {
       HUB-CORE-SEC = {
-        name     = "hub-core-sec-hk"
+        name     = "hub-core-sec-ea"
         location = "eastasia"
       }
       HUB-OPERATIONS = {
-        name     = "hub-operations-hk"
+        name     = "hub-operations-ea"
         location = "eastasia"
       }
     }
@@ -102,7 +102,7 @@ accounting_settings = {
     azure_diagnostics_logs_event_hub = false
 
     #Logging and monitoring 
-    analytics_workspace_name = "caflalogs-hk"
+    analytics_workspace_name = "caflalogs-ea"
 
     ##Log analytics solutions to be deployed 
     solution_plan_map = {

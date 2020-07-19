@@ -59,7 +59,7 @@ data "terraform_remote_state" "landingzone_caf_foundations" {
 
 locals {
   landingzone_tag = {
-    "landingzone" = basename(abspath(path.root))
+    "landingzone" = var.landingzone_tag == null ? basename(abspath(path.root)) : var.landingzone_tag
   }
 
   global_settings = data.terraform_remote_state.landingzone_caf_foundations.outputs.global_settings

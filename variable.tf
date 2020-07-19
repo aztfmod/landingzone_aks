@@ -25,3 +25,6 @@ variable tfstate_landingzone_networking {
 variable tfstate_landingzone_caf_foundations {
   default = "landingzone_caf_foundations.tfstate"
 }
+
+variable landingzone_tag {
+}
