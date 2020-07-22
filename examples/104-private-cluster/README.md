@@ -57,7 +57,7 @@ rover -lz /tf/caf/ \
 
 ### 3. Destroy Landingzones
 
-Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
+Have fun playing with the landing zone and once you are done, you can simply delete the deployment using:
 
 ```bash
 rover -lz /tf/caf/ \
@@ -71,12 +71,12 @@ rover -lz /tf/caf/landingzones/landingzone_networking/ \
       -a destroy
 
 # Only destroy Foundation & Launchpad if you have no other Landingzones dependent on them.
-rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a destroy -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars
+rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a destroy -var-file /tf/caf/examples/${example}/landingzone_caf_foundations.tfvars
 
-# to destroy the launchpad you need to conifrm you are connected with your user. If not reconnect with
+# to destroy the launchpad you need to confirm you are connected with your user. If not reconnect with
 rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
 
-rover -lz /tf/caf/landingzones/launchpad -a destroy -launchpad
+rover -lz /tf/caf/landingzones/launchpad -a destroy -launchpad -var location=eastus -var-file /tf/caf/examples/${example}/launchpad.tfvars
 ```
 
 More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
