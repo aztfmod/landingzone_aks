@@ -17,6 +17,16 @@ module "blueprint_aks" {
 }
 
 
+module "bastion_vm" {
+  source  = "./bastion_vm"
+  for_each = var.jumpboxes
+  
+  prefix                        = local.prefix
+  convention                    = var.convention
+  bastion_vm                    = each.value
+  subnet_id                     = local.vnets[each.value.vnet_key].vnet_subnets[each.value.subnet_key]
+  tags                          = local.tags
+}
 #
 # Grant AKS Control plane System Assigned Identity reader + join role on the subnet AKS
 #
