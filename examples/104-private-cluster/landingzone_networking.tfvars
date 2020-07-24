@@ -1,46 +1,46 @@
 resource_groups = {
-  vnet_sg = {
-    name       = "vnet-sg"
-    location   = "southeastasia"
+  vnet_eus = {
+    name       = "vnet-eus"
+    location   = "eastus"
+    useprefix  = true
+    max_length = 40
+  }
+  vnet_wus = {
+    name       = "vnet-wus"
+    location   = "westus"
     useprefix  = true
     max_length = 40
   }
 }
 
 vnets = {
-  hub_sg = {
-    resource_group_key = "vnet_sg"
-    location           = "southeastasia"
+  hub_eus = {
+    resource_group_key = "vnet_eus"
+    location           = "eastus"
     vnet = {
       name          = "hub"
-      address_space = ["10.10.100.0/23"]
+      address_space = ["100.64.100.0/22"]
     }
     specialsubnets = {
       GatewaySubnet = {
         name = "GatewaySubnet" #Must be called GateWaySubnet in order to host a Virtual Network Gateway
-        cidr = ["10.10.100.224/27"]
+        cidr = ["100.64.100.0/27"]
       }
       AzureFirewallSubnet = {
         name = "AzureFirewallSubnet" #Must be called AzureFirewallSubnet 
-        cidr = ["10.10.100.192/27"]
+        cidr = ["100.64.101.0/26"]
       }
     }
     subnets = {
       Active_Directory = {
         name     = "Active_Directory"
-        cidr     = ["10.10.100.0/27"]
+        cidr     = ["100.64.102.0/27"]
         nsg_name = "Active_Directory_nsg"
-        nsg      = []
-      }
-      Jumpbox = {
-        name     = "Jumpbox"
-        cidr     = ["10.10.101.0/25"]
-        nsg_name = "Jumpbox_nsg"
         nsg      = []
       }
       AzureBastionSubnet = {
         name     = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
-        cidr     = ["10.10.100.160/27"]
+        cidr     = ["100.64.103.0/27"]
         nsg_name = "AzureBastionSubnet_nsg"
         nsg = [
           {
@@ -125,19 +125,31 @@ vnets = {
     }
   }
 
-  spoke_aks_sg = {
-    resource_group_key = "vnet_sg"
-    location           = "southeastasia"
+  spoke_aks_eus = {
+    resource_group_key = "vnet_eus"
+    location           = "eastus"
     vnet = {
       name          = "aks"
-      address_space = ["10.10.100.0/23"]
+      address_space = ["100.64.48.0/22"]
     }
     specialsubnets = {}
     subnets = {
       aks_nodepool_system = {
         name     = "aks_nodepool_system"
-        cidr     = ["10.10.100.0/25"]
+        cidr     = ["100.64.48.0/24"]
         nsg_name = "aks_nodepool_system_nsg"
+        nsg      = []
+      }
+      aks_nodepool_user1 = {
+        name     = "aks_nodepool_user1"
+        cidr     = ["100.64.49.0/24"]
+        nsg_name = "aks_nodepool_user1_nsg"
+        nsg      = []
+      }
+      aks_nodepool_user2 = {
+        name     = "aks_nodepool_user2"
+        cidr     = ["100.64.50.0/24"]
+        nsg_name = "aks_nodepool_user2_nsg"
         nsg      = []
       }
     }
@@ -145,5 +157,73 @@ vnets = {
 }
 
 peerings = {
+  hub_eus_TO_spoke_aks_eus = {
+    from_key                     = "hub_eus"
+    to_key                       = "spoke_aks_eus"
+    name                         = "hub_eus_TO_spoke_aks_eus"
+    allow_virtual_network_access = true
+    allow_forwarded_traffic      = false
+    allow_gateway_transit        = false
+    use_remote_gateways          = false
+  }
 
+  spoke_aks_eus_TO_hub_eus = {
+    from_key                     = "spoke_aks_eus"
+    to_key                       = "hub_eus"
+    name                         = "spoke_aks_eus_TO_hub_eus"
+    allow_virtual_network_access = true
+    allow_forwarded_traffic      = false
+    allow_gateway_transit        = false
+    use_remote_gateways          = false
+  }
+}
+
+firewalls = {
+  # Southeastasia firewall (do not change the key when created)
+  eastus = {
+    location           = "eastus"
+    resource_group_key = "vnet_eus"
+    vnet_key           = "hub_eus"
+
+    # Settings for the public IP address to be used for Azure Firewall 
+    # Must be standard and static for 
+    firewall_ip_addr_config = {
+      ip_name           = "firewall"
+      allocation_method = "Static"
+      sku               = "Standard" #defaults to Basic
+      ip_version        = "IPv4"     #defaults to IP4, Only dynamic for IPv6, Supported arguments are IPv4 or IPv6, NOT Both
+      diagnostics = {
+        log = [
+          #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+          ["DDoSProtectionNotifications", true, true, 30],
+          ["DDoSMitigationFlowLogs", true, true, 30],
+          ["DDoSMitigationReports", true, true, 30],
+        ]
+        metric = [
+          ["AllMetrics", true, true, 30],
+        ]
+      }
+    }
+
+    # Settings for the Azure Firewall settings
+    az_fw_config = {
+      name = "azfw"
+      diagnostics = {
+        log = [
+          #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+          ["AzureFirewallApplicationRule", true, true, 30],
+          ["AzureFirewallNetworkRule", true, true, 30],
+        ]
+        metric = [
+          ["AllMetrics", true, true, 30],
+        ]
+      }
+      network_rules = {
+        
+      }
+      application_rules = {
+        
+      }
+    }
+  }
 }

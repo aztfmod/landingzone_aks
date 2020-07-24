@@ -19,24 +19,26 @@ resource "azurecaf_naming_convention" "default_node_pool" {
 
 resource "azurerm_kubernetes_cluster" "aks" {
 
-  name                = azurecaf_naming_convention.aks.result
-  location            = azurerm_resource_group.aks.location
-  resource_group_name = azurerm_resource_group.aks.name
-  dns_prefix          = lookup(var.blueprint_aks, "dns_prefix", random_string.prefix.result)
-  kubernetes_version  = lookup(var.blueprint_aks, "kubernetes_version")
-  node_resource_group = azurecaf_naming_convention.rg_node.result
+  name                    = azurecaf_naming_convention.aks.result
+  location                = azurerm_resource_group.aks.location
+  resource_group_name     = azurerm_resource_group.aks.name
+  dns_prefix              = lookup(var.blueprint_aks, "dns_prefix", random_string.prefix.result)
+  kubernetes_version      = lookup(var.blueprint_aks, "kubernetes_version")
+  node_resource_group     = azurecaf_naming_convention.rg_node.result
+  private_cluster_enabled = lookup(var.blueprint_aks, "private_cluster_enabled", false)
 
   network_profile {
 
     network_plugin    = var.blueprint_aks.network_policy.network_plugin
     load_balancer_sku = var.blueprint_aks.network_policy.load_balancer_sku
 
-    load_balancer_profile {
-      managed_outbound_ip_count = lookup(var.blueprint_aks.load_balancer_profile, "managed_outbound_ip_count", null)
-      outbound_ip_prefix_ids    = lookup(var.blueprint_aks.load_balancer_profile, "outbound_ip_prefix_ids", null)
-      outbound_ip_address_ids   = lookup(var.blueprint_aks.load_balancer_profile, "outbound_ip_address_ids", null)
-    }
+    # load_balancer_profile {
+    #   managed_outbound_ip_count = lookup(var.blueprint_aks.load_balancer_profile, "managed_outbound_ip_count", null)
+    #   outbound_ip_prefix_ids    = lookup(var.blueprint_aks.load_balancer_profile, "outbound_ip_prefix_ids", null)
+    #   outbound_ip_address_ids   = lookup(var.blueprint_aks.load_balancer_profile, "outbound_ip_address_ids", null)
+    # }
 
+    outbound_type = lookup(var.blueprint_aks, "outbound_type", "loadBalancer")
   }
 
 
@@ -64,15 +66,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   dynamic "identity" {
-
     for_each = lookup(var.blueprint_aks, "identity", null) == null ? [] : [1]
 
     content {
       type = var.blueprint_aks.identity.type
     }
-
   }
-
 
   # Enabled RBAC
   role_based_access_control {
