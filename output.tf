@@ -5,6 +5,3 @@ output "aks" {
   value = module.blueprint_aks.*
 }
 
-output "jumpboxes" {
-  value = module.bastion_vm.*
-}

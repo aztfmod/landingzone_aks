@@ -6,10 +6,6 @@ variable "lowerlevel_resource_group_name" {}
 variable "workspace" {}
 
 variable "clusters" {}
-variable "jumpboxes" {
-  default = {}
-  type    = map
-}
 variable "convention" {}
 
 variable "tags" {
