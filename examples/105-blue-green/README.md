@@ -22,7 +22,7 @@ Note - the script bellow is not covering a shared environment multiple devops en
 Ensure the below is set prior to apply or destroy.
 ```bash
 # Login the Azure subscription
-rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
+rover login -t terraformdev.onmicrosoft.com -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export TF_VAR_environment=[YOUR_ENVIRONMENT]
 # Set the folder name of this example
