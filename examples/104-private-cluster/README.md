@@ -20,9 +20,10 @@ Ensure the below is set prior to apply or destroy.
 # Login the Azure subscription
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
-export TF_VAR_environment=khpriv
+export TF_VAR_environment=hieu
 # Set the folder name of this example
 example=104-private-cluster
+path=$example/asia
 ```
 
 ### 2. Apply Landingzones
@@ -43,13 +44,13 @@ rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /
 # Deploy networking
 rover -lz /tf/caf/landingzones/landingzone_networking/ \
       -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/${example}/landingzone_networking.tfvars \
+      -var-file /tf/caf/examples/${path}/landingzone_networking.tfvars \
       -a apply
 
 # Run AKS landing zone deployment
 rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
-      -var-file /tf/caf/examples/${example}/configuration.tfvars \
+      -var-file /tf/caf/examples/${path}/configuration.tfvars \
       -var tfstate_landingzone_networking=${example}_landingzone_networking.tfstate \
       -var landingzone_tag=${example}_landingzone_aks \
       -a apply

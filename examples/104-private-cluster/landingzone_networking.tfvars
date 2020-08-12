@@ -207,23 +207,108 @@ firewalls = {
 
     # Settings for the Azure Firewall settings
     az_fw_config = {
-      name = "azfw"
-      diagnostics = {
-        log = [
-          #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
-          ["AzureFirewallApplicationRule", true, true, 30],
-          ["AzureFirewallNetworkRule", true, true, 30],
-        ]
-        metric = [
-          ["AllMetrics", true, true, 30],
-        ]
+      fw1 = {
+        name = "azfw"
+        diagnostics = {
+          log = [
+            #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+            ["AzureFirewallApplicationRule", true, true, 30],
+            ["AzureFirewallNetworkRule", true, true, 30],
+          ]
+          metric = [
+            ["AllMetrics", true, true, 30],
+          ]
+        }
+        network_rules_key = aksnetworkrules
+        application_rules_key = aksapprules
       }
-      network_rules = {
-        
+      fw2 = {
+      name = "azfw" 
+        diagnostics = {
+          log = [
+            #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+            ["AzureFirewallApplicationRule", true, true, 30],
+            ["AzureFirewallNetworkRule", true, true, 30],
+          ]
+          metric = [
+            ["AllMetrics", true, true, 30],
+          ]
+        }
+        network_rules_key = aksnetworkrules
+        application_rules_key = aksapprules
       }
-      application_rules = {
-        
+      
+
+
+application_rules = {
+        aksapprules = {
+          name = "aks"
+          priority = 100
+          action = "Allow"
+          rules = {
+            aks = {
+              name  = "aks"
+              source_addresses = [
+                "100.64.48.0/22",
+              ]
+              fqdn_tags = [
+                "AzureKubernetesService",
+              ]
+              0f
+            }
+            ubuntu = {
+              name = "ubuntu"
+              source_addresses = [
+                "100.64.48.0/22",
+              ]
+              target_fqdns = [
+                "security.ubuntu.com", "azure.archive.ubuntu.com", "changelogs.ubuntu.com"
+              ]
+              protocols = ["Http"]
+            }
+          }
+        }
       }
     }
   }
 }
+
+network_rules = {
+        aksnetworkrules = {
+          name = "aks"
+          priority = 100
+          action = "Allow"
+          rules = {
+            ntp = {
+              name = "ntp"
+              source_addresses = [
+                "100.64.48.0/22"
+              ]
+              destination_ports = [
+                "123"
+              ]
+              destination_addresses = [
+                "*"
+              ]
+              protocols = [
+                "UDP"
+              ]
+            }
+            monitor = {
+              name = "monitor"
+              source_addresses = [
+                "100.64.48.0/22"
+              ]
+              destination_ports = [
+                "443"
+              ]
+              destination_addresses = [
+                "*"
+              ]
+              protocols = [
+                "TCP"
+              ]
+            }
+          }
+        }
+      }
