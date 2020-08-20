@@ -1,10 +1,19 @@
 tags       = {}
 convention = "cafrandom"
+
+resource_groups = {
+  aks1 = {
+    name       = "aks-1"
+    region   = "region1"
+    useprefix  = true
+    max_length = 40
+  }
+}
+
 clusters = {
-  seacluster = {
-    name                = "seacluster-001"
-    location            = "southeastasia"
-    resource_group_name = "aks"
+  cluster1 = {
+    name                = "cluster-001"
+    resource_group_key = "aks1"
     os_type             = "Linux"
     identity = {
       type = "SystemAssigned"
@@ -28,7 +37,7 @@ clusters = {
     default_node_pool = {
       name                  = "sharedsvc"
       vm_size               = "Standard_F4s_v2"
-      subnet_name           = "aks_nodepool_system"
+      subnet_key           = "aks_nodepool_system"
       availability_zones    = ["1"]
       enabled_auto_scaling  = false
       enable_node_public_ip = false

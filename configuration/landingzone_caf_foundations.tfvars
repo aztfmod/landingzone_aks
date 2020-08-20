@@ -3,11 +3,18 @@
 ## globalsettings
 global_settings = {
   #specifies the set of locations you are going to use in this landing zone
+
+  default_region = "region1"
+
+  regions = {
+    region1 = "southeastasia"
+    region2 = "eastasia"
+  }
+  
   location_map = {
     southeastasia = "southeastasia"
     eastasia      = "eastasia"
   }
-
   #naming convention to be used as defined in naming convention module, accepted values are cafclassic, cafrandom, random, passthrough
   convention = "cafrandom"
 

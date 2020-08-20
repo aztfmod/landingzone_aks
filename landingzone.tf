@@ -1,21 +1,34 @@
 #
 # Deploy Azure Kubernetes Services with RBAC enabled with Azure Active Directory
 #
-module "blueprint_aks" {
-  source        = "./blueprint_aks"
+
+
+module "acr" {
+    source  = "./acr"
+    for_each      = var.registries
+    prefix        = local.prefix
+    convention    = var.convention
+    tags          = local.tags
+    acr           = each.value
+    log_analytics_workspace = local.caf_foundations_accounting[azurerm_resource_group.rg[each.value.resource_group_key].location].log_analytics_workspace
+    diagnostics_map         = local.caf_foundations_accounting[azurerm_resource_group.rg[each.value.resource_group_key].location].diagnostics_map
+    resource_group              = azurerm_resource_group.rg[each.value.resource_group_key]
+}
+
+module "aks" {
+  source        = "./aks"
   for_each      = var.clusters
   prefix        = local.prefix
   convention    = var.convention
   tags          = local.tags
-  blueprint_aks = each.value
+  aks = each.value
   subnet_ids    = local.vnets[each.value.vnet_key].vnet_subnets
-
-  log_analytics_workspace = local.caf_foundations_accounting[each.value.location].log_analytics_workspace
-  diagnostics_map         = local.caf_foundations_accounting[each.value.location].diagnostics_map
-
+  log_analytics_workspace = local.caf_foundations_accounting[azurerm_resource_group.rg[each.value.resource_group_key].location].log_analytics_workspace
+  diagnostics_map         = local.caf_foundations_accounting[azurerm_resource_group.rg[each.value.resource_group_key].location].diagnostics_map
   enable_rbac = each.value.enable_rbac
+  resource_group = azurerm_resource_group.rg[each.value.resource_group_key]
+  registries    = module.acr
 }
-
 
 module "bastion_vm" {
   source  = "./bastion_vm"
@@ -52,5 +65,5 @@ resource "azurerm_role_assignment" "subnet_aks_to_aks_cluster" {
   scope              = local.vnets[each.value.vnet_key].vnet_obj.id
   role_definition_name = "Contributor"
   # role_definition_id = azurerm_role_definition.aks_networking_owner[each.key].id
-  principal_id       = module.blueprint_aks[each.key].identity.0.principal_id
+  principal_id       = module.aks[each.key].identity.0.principal_id
 }

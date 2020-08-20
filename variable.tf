@@ -32,3 +32,6 @@ variable tfstate_landingzone_caf_foundations {
 
 variable landingzone_tag {
 }
+
+variable resource_groups {}
+variable registries {}

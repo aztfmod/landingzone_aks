@@ -111,6 +111,12 @@ vnets = {
           }
         ]
       }
+      jumpbox = {
+        name     = "jumpbox"
+        cidr     = ["10.10.100.32/27"]
+        nsg_name = "jumpbox_nsg"
+        nsg      = []
+      }
     }
     # Override the default var.diagnostics.vnet
     diagnostics = {
@@ -301,4 +307,43 @@ vnets = {
 
 peerings = {
 
+}
+
+bastions = {
+  southeastasia = {
+    location           = "southeastasia"
+    resource_group_key = "vnet_sg"
+    vnet_key           = "hub_sg"
+    subnet_key         = "AzureBastionSubnet"
+
+    bastion_ip_addr_config = {
+      ip_name           = "firewall"
+      allocation_method = "Static"
+      sku               = "Standard" #defaults to Basic
+      ip_version        = "IPv4"     #defaults to IP4, Only dynamic for IPv6, Supported arguments are IPv4 or IPv6, NOT Both
+      diagnostics = {
+        log = [
+          #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+          ["DDoSProtectionNotifications", true, true, 30],
+          ["DDoSMitigationFlowLogs", true, true, 30],
+          ["DDoSMitigationReports", true, true, 30],
+        ]
+        metric = [
+          ["AllMetrics", true, true, 30],
+        ]
+      }
+    }
+
+    bastion_config = {
+      name = "bastion"
+      diagnostics = {
+        log = [
+          #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+          ["BastionAuditLogs", true, true, 30],
+        ]
+        metric = [
+        ]
+      }
+    }
+  }
 }

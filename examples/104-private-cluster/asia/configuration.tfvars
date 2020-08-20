@@ -1,10 +1,23 @@
 tags       = {}
 convention = "cafrandom"
+resource_groups = {
+  aks1 = {
+    name       = "aks-1"
+    region   = "region1"
+    useprefix  = true
+    max_length = 40
+  }
+}
+
+helms = {
+  flux = { version = "1.0" }
+  podIdentity = {}
+}
 clusters = {
-  euscluster = {
+  seacluster = {
+    helm_keys = ["flux", "podIdentify"]
     name                = "akscluster-001"
-    location            = "southeastasia"
-    resource_group_name = "aks"
+    resource_group_key = "aks1"
     os_type             = "Linux"
 
     identity = {
@@ -33,7 +46,7 @@ clusters = {
     default_node_pool = {
       name                  = "sharedsvc"
       vm_size               = "Standard_F4s_v2"
-      subnet_name           = "aks_nodepool_system"
+      subnet_key           = "aks_nodepool_system"
       enabled_auto_scaling  = false
       enable_node_public_ip = false
       max_pods              = 30
@@ -49,7 +62,7 @@ clusters = {
       pool1 = {
         name                 = "nodepool1"
         mode                 = "User"
-        subnet_name          = "aks_nodepool_user1"
+        subnet_key          = "aks_nodepool_user1"
         max_pods             = 30
         vm_size              = "Standard_DS2_v2"
         node_count           = 2
@@ -61,6 +74,17 @@ clusters = {
         }
       }
     }
+  }
+}
+
+registries = {
+  seaacr = {
+    name                = "acr-001"
+    resource_group_key  = "aks-1"
+    cluster_keys = ["seacluster"]
+    sku                      = "Premium"
+    admin_enabled            = false
+    georeplication_locations = ["eastasia"]
   }
 }
 
