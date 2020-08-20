@@ -5,17 +5,17 @@ output "cluster_name" {
 
 output "resource_group_name" {
   depends_on = [azurerm_kubernetes_cluster.aks]
-  value      = azurerm_resource_group.aks.name
+  value      = var.resource_group.name
 }
 
 output "aks_kubeconfig_cmd" {
   depends_on = [azurerm_kubernetes_cluster.aks]
-  value      = "az aks get-credentials --name ${azurecaf_naming_convention.aks.result} --resource-group ${azurerm_resource_group.aks.name} --overwrite-existing"
+  value      = "az aks get-credentials --name ${azurecaf_naming_convention.aks.result} --resource-group ${var.resource_group.name} --overwrite-existing"
 }
 
 output "aks_kubeconfig_admin_cmd" {
   depends_on = [azurerm_kubernetes_cluster.aks]
-  value      = "az aks get-credentials --name ${azurecaf_naming_convention.aks.result} --resource-group ${azurerm_resource_group.aks.name} --overwrite-existing --admin"
+  value      = "az aks get-credentials --name ${azurecaf_naming_convention.aks.result} --resource-group ${var.resource_group.name} --overwrite-existing --admin"
 }
 
 output "kubelet_identity" {
