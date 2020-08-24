@@ -145,18 +145,21 @@ vnets = {
         cidr     = ["10.10.100.0/25"]
         nsg_name = "aks_nodepool_system_nsg"
         nsg      = []
+        enforce_private_link_endpoint_network_policies = true
       }
       aks_nodepool_system1 = {
         name     = "aks_nodepool_system1"
         cidr     = ["10.10.100.128/25"]
         nsg_name = "aks_nodepool_system1_nsg"
         nsg      = []
+        enforce_private_link_endpoint_network_policies = true
       }
       aks_nodepool_user1 = {
         name     = "aks_nodepool_user1"
         cidr     = ["10.10.101.0/25"]
         nsg_name = "aks_nodepool_user1_nsg"
         nsg      = []
+        enforce_private_link_endpoint_network_policies = true
       }
     }
   }
@@ -286,18 +289,21 @@ vnets = {
         cidr     = ["10.20.100.0/25"]
         nsg_name = "aks_nodepool_system_nsg"
         nsg      = []
+        enforce_private_link_endpoint_network_policies = true
       }
       aks_nodepool_system1 = {
         name     = "aks_nodepool_system1"
         cidr     = ["10.20.100.128/25"]
         nsg_name = "aks_nodepool_system1_nsg"
         nsg      = []
+        enforce_private_link_endpoint_network_policies = true
       }
       aks_nodepool_user1 = {
         name     = "aks_nodepool_user1"
         cidr     = ["10.20.101.0/25"]
         nsg_name = "aks_nodepool_user1_nsg"
         nsg      = []
+        enforce_private_link_endpoint_network_policies = true
       }
     }
   }

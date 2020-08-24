@@ -3,6 +3,7 @@
 #
 
 
+
 module "acr" {
     source  = "./acr"
     for_each      = var.registries
@@ -13,6 +14,11 @@ module "acr" {
     log_analytics_workspace = local.caf_foundations_accounting[azurerm_resource_group.rg[each.value.resource_group_key].location].log_analytics_workspace
     diagnostics_map         = local.caf_foundations_accounting[azurerm_resource_group.rg[each.value.resource_group_key].location].diagnostics_map
     resource_group              = azurerm_resource_group.rg[each.value.resource_group_key]
+    vnets         = local.vnets
+}
+
+output "subnet_ids" {
+  value = module.acr.*
 }
 
 module "aks" {

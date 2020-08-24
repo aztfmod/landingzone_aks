@@ -36,8 +36,9 @@ rover --clone-folder /landingzones/landingzone_networking --clone-branch vnext13
 
 # git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git
 git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /tf/caf/lz-modules
-
 rover -lz /tf/caf/lzmodules/landingzones/caf_launchpad -launchpad -var-file /tf/caf/lzmodules/landingzones/caf_launchpad/examples/402-dual-region-essential/configuration.tfvars -parallelism=30 -a plan
+
+
 
 # Deploy the launchpad light to store the tfstates
 rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad -var location=southeastasia

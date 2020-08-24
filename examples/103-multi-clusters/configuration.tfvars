@@ -22,7 +22,10 @@ registries = {
     resource_group_key  = "aks1"
     sku                      = "Premium"
     admin_enabled            = false
-    private_endpoint_subnet_keys = ["aks_nodepool_system","aks_nodepool_system1"]
+
+    private_endpoint_vnet_subnet_keys = {
+      "spoke_aks_sg" = ["aks_nodepool_system","aks_nodepool_user1"]
+    }
   }
   registry2 = {
     name                = "acr002"
