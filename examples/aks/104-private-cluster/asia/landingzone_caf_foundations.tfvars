@@ -3,18 +3,11 @@
 ## globalsettings
 global_settings = {
   #specifies the set of locations you are going to use in this landing zone
-
-  default_region = "region1"
-
-  regions = {
-    region1 = "southeastasia"
-    region2 = "eastasia"
-  }
-
   location_map = {
-    southeastasia = "southeastasia"
-    eastasia      = "eastasia"
+    eastus = "southeastasia"
+    westus = "eastasia"
   }
+
   #naming convention to be used as defined in naming convention module, accepted values are cafclassic, cafrandom, random, passthrough
   convention = "cafrandom"
 
@@ -26,23 +19,23 @@ global_settings = {
 
   # Set of resource groups to land the foundations
   resource_groups_hub = {
-    southeastasia = {
+    eastus = {
       HUB-CORE-SEC = {
-        name     = "hub-core-sec-sea"
+        name     = "hub-core-sec-eus"
         location = "southeastasia"
       }
       HUB-OPERATIONS = {
-        name     = "hub-operations-sea"
+        name     = "hub-operations-eus"
         location = "southeastasia"
       }
     }
-    eastasia = {
+    westus = {
       HUB-CORE-SEC = {
-        name     = "hub-core-sec-ea"
+        name     = "hub-core-sec-wus"
         location = "eastasia"
       }
       HUB-OPERATIONS = {
-        name     = "hub-operations-ea"
+        name     = "hub-operations-wus"
         location = "eastasia"
       }
     }
@@ -53,10 +46,10 @@ global_settings = {
 accounting_settings = {
 
   # Azure diagnostics logs retention period
-  southeastasia = {
+  eastus = {
     # Azure Subscription activity logs retention period
     azure_activity_log_enabled    = false
-    azure_activity_logs_name      = "actlogsea"
+    azure_activity_logs_name      = "actlogeus"
     azure_activity_logs_event_hub = false
     azure_activity_logs_retention = 31
     azure_activity_audit = {
@@ -76,7 +69,7 @@ accounting_settings = {
     azure_diagnostics_logs_event_hub = false
 
     #Logging and monitoring 
-    analytics_workspace_name = "caflalogs-sg"
+    analytics_workspace_name = "caflalogs-eus"
 
     ##Log analytics solutions to be deployed 
     solution_plan_map = {
@@ -86,10 +79,10 @@ accounting_settings = {
       }
     }
   }
-  eastasia = {
+  westus = {
     # Azure Subscription activity logs retention period
     azure_activity_log_enabled    = false
-    azure_activity_logs_name      = "actlogea"
+    azure_activity_logs_name      = "actlogwus"
     azure_activity_logs_event_hub = false
     azure_activity_logs_retention = 31
     azure_activity_audit = {
@@ -109,7 +102,7 @@ accounting_settings = {
     azure_diagnostics_logs_event_hub = false
 
     #Logging and monitoring 
-    analytics_workspace_name = "caflalogs-ea"
+    analytics_workspace_name = "caflalogs-wus"
 
     ##Log analytics solutions to be deployed 
     solution_plan_map = {
@@ -124,7 +117,7 @@ accounting_settings = {
 
 ## governance
 governance_settings = {
-  southeastasia = {
+  eastus = {
     #current code supports only two levels of managemenr groups and one root
     deploy_mgmt_groups = false
     management_groups  = {}
@@ -137,14 +130,14 @@ governance_settings = {
       cant_create_ip_spoke   = false
       managed_disks_only     = true
       restrict_locations     = false
-      list_of_allowed_locs   = ["southeastasia", "eastasia"]
+      list_of_allowed_locs   = ["eastus", "westus"]
       restrict_supported_svc = false
       list_of_supported_svc  = ["Microsoft.Network/publicIPAddresses", "Microsoft.Compute/disks"]
-      msi_location           = "southeastasia"
+      msi_location           = "eastus"
     }
   }
 
-  eastasia = {}
+  westus = {}
 }
 
 ## security 
