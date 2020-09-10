@@ -4,15 +4,22 @@ git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /
 ## Set your environment
 export TF_VAR_environment=bicycle
 
+# Level0
 ## Launchpad with scenario 200 at minimum
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/public/landingzones/caf_launchpad/scenario/200/configuration.tfvars -a apply
+rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
 
+# Level1
 ## Foundations
 rover -lz /tf/caf/public/landingzones/caf_foundation -a apply
+
+# Level2
+## Deploy the networking hub
+rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/public/landingzones/caf_networking/scenario/200-single-region-hub/configuration.tfvars -a apply
 
 ## Deploy isolated networking hub and spoke for AKS environment
 rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/examples/aks/204-private-cluster/caf_networking_configuration.tfvars -tfstate aks_networking.tfstate -parallelism=30 -a apply
 
+# Level3
 ## To deploy the private cluster configuration
 rover -lz /tf/caf -var-file /tf/caf/examples/aks/204-private-cluster/aks_configuration.tfvars -tfstate aks-bicycle.tfstate -parallelism=30 -a apply
 
