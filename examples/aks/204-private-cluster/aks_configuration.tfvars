@@ -1,3 +1,14 @@
+landingzone_name = "aks_private_cluster"
+
+tfstates = {
+  caf_foundations = {
+    tfstate = "caf_foundations.tfstate"
+  }
+  networking = {
+    tfstate = "networking_aks.tfstate"
+  }
+}
+
 resource_groups = {
   aks1_rg1 = {
     name   = "aks-rg1"
@@ -191,7 +202,7 @@ virtual_machines = {
             tfstate_key = "networking_aks"
             output_key  = "vnets"
             lz_key      = "networking_aks"
-            vnet_key    = "hub_rg1"
+            vnet_key    = "spoke_aks_rg1"
             subnet_key  = "jumpbox"
           }
         }

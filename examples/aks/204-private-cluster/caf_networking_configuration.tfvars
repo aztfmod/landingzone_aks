@@ -2,6 +2,15 @@ level = "level2"
 
 landingzone_name = "networking_aks"
 
+tfstates = {
+  caf_foundations = {
+    tfstate = "caf_foundations.tfstate"
+  }
+  networking = {
+    tfstate = "caf_foundations.tfstate"
+  }
+}
+
 resource_groups = {
   vnet_rg1 = {
     name   = "vnet-rg1"
@@ -31,17 +40,6 @@ vnets = {
       }
     }
     subnets = {
-      AzureBastionSubnet = {
-        name    = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
-        cidr    = ["100.64.101.64/26"]
-        nsg_key = "azure_bastion_nsg"
-      }
-      jumpbox = {
-        name            = "jumpbox"
-        cidr            = ["100.64.102.0/27"]
-        route_table_key = "default_to_firewall_rg1"
-        nsg_key         = "jumpbox"
-      }
     }
 
   }
@@ -71,8 +69,19 @@ vnets = {
       }
       private_endpoints = {
         name                                           = "private_endpoints"
-        cidr                                           = ["100.64.51.0/24"]
+        cidr                                           = ["100.64.51.0/27"]
         enforce_private_link_endpoint_network_policies = true
+      }
+      AzureBastionSubnet = {
+        name    = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
+        cidr    = ["100.64.51.64/27"]
+        nsg_key = "azure_bastion_nsg"
+      }
+      jumpbox = {
+        name            = "jumpbox"
+        cidr            = ["100.64.51.128/27"]
+        route_table_key = "default_to_firewall_rg1"
+        nsg_key         = "jumpbox"
       }
     }
   }
@@ -801,7 +810,7 @@ bastion_hosts = {
   launchpad_host = {
     name               = "bastion"
     resource_group_key = "vnet_rg1"
-    vnet_key           = "hub_rg1"
+    vnet_key           = "spoke_aks_rg1"
     subnet_key         = "AzureBastionSubnet"
     public_ip_key      = "bastion_host_rg1"
 

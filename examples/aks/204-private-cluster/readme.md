@@ -10,14 +10,14 @@ rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf
 
 # Level1
 ## Foundations
-rover -lz /tf/caf/public/landingzones/caf_foundation -a apply
+rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
 # Level2
 ## Deploy the networking hub
-rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/public/landingzones/caf_networking/scenario/200-single-region-hub/configuration.tfvars -a apply
+<!-- rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/public/landingzones/caf_networking/scenario/200-single-region-hub/configuration.tfvars -tfstate networking_hub.tfstate -a apply -->
 
 ## Deploy isolated networking hub and spoke for AKS environment
-rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/examples/aks/204-private-cluster/caf_networking_configuration.tfvars -tfstate aks_networking.tfstate -parallelism=30 -a apply
+rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/examples/aks/204-private-cluster/caf_networking_configuration.tfvars -tfstate networking_aks.tfstate -parallelism=30 -a apply
 
 # Level3
 ## To deploy the private cluster configuration
