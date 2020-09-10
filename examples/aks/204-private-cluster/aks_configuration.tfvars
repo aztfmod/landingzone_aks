@@ -19,6 +19,17 @@ resource_groups = {
   }
 }
 
+storage_accounts = {
+  bootdiag_re1 = {
+    name                     = "bootdiag"
+    resource_group_key       = "aks_jumpbox_rg1"
+    account_kind             = "BlobStorage"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    access_tier              = "Cool"
+  }
+}
+
 keyvaults = {
   secrets = {
     name                = "secrets"
@@ -184,9 +195,9 @@ virtual_machines = {
 
   # Configuration to deploy a bastion host linux virtual machine
   bastion_host = {
-    resource_group_key = "aks_jumpbox_rg1"
-    # boot_diagnostics_storage_account_key = "bootdiag_region1"
-    provision_vm_agent = true
+    resource_group_key                   = "aks_jumpbox_rg1"
+    boot_diagnostics_storage_account_key = "bootdiag_re1"
+    provision_vm_agent                   = true
 
     os_type = "linux"
 
@@ -246,9 +257,12 @@ virtual_machines = {
           version   = "latest"
         }
 
-        managed_identity_keys = [
-          "jumpbox",
-        ]
+        identity = {
+          type = "UserAssigned"
+          managed_identity_keys = [
+            "jumpbox"
+          ]
+        }
 
       }
     }
