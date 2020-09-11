@@ -22,13 +22,3 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ -var-file /tf/caf/examples
 # Level3
 ## To deploy the private cluster configuration
 rover -lz /tf/caf -var-file /tf/caf/examples/aks/204-private-cluster/aks_configuration.tfvars -tfstate aks-bicycle.tfstate -parallelism=30 -a apply
-
-# Install Azure cli on jumphost (to be added to a cloud init script)
-curl -sL https://azurecliprod.blob.core.windows.net/deb_install.sh | sudo bash
-kubectl
-helm
-
-Attach the private dns to the hub for bastion to access aks
-
-az login --identity
-az aks get-credentials --name scmmaksakscluster001adbhshvthcrwmweirsit --resource-group scmm-rg-aks-rg1-ymihuyilmxuemrkknthppjgd --overwrite-existing --admin

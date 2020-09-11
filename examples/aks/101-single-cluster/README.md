@@ -30,26 +30,24 @@ example=101-single-cluster
 ```bash
 # Add the lower dependency landingzones
 # rover --clone-landingzones --clone-branch vnext13
-rover --clone-folder /landingzones/launchpad --clone-branch vnext13
-rover --clone-folder /landingzones/landingzone_caf_foundations --clone-branch vnext13
-rover --clone-folder /landingzones/landingzone_networking --clone-branch vnext13
+git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad -var location=southeastasia
+rover -lz /tf/caf/public/landingzones/caf_launchpad -a apply -launchpad
 ## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
 rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars
 
 # Deploy networking
-rover -lz /tf/caf/landingzones/landingzone_networking/ \
+rover -lz /tf/caf/public/landingzones/caf_networking/ \
       -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/${example}/landingzone_networking.tfvars \
+      -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
+      -var tags={landingzone=\"101-single-cluster_landingzone_networking\"} \
       -a apply
 # Run AKS landing zone deployment
 rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
-      -var-file /tf/caf/examples/${example}/configuration.tfvars \
-      -var tfstate_landingzone_networking=${example}_landingzone_networking.tfstate \
-      -var landingzone_tag=${example}_landingzone_aks \
+      -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+      -var landingzone_name=${example}_aks \
       -a apply
 ```
 ### 3. Destroy Landingzones

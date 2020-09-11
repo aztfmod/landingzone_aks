@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.25.0"
+      version = "~> 2.26.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -34,7 +34,11 @@ terraform {
 
 
 provider "azurerm" {
-  features {}
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
+  }
 }
 
 data "azurerm_client_config" "current" {}
@@ -44,8 +48,8 @@ data "terraform_remote_state" "caf_foundations" {
   config = {
     storage_account_name = var.lowerlevel_storage_account_name
     container_name       = var.lowerlevel_container_name
-    resource_group_name  = var.lowerlevel_resource_group_name
     key                  = var.tfstates.caf_foundations.tfstate
+    resource_group_name  = var.lowerlevel_resource_group_name
   }
 }
 
@@ -54,21 +58,21 @@ data "terraform_remote_state" "networking" {
   config = {
     storage_account_name = var.lowerlevel_storage_account_name
     container_name       = var.lowerlevel_container_name
-    resource_group_name  = var.lowerlevel_resource_group_name
     key                  = var.tfstates.networking.tfstate
+    resource_group_name  = var.lowerlevel_resource_group_name
   }
 }
 
 locals {
-  tags = merge(var.tags, { "level" = var.level }, { "environment" = local.global_settings.environment }, { "rover_version" = var.rover_version })
+  tags = merge(var.tags, { "level" = var.level }, { "environment" = var.environment }, { "rover_version" = var.rover_version })
 
   global_settings = {
     prefix         = data.terraform_remote_state.caf_foundations.outputs.global_settings.prefix
-    convention     = data.terraform_remote_state.caf_foundations.outputs.global_settings.convention
-    default_region = data.terraform_remote_state.caf_foundations.outputs.global_settings.default_region
+    convention     = try(var.global_settings.convention, data.terraform_remote_state.caf_foundations.outputs.global_settings.convention)
+    default_region = try(var.global_settings.default_region, data.terraform_remote_state.caf_foundations.outputs.global_settings.default_region)
     environment    = data.terraform_remote_state.caf_foundations.outputs.global_settings.environment
-    regions        = data.terraform_remote_state.caf_foundations.outputs.global_settings.regions
-    max_length     = var.max_length == null ? data.terraform_remote_state.caf_foundations.outputs.global_settings.max_length : var.max_length
+    regions        = try(var.global_settings.regions, data.terraform_remote_state.caf_foundations.outputs.global_settings.regions)
+    max_length     = try(var.max_length, data.terraform_remote_state.caf_foundations.outputs.global_settings.max_length)
   }
 
   diagnostics = {
