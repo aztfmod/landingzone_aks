@@ -115,3 +115,6 @@ variable role_mapping {
 variable aks_clusters {
   default = {}
 }
+variable azure_container_registries {
+  default = {}
+}

@@ -7,3 +7,8 @@ output aks_clusters_kubeconfig {
   }
   sensitive = false
 }
+
+output tfstates {
+  value     = local.tfstates
+  sensitive = false
+}

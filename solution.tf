@@ -19,6 +19,7 @@ module "caf" {
     virtual_machines = var.virtual_machines
     bastion_hosts    = var.bastion_hosts
     aks_clusters     = var.aks_clusters
+    azure_container_registries = var.azure_container_registries
   }
   networking = {
     vnets                             = var.vnets

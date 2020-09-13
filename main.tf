@@ -64,6 +64,9 @@ data "terraform_remote_state" "networking" {
 }
 
 locals {
+  landingzone_tag = {
+    "landingzone" = "aks"//basename(abspath(path.module))
+  }
   tags = merge(var.tags, { "level" = var.level }, { "environment" = var.environment }, { "rover_version" = var.rover_version })
 
   global_settings = {

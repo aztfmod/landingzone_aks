@@ -2,11 +2,6 @@
 
 Deploys a Single AKS cluster in a VNET
 
-## Prerequisites
-
-
-
-
 ## Deploying this landing zone
 
 Those are the minimum steps to allow a single devops engineer. 
@@ -33,22 +28,23 @@ example=101-single-cluster
 git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/public/landingzones/caf_launchpad -a apply -launchpad
+rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
 ## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
-rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars
+rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
 # Deploy networking
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
       -tfstate ${example}_landingzone_networking.tfstate \
       -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
-      -var tags={landingzone=\"101-single-cluster_landingzone_networking\"} \
+      -var tags={example=\"${example}\"} \
       -a apply
 # Run AKS landing zone deployment
+
 rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
       -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
-      -var landingzone_name=${example}_aks \
-      -a apply
+      -var tags={example=\"${example}\"} \
+      -a apply      
 ```
 ### 3. Destroy Landingzones
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
@@ -56,21 +52,22 @@ Have fun playing with the landing zone an once you are done, you can simply dele
 ```bash
 rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
-      -var-file /tf/caf/examples/${example}/configuration.tfvars \
-      -var tfstate_landingzone_networking=${example}_landingzone_networking.tfstate \
-      -a destroy
-rover -lz /tf/caf/landingzones/landingzone_networking/ \
+      -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+      -var tags={example=\"${example}\"} \
+      -a destroy -auto-approve
+rover -lz /tf/caf/public/landingzones/caf_networking/ \
       -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/${example}/landingzone_networking.tfvars \
-      -a destroy
+      -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
+      -var tags={example=\"${example}\"} \
+      -a destroy -auto-approve
 
 # Only destroy Foundation & Launchpad if you have no other Landingzones dependent on them.
-rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a destroy -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars
+rover -lz /tf/caf/public/landingzones/caf_foundations -a destroy
 
 # to destroy the launchpad you need to conifrm you are connected with your user. If not reconnect with
 rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
 
-rover -lz /tf/caf/landingzones/launchpad -a destroy -launchpad
+rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a destroy
 ```
 
 More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.

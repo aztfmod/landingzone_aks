@@ -1,4 +1,4 @@
-
+landingzone_name = "101-single-cluster_aks"
 tfstates = {
   caf_foundations = {
     tfstate = "caf_foundations.tfstate"
@@ -9,7 +9,7 @@ tfstates = {
 }
 
 resource_groups = {
-  aks1_rg1 = {
+  aks_rg1 = {
     name   = "aks-rg1"
     region = "region1"
   }
@@ -19,7 +19,7 @@ aks_clusters = {
   cluster_rg1 = {
     helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-001"
-    resource_group_key = "aks1_rg1"
+    resource_group_key = "aks_rg1"
     os_type            = "Linux"
 
     identity = {
@@ -29,6 +29,8 @@ aks_clusters = {
     kubernetes_version = "1.17.7"
 
     networking = {
+
+      #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
       remote_tfstate = {
         tfstate_key = "networking_aks"
         output_key  = "vnets"
@@ -63,7 +65,7 @@ aks_clusters = {
       enabled_auto_scaling  = false
       enable_node_public_ip = false
       max_pods              = 30
-      node_count            = 2
+      node_count            = 1
       os_disk_size_gb       = 512
       orchestrator_version  = "1.17.7"
       tags = {
@@ -72,23 +74,40 @@ aks_clusters = {
     }
 
     node_resource_group_name = "aks-nodes-rg1"
+  }
+}
 
-    node_pools = {
-      pool1 = {
-        name                 = "nodepool1"
-        mode                 = "User"
-        subnet_key           = "aks_nodepool_user1"
-        max_pods             = 30
-        vm_size              = "Standard_DS2_v2"
-        node_count           = 2
-        enable_auto_scaling  = false
-        os_disk_size_gb      = 512
-        orchestrator_version = "1.17.7"
-        tags = {
-          "project" = "user services"
+azure_container_registries = {
+  acr1 = {
+    name               = "acr-test"
+    resource_group_key = "aks_rg1"
+    sku                = "Premium"
+    # georeplication_region_keys = ["region2"]
+
+    # you can setup up to 5 key
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "azure_container_registry"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
+  }
+}
+
+#
+role_mapping = {
+  custom_role_mapping = {}
+
+  built_in_role_mapping = {
+    azure_container_registries = {
+      acr1 = {
+        "AcrPull" = {
+          aks_clusters = [
+            "cluster_rg1"
+          ]
         }
       }
     }
-
   }
 }
