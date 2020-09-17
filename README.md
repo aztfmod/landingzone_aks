@@ -1,65 +1,41 @@
 # Azure AKS landing zone
 
 
-## Prerequisites
-
-
-## Overall architecture
-
-The following diagram shows the environment we are deploying for this POC:
-
-![DMZ](../../_pictures/hub_spoke/hybrid-network-hub-spoke.png)
-
 ## Getting Started
 
 To deploy a landing zone, use the execution environnement as described at the root of the landing zone repository.
 
-## Deploying this landing zone
+## Deploy AKS (Level 3) landing zone
 
 Those are the minimum steps to allow a single devops engineer. 
 
 If the subscription is shared across multiple devops engineer is it recommended each devops engineer use their own launchpad to avoid any conflicts between devops engineers. This can be achieved by setting a specific environment variable value. In the following script we use the environment value of "asia".
 
-Note - the script bellow is not covering a shared environment multiple devops engineer can get access and collaborate (coming later)
+The scripts in example folders below can be used shared environment multiple devops engineer can get access and collaborate.
 
-```bash
-# Login the Azure subscription
-rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
-# Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
-export TF_VAR_environment={Your Environment}
-# Add the lower dependency landingzones
-rover --clone-landingzones --clone-branch vnext13
-rover --clone-folder /landingzones/launchpad --clone-branch vnext13
-# Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/landingzones/launchpad -a apply -launchpad -var location=southeastasia
+We are currently using <em>bicycle</em> environment to deploy Landing zones.
 
-## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
-rover --clone-folder /landingzones/landingzone_caf_foundations --clone-branch vnext13
-rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a apply -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars
-
-rover --clone-folder /landingzones/landingzone_networking --clone-branch vnext13
-rover -lz /tf/caf/landingzones/landingzone_networking/ -var-file /tf/caf/configuration/landingzone_networking.tfvars -a plan
-
-
-# Run AKS landing zone deployment
-rover -lz /tf/caf/ -tfstate landingzone_aks.tfstate -a apply 
 ```
-
-Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
-
-```bash
-rover -lz /tf/caf/ -tfstate landingzone_aks.tfstate -a destroy -auto-approve
-rover -lz /tf/caf/landingzones/landingzone_networking/ -a destroy -var-file /tf/caf/configuration/landingzone_networking.tfvars
-rover -lz /tf/caf/landingzones/landingzone_caf_foundations/ -a destroy -var-file /tf/caf/configuration/landingzone_caf_foundations.tfvars
-
-# to destroy the launchpad you need to conifrm you are connected with your user. If not reconnect with
-rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
-
-rover -lz /tf/caf/landingzones/launchpad -a destroy -launchpad
+export TF_VAR_environment=bicycle
 ```
+| AKS Landing Zone Example                                                                                              | Description                                                |
+|---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
+| [101-single-cluster](./examples/aks/101-single-cluster)| Provision single AKS cluster within open VNET |
+| [102-multi-nodepools](./examples/aks/102-multi-nodepools)| Provision single AKS cluster with multiple nodepool within separate subnet (1 open VNET)|
+| [103-multi-clusters](./examples/aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions (different open VNETs)                     |
+| [204-private-cluster](./examples/aks/204-private-cluster)| Provision private AKS clusters within private VNET with Hub & Spoke UDR to Azure Firewall |
 
-More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
+## Deploy Application (Level 4) landing zone
+Deploys Applications Landing zone on top of an AKS Landing zone
+| Application Landing Zone Example                                                                                              | Description                                                |
+|---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
+| [Flux](./examples/applications/flux)| Provision Flux helm charts on AKS LZ |
+
+
 
 ## Contribute
 
+More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
+
 Pull requests are welcome to evolve the framework and integrate new features.
+
