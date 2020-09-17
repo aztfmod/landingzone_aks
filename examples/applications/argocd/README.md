@@ -14,7 +14,7 @@ rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 export TF_VAR_environment=[YOUR_ENVIRONMENT]
 # Set the folder name of this example
 example=101-single-cluster
-app_example=flux
+app_example=argocd
 ```
 ## 2. Apply Landing zone
 
