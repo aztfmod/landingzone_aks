@@ -1,4 +1,4 @@
-# Applications
+# Flux
 
 Deploys Applications on top of an AKS Landing zone
 
@@ -16,7 +16,7 @@ export TF_VAR_environment=[YOUR_ENVIRONMENT]
 example=101-single-cluster
 app_example=flux
 ```
-## 2. Apply Landingzone
+## 2. Apply Landing zone
 
 Please make sure to change the cluster_key in /tf/caf/examples/applications/{app_example}/configuration.tfvars to choose the cluster to deploy this Application LZ to.
 
@@ -27,7 +27,7 @@ rover -lz /tf/caf/applications \
       -var tags={example=\"${example}\"} \
       -a apply     
 ```
-## 3. Destroy Landingzones
+## 3. Destroy Landing zone
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
 
 ```bash
