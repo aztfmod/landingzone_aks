@@ -5,7 +5,7 @@
 
 To deploy a landing zone, use the execution environnement as described at the root of the landing zone repository.
 
-## Deploy AKS (Level 3) landing zone
+## Deploy AKS (Level 3) Landing zone
 
 Those are the minimum steps to allow a single devops engineer. 
 
@@ -25,7 +25,7 @@ export TF_VAR_environment=bicycle
 | [103-multi-clusters](./examples/aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions (different open VNETs)                     |
 | [204-private-cluster](./examples/aks/204-private-cluster)| Provision private AKS clusters within private VNET with Hub & Spoke UDR to Azure Firewall |
 
-## Deploy Application (Level 4) landing zone
+## Deploy Application (Level 4) Landing zone
 Deploys Applications Landing zone on top of an AKS Landing zone
 | Application Landing Zone Example                                                                                              | Description                                                |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
