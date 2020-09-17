@@ -30,6 +30,7 @@ Deploys Applications Landing zone on top of an AKS Landing zone
 | Application Landing Zone Example                                                                                              | Description                                                |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | [Flux](./examples/applications/flux)| Provision Flux helm charts on AKS LZ |
+| [ArgoCD](./examples/applications/argocd)| Provision ArgoCD helm charts on AKS LZ |
 
 
 
