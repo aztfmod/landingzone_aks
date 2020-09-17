@@ -8,6 +8,11 @@ output aks_clusters_kubeconfig {
   sensitive = false
 }
 
+output aks_clusters {
+  value = module.caf.aks_clusters
+  sensitive = false
+}
+
 output tfstates {
   value     = local.tfstates
   sensitive = false

@@ -4,14 +4,6 @@ Deploys a Single AKS cluster with Blue and Green nodepools in a VNET, within dif
 - Simulate upgrade with Green nodepool.
 - Apply taint & toleration to migrate from Blue to Green.
 
-## Deploying this landing zone
-
-Those are the minimum steps to allow a single devops engineer. 
-
-If the subscription is shared across multiple devops engineer is it recommended each devops engineer use their own launchpad to avoid any conflicts between devops engineers. This can be achieved by setting a specific environment variable value. In the following script we use the environment value of "asia".
-
-Note - the script bellow is not covering a shared environment multiple devops engineer can get access and collaborate (coming later)
-
 
 ### 1. Rover login, Environment & example set
 Ensure the below is set prior to apply or destroy.
@@ -72,7 +64,6 @@ rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a destroy
 ```
 
-More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
 
 ## Contribute
 

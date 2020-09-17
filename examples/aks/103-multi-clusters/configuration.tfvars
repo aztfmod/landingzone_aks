@@ -1,128 +1,58 @@
-tags       = {}
-convention = "cafrandom"
+landingzone_name = "101-single-cluster_aks"
+tfstates = {
+  caf_foundations = {
+    tfstate = "caf_foundations.tfstate"
+  }
+  networking = {
+    tfstate = "103-multi-clusters_landingzone_networking.tfstate"
+  }
+}
 
 resource_groups = {
-  aks1 = {
-    name       = "aks-1"
-    region     = "region1"
-    useprefix  = true
-    max_length = 40
+  aks_rg1 = {
+    name   = "aks-rg1"
+    region = "region1"
   }
-  aks2 = {
-    name       = "aks-2"
-    region     = "region2"
-    useprefix  = true
-    max_length = 40
+  aks_rg2 = {
+    name   = "aks-rg2"
+    region = "region2"
   }
 }
 
-registries = {
-  registry1 = {
-    name               = "acr001"
-    resource_group_key = "aks1"
-    sku                = "Premium"
-    admin_enabled      = false
-
-    private_endpoint_vnet_subnet_keys = {
-      "spoke_aks_sg" = ["aks_nodepool_system", "aks_nodepool_user1"]
-    }
-  }
-  registry2 = {
-    name               = "acr002"
-    resource_group_key = "aks2"
-    sku                = "Premium"
-    admin_enabled      = false
-  }
-}
-
-clusters = {
-  cluster1 = {
-    name               = "cluster-001"
-    resource_group_key = "aks1"
+aks_clusters = {
+  cluster_rg1 = {
+    name               = "akscluster-001"
+    resource_group_key = "aks_rg1"
     os_type            = "Linux"
+
     identity = {
       type = "SystemAssigned"
     }
-    acr_keys = {
-      registry1 = "registry1"
-      registry2 = "registry2"
+
+    kubernetes_version = "1.17.7"
+
+    networking = {
+
+      #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
+      remote_tfstate = {
+        tfstate_key = "networking_aks"
+        output_key  = "vnets"
+        lz_key      = "networking_aks"
+        vnet_key    = "spoke_aks_rg1"
+      }
     }
-    kubernetes_version = "1.15.12"
-    vnet_key           = "spoke_aks_sg"
+
     network_policy = {
       network_plugin    = "azure"
       load_balancer_sku = "Standard"
     }
-    enable_rbac = true
 
-    load_balancer_profile = {
-      # Only one option can be set
-      managed_outbound_ip_count = 1
-      # outbound_ip_prefix_ids = []
-      # outbound_ip_address_ids = []
-    }
+    enable_rbac             = true
 
-    default_node_pool = {
-      name                  = "sharedsvc"
-      vm_size               = "Standard_F4s_v2"
-      subnet_key            = "aks_nodepool_system"
-      availability_zones    = ["1"]
-      enabled_auto_scaling  = false
-      enable_node_public_ip = false
-      max_pods              = 30
-      node_count            = 1
-      os_disk_size_gb       = 64
-      orchestrator_version  = "1.15.11"
-      tags = {
-        "project" = "shared services"
-      }
+    admin_groups = {
+      # ids = []
+      azuread_group_keys = []
     }
-
-    node_pools = {
-      systempool1 = {
-        name                 = "systempool1"
-        mode                 = "System"
-        subnet_key           = "aks_nodepool_system1"
-        max_pods             = 30
-        vm_size              = "Standard_DS2_v2"
-        node_count           = 3
-        enable_auto_scaling  = false
-        os_disk_size_gb      = 64
-        orchestrator_version = "1.15.11"
-      }
-      userpool1 = {
-        name                 = "userpool1"
-        mode                 = "User"
-        subnet_key           = "aks_nodepool_user1"
-        max_pods             = 10
-        vm_size              = "Standard_DS2_v2"
-        node_count           = 1
-        enable_auto_scaling  = false
-        availability_zones   = ["1"]
-        os_disk_size_gb      = 64
-        orchestrator_version = "1.15.11"
-      }
-    }
-  }
-  cluster2 = {
-    name               = "cluster-001"
-    resource_group_key = "aks2"
-    os_type            = "Linux"
-    identity = {
-      type = "SystemAssigned"
-    }
-    kubernetes_version = "1.15.12"
-    vnet_key           = "spoke_aks_ea"
-
-    acr_keys = {
-      registry2 = "registry2"
-    }
-    network_policy = {
-      network_plugin    = "azure"
-      load_balancer_sku = "Standard"
-
-    }
-    enable_rbac = true
 
     load_balancer_profile = {
       # Only one option can be set
@@ -139,65 +69,107 @@ clusters = {
       enable_node_public_ip = false
       max_pods              = 30
       node_count            = 1
-      os_disk_size_gb       = 64
-      orchestrator_version  = "1.15.11"
+      os_disk_size_gb       = 512
+      orchestrator_version  = "1.17.7"
       tags = {
-        "project" = "shared services"
+        "project" = "system services"
       }
     }
 
-    node_pools = {
-      systempool1 = {
-        name                 = "systempool1"
-        mode                 = "System"
-        subnet_key           = "aks_nodepool_system1"
-        max_pods             = 30
-        vm_size              = "Standard_DS2_v2"
-        node_count           = 3
-        enable_auto_scaling  = false
-        os_disk_size_gb      = 64
-        orchestrator_version = "1.15.11"
+    node_resource_group_name = "aks-nodes-rg1"
+  }
+
+  cluster_rg2 = {
+    name               = "akscluster-002"
+    resource_group_key = "aks_rg2"
+    os_type            = "Linux"
+
+    identity = {
+      type = "SystemAssigned"
+    }
+
+    kubernetes_version = "1.17.7"
+
+    networking = {
+
+      #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
+      remote_tfstate = {
+        tfstate_key = "networking_aks"
+        output_key  = "vnets"
+        lz_key      = "networking_aks"
+        vnet_key    = "spoke_aks_rg2"
       }
-      userpool1 = {
-        name                 = "userpool1"
-        mode                 = "User"
-        subnet_key           = "aks_nodepool_user1"
-        max_pods             = 10
-        vm_size              = "Standard_DS2_v2"
-        node_count           = 1
-        enable_auto_scaling  = false
-        os_disk_size_gb      = 64
-        orchestrator_version = "1.15.11"
+    }
+
+    network_policy = {
+      network_plugin    = "azure"
+      load_balancer_sku = "Standard"
+    }
+
+    enable_rbac             = true
+
+    admin_groups = {
+      # ids = []
+      azuread_group_keys = []
+    }
+
+    load_balancer_profile = {
+      # Only one option can be set
+      managed_outbound_ip_count = 1
+      # outbound_ip_prefix_ids = []
+      # outbound_ip_address_ids = []
+    }
+
+    default_node_pool = {
+      name                  = "sharedsvc"
+      vm_size               = "Standard_F4s_v2"
+      subnet_key            = "aks_nodepool_system"
+      enabled_auto_scaling  = false
+      enable_node_public_ip = false
+      max_pods              = 30
+      node_count            = 1
+      os_disk_size_gb       = 512
+      orchestrator_version  = "1.17.7"
+      tags = {
+        "project" = "system services"
+      }
+    }
+
+    node_resource_group_name = "aks-nodes-rg1"
+  }
+}
+
+azure_container_registries = {
+  acr1 = {
+    name               = "acr-test"
+    resource_group_key = "aks_rg1"
+    sku                = "Premium"
+    # georeplication_region_keys = ["region2"]
+
+    # you can setup up to 5 key
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "azure_container_registry"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
       }
     }
   }
 }
 
-jumpboxes = {
-  ubuntu1 = {
-    name                = "ubuntujumpbox"
-    resource_group_name = "jumpbox"
-    location            = "southeastasia"
-    os                  = "Linux"
-    vnet_key            = "hub_sg"
-    subnet_key          = "jumpbox"
-    storage_image_reference = {
-      publisher = "Canonical"
-      offer     = "UbuntuServer"
-      sku       = "18.04-LTS"
-      version   = "latest"
-    }
-    vm_size = "Standard_DS1_v2"
-    os_profile = {
-      admin_username = "testadmin"
-      admin_password = "Ab123456789!"
-    }
-    storage_os_disk = {
-      name              = "ubuntuosdisk1"
-      caching           = "ReadWrite"
-      create_option     = "FromImage"
-      managed_disk_type = "Standard_LRS"
-      disk_size_gb      = "128"
+#
+role_mapping = {
+  custom_role_mapping = {}
+
+  built_in_role_mapping = {
+    azure_container_registries = {
+      acr1 = {
+        "AcrPull" = {
+          aks_clusters = [
+            "cluster_rg1"
+          ]
+        }
+      }
     }
   }
 }

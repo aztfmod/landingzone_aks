@@ -28,7 +28,7 @@ example=102-multi-nodepools
 ```bash
 # Add the lower dependency landingzones
 # rover --clone-landingzones --clone-branch vnext13
-git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /tf/caf/public
+git clone git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
@@ -72,9 +72,3 @@ rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
 
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a destroy
 ```
-
-More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
-
-## Contribute
-
-Pull requests are welcome to evolve the framework and integrate new features.

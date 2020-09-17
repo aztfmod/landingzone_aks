@@ -22,7 +22,7 @@ variable global_settings {
 }
 
 variable landingzone_name {
-  default = "appservices"
+  default = "aks"
 }
 variable level {
   default = "level3"

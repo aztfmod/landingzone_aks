@@ -5,13 +5,6 @@
 
 Deploys Private Cluster with Application Gateway for ingress & UDR to Azure Firewall for egress.
 
-## Deploying this landing zone
-
-Those are the minimum steps to allow a single devops engineer. 
-
-If the subscription is shared across multiple devops engineer is it recommended each devops engineer use their own launchpad to avoid any conflicts between devops engineers. This can be achieved by setting a specific environment variable value. In the following script we use the environment value of "asia".
-
-Note - the script bellow is not covering a shared environment multiple devops engineer can get access and collaborate (coming later)
 
 ### 1. Rover login, Environment & example set
 
@@ -80,8 +73,3 @@ rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
 rover -lz /tf/caf/landingzones/launchpad -a destroy -launchpad -var location=eastus -var-file /tf/caf/examples/${example}/launchpad.tfvars
 ```
 
-More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
-
-## Contribute
-
-Pull requests are welcome to evolve the framework and integrate new features.

@@ -2,15 +2,6 @@
 
 Deploys a Single AKS cluster in a VNET
 
-## Deploying this landing zone
-
-Those are the minimum steps to allow a single devops engineer. 
-
-If the subscription is shared across multiple devops engineer is it recommended each devops engineer use their own launchpad to avoid any conflicts between devops engineers. This can be achieved by setting a specific environment variable value. In the following script we use the environment value of "asia".
-
-Note - the script bellow is not covering a shared environment multiple devops engineer can get access and collaborate (coming later)
-
-
 ### 1. Rover login, Environment & example set
 Ensure the below is set prior to apply or destroy.
 ```bash
@@ -25,7 +16,7 @@ example=101-single-cluster
 ```bash
 # Add the lower dependency landingzones
 # rover --clone-landingzones --clone-branch vnext13
-git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /tf/caf/public
+git clone git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
@@ -44,7 +35,14 @@ rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
       -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
       -var tags={example=\"${example}\"} \
-      -a apply      
+      -a apply    
+
+
+rover -lz /tf/caf/apps \
+      -tfstate ${example}_dapr.tfstate \
+      -var-file /tf/caf/examples/apps/dapr/configuration.tfvars \
+      -var tags={example=\"${example}\"} \
+      -a apply     
 ```
 ### 3. Destroy Landingzones
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
@@ -70,8 +68,4 @@ rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a destroy
 ```
 
-More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
 
-## Contribute
-
-Pull requests are welcome to evolve the framework and integrate new features.
