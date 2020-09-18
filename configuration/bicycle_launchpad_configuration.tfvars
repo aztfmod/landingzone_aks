@@ -347,9 +347,7 @@ azuread_groups = {
     description = "Provide read and write access to the keyvault secrets / level0."
     members = {
       user_principal_names = [
-        "hieunhu_microsoft.com#EXT#@terraformdev.onmicrosoft.com",
-        "lalesle_microsoft.com#EXT#@terraformdev.onmicrosoft.com",
-        "kevinhar_microsoft.com#EXT#@terraformdev.onmicrosoft.com"
+        
       ]
       group_names = []
       object_ids  = []
