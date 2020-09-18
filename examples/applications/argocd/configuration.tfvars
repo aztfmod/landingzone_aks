@@ -4,7 +4,7 @@ remote_tfstate = "101-single-cluster_landingzone_aks.tfstate"
 cluster_key = "cluster_rg1"
 
 namespaces = {
-  fluxcd = {
+  argocd = {
     name = "argocd"
   }
 }
