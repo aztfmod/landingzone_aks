@@ -1,9 +1,6 @@
 level = "level0"
-scenarios = {
-  launchpad = 200
-}
 
-launchpad_mode = "launchpad"
+launchpad_mode = "launchpad_light"
 
 # Default region. When not set to a resource it will use that value
 default_region = "region1"
@@ -14,9 +11,8 @@ regions = {
 }
 
 launchpad_key_names = {
-  keyvault               = "launchpad"
-  azuread_app            = "caf_launchpad_level0"
-  keyvault_client_secret = "aadapp-caf-launchpad-level0"
+  keyvault    = "launchpad"
+  azuread_app = "caf_launchpad_level0"
   tfstates = [
     "level0",
     "level1",
@@ -147,9 +143,6 @@ storage_accounts = {
 
   }
 
-}
-
-diagnostic_storage_accounts = {
   # Stores diagnostic logging for region1
   diaglogs_region1 = {
     name                     = "diaglogsrg1"
@@ -264,63 +257,51 @@ keyvaults = {
       }
     }
 
-    # secrets = {
-    #   azdo_pat_admin = {
-    #     name           = "azdo-pat-admin"
-    #     value          = ""
-    #     ignore_changes = true
-    #   }
-    #   azdo_pat_agent = {
-    #     name           = "azdo-pat-agent"
-    #     value          = ""
-    #     ignore_changes = true
-    #   }
-    # }
-
   }
 }
 
 keyvault_access_policies = {
   # A maximum of 16 access policies per keyvault
   launchpad = {
-    logged_in_user = {
-      # if the key is set to "logged_in_user" add the user running terraform in the keyvault policy
-      # More examples in /examples/keyvault
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
-    }
-    caf_launchpad_level0 = {
-      # Reference a key to an azure ad applications
-      azuread_app_key    = "caf_launchpad_level0"
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
+    bootstrap_user = {
+      # azuread_group_key = ""
+      # azuread_app_key   = ""
+
+      # can be any object_id to reference an existing azure ad application, group or user
+      # if set to "logged_in_user" add the user running terraform in the policy (recommended)
+      object_id = "logged_in_user"
+
+      key_permissions         = []
+      certificate_permissions = []
+      secret_permissions      = ["Set", "Get", "List", "Delete"]
     }
     keyvault_level0_rw = {
-      # Reference a key to an azure ad group
-      azuread_group_key  = "keyvault_level0_rw"
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
+      azuread_group_key = "keyvault_level0_rw"
+      # azuread_app_key   = ""
+      # object_id               = ""
+
+      key_permissions         = []
+      certificate_permissions = []
+      secret_permissions      = ["Set", "Get", "List", "Delete"]
     }
   }
 
   secrets = {
-    logged_in_user = {
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
-    }
-    caf_launchpad_level0 = {
-      azuread_app_key    = "caf_launchpad_level0"
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
-    }
-    keyvault_level0_rw = {
-      azuread_group_key  = "keyvault_level0_rw"
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
+    launchpad_bootstrap_user = {
+      object_id          = "logged_in_user"
+      secret_permissions = ["Set", "Get", "List", "Delete"]
     }
     keyvault_password_rotation = {
       azuread_group_key  = "keyvault_password_rotation"
-      secret_permissions = ["Set", "Get", "List", "Delete", ]
+      secret_permissions = ["Set", "Get", "List", "Delete"]
     }
   }
 }
 
 subscriptions = {
   logged_in_subscription = {
+    role_definition_name = "Owner"
+    aad_app_key          = "caf_launchpad_level0"
 
     # you can setup up to 5 profiles
     diagnostic_profiles = {
@@ -347,17 +328,15 @@ azuread_groups = {
     description = "Provide read and write access to the keyvault secrets / level0."
     members = {
       user_principal_names = [
-        "hieunhu_microsoft.com#EXT#@terraformdev.onmicrosoft.com",
-        "lalesle_microsoft.com#EXT#@terraformdev.onmicrosoft.com",
-        "kevinhar_microsoft.com#EXT#@terraformdev.onmicrosoft.com"
       ]
-      group_names = []
-      object_ids  = []
-      group_keys  = []
+      group_names      = []
+      group_object_ids = []
+      group_keys       = []
 
       service_principal_keys = [
         "caf_launchpad_level0"
       ]
+      service_principal_object_id = []
 
     }
     owners = {
@@ -366,6 +345,7 @@ azuread_groups = {
       service_principal_keys = [
         "caf_launchpad_level0"
       ]
+      service_principal_object_id = []
     }
     prevent_duplicate_name = false
   }
@@ -431,13 +411,14 @@ azuread_groups = {
     members = {
       user_principal_names = [
       ]
-      group_names = []
-      object_ids  = []
-      group_keys  = []
+      group_names      = []
+      group_object_ids = []
+      group_keys       = []
 
       service_principal_keys = [
         "caf_launchpad_level0"
       ]
+      service_principal_object_id = []
 
     }
     owners = {
@@ -446,6 +427,7 @@ azuread_groups = {
       service_principal_keys = [
         "caf_launchpad_level0"
       ]
+      service_principal_object_id = []
     }
     prevent_duplicate_name = false
   }
@@ -458,6 +440,7 @@ azuread_users = {
     convention              = "cafrandom"
     useprefix               = true
     max_length              = 60
+    tenant_name             = "terraformdev.onmicrosoft.com"
     user_name               = "caf-level0-security-devops-pat-rotation"
     password_expire_in_days = 180
 
@@ -476,10 +459,13 @@ azuread_apps = {
     password_expire_in_days = 180
 
     # Store the ${secret_prefix}-client-id, ${secret_prefix}-client-secret...
-    # Set the policy during the creation process of the launchpad
     keyvault = {
       keyvault_key  = "launchpad"
-      secret_prefix = "aadapp-caf-launchpad-level0"
+      secret_prefix = "caf-launchpad-level0"
+      access_policies = {
+        key_permissions    = []
+        secret_permissions = ["Get", "List", "Set", "Delete"]
+      }
     }
   }
 
@@ -493,7 +479,11 @@ azuread_apps = {
     reply_urls              = ["https://localhost"]
     keyvault = {
       keyvault_key  = "secrets"
-      secret_prefix = "aadapp-caf-level0-security-devops-pat-rotation-aad-app"
+      secret_prefix = "caf-level0-security-devops-pat-rotation-aad-app"
+      access_policies = {
+        key_permissions    = []
+        secret_permissions = ["Get", "Set"]
+      }
     }
   }
 
@@ -506,7 +496,6 @@ azuread_apps = {
 azuread_app_roles = {
   caf_launchpad_level0 = {
     roles = [
-      "Application Administrator",
       "Application Developer",
       "User Account Administrator"
     ]
@@ -516,31 +505,31 @@ azuread_app_roles = {
 managed_identities = {
   level0 = {
     # Used by the release agent to access the level0 keyvault and storage account with the tfstates in read / write
-    name               = "launchpad-level0-msi"
+    name               = "launchpad-level0"
     resource_group_key = "security"
   }
   level1 = {
     # Used by the release agent to access the level1 keyvault and storage account with the tfstates in read / write
     # Has read access to level0
-    name               = "launchpad-level1-msi"
+    name               = "launchpad-level1"
     resource_group_key = "security"
   }
   level2 = {
     # Used by the release agent to access the level2 keyvault and storage account with the tfstates in read / write
     # Has read access to level1
-    name               = "launchpad-level2-msi"
+    name               = "launchpad-level2"
     resource_group_key = "security"
   }
   level3 = {
     # Used by the release agent to access the level3 keyvault and storage account with the tfstates in read / write
     # Has read access to level2
-    name               = "launchpad-level3-msi"
+    name               = "launchpad-level3"
     resource_group_key = "security"
   }
   level4 = {
     # Used by the release agent to access the level4 keyvault and storage account with the tfstates in read / write
     # Has read access to level3
-    name               = "launchpad-level4-msi"
+    name               = "launchpad-level4"
     resource_group_key = "security"
   }
 }
@@ -604,11 +593,11 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["Audit", true, false, 7],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", true, false, 7],
       ]
     }
@@ -619,11 +608,11 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["AuditEvent", true, false, 7],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", true, false, 7],
       ]
     }
@@ -634,7 +623,7 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["BastionAuditLogs", true, false, 7],
       ]
     }
@@ -645,11 +634,11 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["VMProtectionAlerts", true, false, 7],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", true, false, 7],
       ]
     }
@@ -660,13 +649,13 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["DDoSProtectionNotifications", true, false, 7],
         ["DDoSMitigationFlowLogs", true, false, 7],
         ["DDoSMitigationReports", true, false, 7],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", true, false, 7],
       ]
     }
@@ -677,7 +666,7 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["NetworkSecurityGroupEvent", true, false, 7],
         ["NetworkSecurityGroupRuleCounter", true, false, 7],
       ]
@@ -689,36 +678,22 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", false, false, 7],
       ]
     }
-  }
 
-  azure_container_registry = {
-    name = "operational_logs_and_metrics"
-    categories = {
-      log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
-        ["ContainerRegistryRepositoryEvents", true, false, 7],
-        ["ContainerRegistryLoginEvents", true, false, 7],
-      ]
-      metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
-        ["AllMetrics", true, false, 7],
-      ]
-    }
   }
 
   compliance_all = {
     name = "compliance_logs"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["AuditEvent", true, true, 365],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", false, false, 7],
       ]
     }
@@ -729,12 +704,12 @@ diagnostics_definition = {
     name = "siem"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
         ["AuditEvent", true, true, 0],
       ]
 
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
         ["AllMetrics", false, false, 0],
       ]
     }
@@ -745,7 +720,7 @@ diagnostics_definition = {
     name = "subscription_operations"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)"]
+        # ["Category name",  "Diagnostics Enabled(true/false)"] 
         ["Administrative", true],
         ["Security", true],
         ["ServiceHealth", true],
@@ -762,7 +737,7 @@ diagnostics_definition = {
     name = "activity_logs_for_siem"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)"]
+        # ["Category name",  "Diagnostics Enabled(true/false)"] 
         ["Administrative", false],
         ["Security", true],
         ["ServiceHealth", false],
@@ -800,8 +775,9 @@ diagnostics_destinations = {
 }
 
 custom_role_definitions = {
-  caf-launchpad = {
-    name        = "caf-launchpad"
+  caf-launchpad-rwdo = {
+    name        = "caf-launchpad-rwdo"
+    convention  = "passthrough"
     useprefix   = true
     description = "Provide addition permissions on top of built-in Contributor role to manage landing zones deployment"
     permissions = {
@@ -860,8 +836,9 @@ custom_role_definitions = {
 
   }
 
-  caf-launchpad-contributor = {
-    name        = "caf-launchpad-contributor"
+  caf-launchpad-contributor-rwdo = {
+    name        = "caf-launchpad-contributor-rwdo"
+    convention  = "passthrough"
     useprefix   = true
     description = "Provide addition permissions on top of built-in Contributor role to manage landing zones deployment"
     permissions = {
@@ -893,17 +870,14 @@ custom_role_definitions = {
 #
 role_mapping = {
   custom_role_mapping = {
-    subscriptions = {
+    subscription_keys = {
       logged_in_subscription = {
-        "caf-launchpad-contributor" = {
-          azuread_groups = [
+        "caf-launchpad-contributor-rwdo" = {
+          azuread_group_keys = [
             "keyvault_level0_rw", "keyvault_level1_rw", "keyvault_level2_rw", "keyvault_level3_rw", "keyvault_level4_rw",
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level0", "level1", "level2", "level3", "level4"
-          ]
-          azuread_apps = [
-            "caf_launchpad_level0"
           ]
         }
       }
@@ -911,109 +885,108 @@ role_mapping = {
   }
 
   built_in_role_mapping = {
-    subscriptions = {
+    subscription_keys = {
       logged_in_subscription = {
         "Contributor" = {
-          azuread_apps = [
+          azuread_app_keys = [
             "caf_launchpad_level0"
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level0", "level1", "level2", "level3", "level4"
           ]
         }
       }
     }
-    resource_groups = {
+    resource_group_keys = {
       tfstate = {
         "Reader" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "caf_launchpad_Reader"
           ]
         }
       }
       security = {
         "Reader" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "caf_launchpad_Reader"
           ]
         }
       }
       networking = {
         "Reader" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "caf_launchpad_Reader"
           ]
         }
       }
       ops = {
         "Reader" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "caf_launchpad_Reader"
           ]
         }
       }
       siem = {
         "Reader" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "caf_launchpad_Reader"
           ]
         }
       }
     }
-    storage_accounts = {
+    storage_account_keys = {
       level0 = {
         "Storage Blob Data Contributor" = {
-          logged_in = [
-            "user"
+          object_ids = [
+            "logged_in_user"
           ]
-          object_ids = []
-          azuread_groups = [
+          azuread_group_keys = [
             "keyvault_level0_rw"
           ]
-          azuread_apps = [
+          azuread_app_keys = [
             "caf_launchpad_level0"
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level0"
           ]
         }
       }
       level1 = {
         "Storage Blob Data Contributor" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "keyvault_level1_rw"
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level1"
           ]
         }
       }
       level2 = {
         "Storage Blob Data Contributor" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "keyvault_level2_rw"
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level2"
           ]
         }
       }
       level3 = {
         "Storage Blob Data Contributor" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "keyvault_level3_rw"
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level3"
           ]
         }
       }
       level4 = {
         "Storage Blob Data Contributor" = {
-          azuread_groups = [
+          azuread_group_keys = [
             "keyvault_level4_rw"
           ]
-          managed_identities = [
+          managed_identity_keys = [
             "level4"
           ]
         }
@@ -1029,11 +1002,11 @@ azuread_api_permissions = {
     active_directory_graph = {
       resource_app_id = "00000002-0000-0000-c000-000000000000"
       resource_access = {
-        Application_ReadWrite_OwnedBy = {
+        active_directory_graph_resource_access_id_Application_ReadWrite_OwnedBy = {
           id   = "824c81eb-e3f8-4ee6-8f6d-de7f50d565b7"
           type = "Role"
         }
-        Directory_ReadWrite_All = {
+        active_directory_graph_resource_access_id_Directory_ReadWrite_All = {
           id   = "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175"
           type = "Role"
         }
@@ -1043,19 +1016,19 @@ azuread_api_permissions = {
     microsoft_graph = {
       resource_app_id = "00000003-0000-0000-c000-000000000000"
       resource_access = {
-        AppRoleAssignment_ReadWrite_All = {
+        microsoft_graph_AppRoleAssignment_ReadWrite_All = {
           id   = "06b708a9-e830-4db3-a914-8e69da51d44f"
           type = "Role"
         }
-        DelegatedPermissionGrant_ReadWrite_All = {
+        microsoft_graph_DelegatedPermissionGrant_ReadWrite_All = {
           id   = "8e8e4742-1d95-4f68-9d56-6ee75648c72a"
           type = "Role"
         }
-        GroupReadWriteAll = {
+        microsoft_graph_GroupReadWriteAll = {
           id   = "62a82d76-70ea-41e2-9197-370581804d09"
           type = "Role"
         }
-        RoleManagement_ReadWrite_Directory = {
+        microsoft_graph_RoleManagement_ReadWrite_Directory = {
           id   = "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8"
           type = "Role"
         }
@@ -1064,6 +1037,7 @@ azuread_api_permissions = {
   }
 
 }
+
 
 ##################################################
 #
@@ -1110,10 +1084,8 @@ virtual_machines = {
     networking_interfaces = {
       nic0 = {
         # Value of the keys from networking.tfvars
-        networking = {
-          vnet_key   = "devops_region1"
-          subnet_key = "jumpbox"
-        }
+        vnet_key                = "devops_region1"
+        subnet_key              = "jumpbox"
         name                    = "0"
         enable_ip_forwarding    = false
         internal_dns_name_label = "nic0"
@@ -1136,7 +1108,6 @@ virtual_machines = {
         size                            = "Standard_F2"
         admin_username                  = "adminuser"
         disable_password_authentication = true
-        custom_data                     = "scripts/cloud-init-install-rover-tools.config"
 
         # Value of the nic keys to attach the VM. The first one in the list is the default nic
         network_interface_keys = ["nic0"]
@@ -1154,9 +1125,9 @@ virtual_machines = {
           version   = "latest"
         }
 
-        managed_identities = {
-          keys = ["level0", "level1", "level2", "level3", "level4"]
-        }
+        managed_identity_keys = [
+          "level0", "level1", "level2", "level3", "level4"
+        ]
       }
     }
 
@@ -1202,7 +1173,7 @@ vnets = {
     specialsubnets = {}
     subnets = {
       AzureBastionSubnet = {
-        name    = "AzureBastionSubnet" #Must be called AzureBastionSubnet
+        name    = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
         cidr    = ["10.100.100.24/29"]
         nsg_key = "azure_bastion_nsg"
       }
@@ -1235,11 +1206,6 @@ vnets = {
         name              = "level4"
         cidr              = ["10.100.100.72/29"]
         service_endpoints = ["Microsoft.KeyVault"]
-      }
-      private_endpoints = {
-        name                                           = "private_endpoints"
-        cidr                                           = ["10.100.100.128/25"]
-        enforce_private_link_endpoint_network_policies = true
       }
     }
 
