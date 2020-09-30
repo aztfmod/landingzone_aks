@@ -1,4 +1,4 @@
-# Flux
+# ArgoCD
 
 Deploys Applications on top of an AKS Landing zone
 
