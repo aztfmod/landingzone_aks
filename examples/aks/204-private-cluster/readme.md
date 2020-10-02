@@ -27,19 +27,23 @@ rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
 # Deploy networking
 # Deploy networking hub services
-network_hub="/tf/caf/examples/aks/204-private-cluster/networking_hub"
+networking_hub="/tf/caf/examples/aks/${example}/networking_hub"
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
       -tfstate networking_hub.tfstate \
-      -var-file ${network_hub}/configuration.tfvars \
-      -var-file ${network_hub}/firewalls.tfvars \
-      -var-file ${network_hub}/nsgs.tfvars \
-      -var-file ${network_hub}/public_ips.tfvars \
-      -var-file ${network_hub}/diagnostics.tfvars \
+      -var-file ${networking_hub}/configuration.tfvars \
+      -var-file ${networking_hub}/firewalls.tfvars \
+      -var-file ${networking_hub}/nsgs.tfvars \
+      -var-file ${networking_hub}/public_ips.tfvars \
       -a apply
 
+networking_spoke="/tf/caf/examples/aks/${example}/networking_spoke"
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
       -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/networking_spoke.tfvars \
+      -var-file ${networking_spoke}/configuration.tfvars \
+      -var-file ${networking_spoke}/route_tables.tfvars \
+      -var-file ${networking_spoke}/nsgs.tfvars \
+      -var-file ${networking_spoke}/public_ips.tfvars \
+      -var-file ${networking_spoke}/bastion.tfvars \
       -var tags={example=\"${example}\"} \
       -a apply
 # Run AKS landing zone deployment
