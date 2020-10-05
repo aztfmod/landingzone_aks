@@ -10,7 +10,7 @@ tfstates = {
 
 resource_groups = {
   aks_rg1 = {
-    name   = "aks-rg1"
+    name   = "aks-rg2"
     region = "region1"
   }
 }
@@ -26,7 +26,7 @@ aks_clusters = {
       type = "SystemAssigned"
     }
 
-    kubernetes_version = "1.17.7"
+    kubernetes_version = "1.17.11"
 
     networking = {
 
@@ -67,19 +67,19 @@ aks_clusters = {
       max_pods              = 30
       node_count            = 1
       os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.7"
+      orchestrator_version  = "1.17.11"
       tags = {
         "project" = "system services"
       }
     }
 
-    node_resource_group_name = "aks-nodes-rg1"
+    node_resource_group_name = "aks-nodes-rg2"
   }
 }
 
 azure_container_registries = {
   acr1 = {
-    name               = "acr-test"
+    name               = "acr-test1"
     resource_group_key = "aks_rg1"
     sku                = "Premium"
     # georeplication_region_keys = ["region2"]

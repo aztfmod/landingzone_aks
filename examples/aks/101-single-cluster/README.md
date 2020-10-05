@@ -15,11 +15,10 @@ example=101-single-cluster
 ### 2. Apply Landingzones
 ```bash
 # Add the lower dependency landingzones
-git clone https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
-git checkout vnext
+git clone --branch vnext https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
+rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/100_configuration.tfvars -a apply
 ## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
 rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
