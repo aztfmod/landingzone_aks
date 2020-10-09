@@ -1,6 +1,6 @@
 module "caf" {
-  source = "git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git"
-  # source = "./modules"
+  # source = "git@github.com:aztfmod/terraform-azurerm-caf.git"
+  source = "./modules"
 
   tfstates                    = local.tfstates
   tags                        = local.tags
