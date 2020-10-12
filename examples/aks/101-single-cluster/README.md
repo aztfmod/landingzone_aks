@@ -15,11 +15,10 @@ example=101-single-cluster
 ### 2. Apply Landingzones
 ```bash
 # Add the lower dependency landingzones
-git clone https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
-git checkout vnext
+git clone --branch vnext https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
+rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/100_configuration.tfvars -a apply
 ## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
 rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
@@ -36,13 +35,6 @@ rover -lz /tf/caf/ \
       -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
       -var tags={example=\"${example}\"} \
       -a apply    
-
-
-rover -lz /tf/caf/apps \
-      -tfstate ${example}_dapr.tfstate \
-      -var-file /tf/caf/examples/apps/dapr/configuration.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a apply     
 ```
 ### 3. Destroy Landingzones
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:

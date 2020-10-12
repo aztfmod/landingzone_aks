@@ -13,7 +13,7 @@ rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export TF_VAR_environment=[YOUR_ENVIRONMENT]
 # Set the folder name of this example
-example=105-blue-green
+example=WIP-105-blue-green
 ```
 ### 2. Apply Landingzones
 ```bash

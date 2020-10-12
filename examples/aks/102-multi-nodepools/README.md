@@ -28,7 +28,7 @@ example=102-multi-nodepools
 ```bash
 # Add the lower dependency landingzones
 # rover --clone-landingzones --clone-branch vnext13
-git clone git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git /tf/caf/public
+git clone --branch vnext https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
 
 # Deploy the launchpad light to store the tfstates
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply

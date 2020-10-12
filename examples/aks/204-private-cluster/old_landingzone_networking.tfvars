@@ -790,7 +790,6 @@ network_security_group_definition = {
       },
     ]
   }
-
 }
 
 
@@ -844,7 +843,6 @@ diagnostics_definition = {
       ]
     }
   }
-
 }
 
 bastion_hosts = {

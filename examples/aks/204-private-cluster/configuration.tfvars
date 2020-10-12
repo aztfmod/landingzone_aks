@@ -5,7 +5,7 @@ tfstates = {
     tfstate = "caf_foundations.tfstate"
   }
   networking = {
-    tfstate = "networking_aks.tfstate"
+    tfstate = "204-private-cluster_landingzone_networking.tfstate"
   }
 }
 
@@ -79,8 +79,8 @@ azure_container_registries = {
         name               = "acr-test-private-link"
         resource_group_key = "aks1_rg1"
         remote_tfstate = {
-          tfstate_key = "networking_aks"
-          lz_key      = "networking_aks"
+          tfstate_key = "aks_networking_spoke"
+          lz_key      = "aks_networking_spoke"
           output_key  = "vnets"
           vnet_key    = "spoke_aks_rg1"
           subnet_key  = "private_endpoints"
@@ -104,14 +104,8 @@ azure_container_registries = {
   }
 }
 
-helms = {
-  flux        = { version = "1.0" }
-  podIdentity = {}
-}
-
 aks_clusters = {
   seacluster = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-001"
     resource_group_key = "aks1_rg1"
     os_type            = "Linux"
@@ -120,13 +114,13 @@ aks_clusters = {
       type = "SystemAssigned"
     }
 
-    kubernetes_version = "1.17.7"
+    kubernetes_version = "1.17.11"
 
     networking = {
       remote_tfstate = {
-        tfstate_key = "networking_aks"
+        tfstate_key = "aks_networking_spoke"
         output_key  = "vnets"
-        lz_key      = "networking_aks"
+        lz_key      = "aks_networking_spoke"
         vnet_key    = "spoke_aks_rg1"
       }
     }
@@ -142,7 +136,7 @@ aks_clusters = {
 
     admin_groups = {
       # ids = []
-      azuread_group_keys = ["aks_admins"]
+      azuread_group_keys = [] #["aks_admins"]
     }
 
     load_balancer_profile = {
@@ -161,7 +155,7 @@ aks_clusters = {
       max_pods              = 30
       node_count            = 2
       os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.7"
+      orchestrator_version  = "1.17.11"
       tags = {
         "project" = "system services"
       }
@@ -179,7 +173,7 @@ aks_clusters = {
         node_count           = 2
         enable_auto_scaling  = false
         os_disk_size_gb      = 512
-        orchestrator_version = "1.17.7"
+        orchestrator_version = "1.17.11"
         tags = {
           "project" = "user services"
         }
@@ -209,9 +203,9 @@ virtual_machines = {
         # AKS rely on a remote network and need the details of the tfstate to connect (tfstate_key), assuming RBAC authorization.
         networking = {
           remote_tfstate = {
-            tfstate_key = "networking_aks"
+            tfstate_key = "aks_networking_spoke"
             output_key  = "vnets"
-            lz_key      = "networking_aks"
+            lz_key      = "aks_networking_spoke"
             vnet_key    = "spoke_aks_rg1"
             subnet_key  = "jumpbox"
           }
@@ -280,23 +274,23 @@ managed_identities = {
   }
 }
 
-azuread_groups = {
-  aks_admins = {
-    name        = "aks-admins"
-    description = "Provide access to the AKS cluster and the jumpbox Keyvault secret."
-    members = {
-      user_principal_names = [
-      ]
-      group_names = []
-      object_ids  = []
-      group_keys  = []
+# azuread_groups = {
+#   aks_admins = {
+#     name        = "aks-admins"
+#     description = "Provide access to the AKS cluster and the jumpbox Keyvault secret."
+#     members = {
+#       user_principal_names = [
+#       ]
+#       group_names = []
+#       object_ids  = []
+#       group_keys  = []
 
-      service_principal_keys = [
-      ]
-    }
-    prevent_duplicate_name = false
-  }
-}
+#       service_principal_keys = [
+#       ]
+#     }
+#     prevent_duplicate_name = false
+#   }
+# }
 
 
 #
@@ -311,7 +305,7 @@ role_mapping = {
       seacluster = {
         "Azure Kubernetes Service Cluster Admin Role" = {
           azuread_groups = [
-            "aks_admins"
+            # "aks_admins"
           ]
           managed_identities = [
             "jumpbox"

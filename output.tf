@@ -13,6 +13,11 @@ output aks_clusters {
   sensitive = false
 }
 
+output virtual_machines {
+  value = module.caf.virtual_machines
+  sensitive = false
+}
+
 output tfstates {
   value     = local.tfstates
   sensitive = false

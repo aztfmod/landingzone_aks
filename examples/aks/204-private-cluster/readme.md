@@ -17,17 +17,33 @@ example=204-private-cluster
 ```bash
 # Add the lower dependency landingzones
 # rover --clone-landingzones --clone-branch vnext13
-git clone git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git /tf/caf/public
+git clone --branch vnext https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
+git clone --branch HN-aks git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git /tf/caf/modules
 
 # Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
+rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/100_configuration.tfvars -a apply
 ## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
 rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
 # Deploy networking
+# Deploy networking hub services
+networking_hub="/tf/caf/examples/aks/${example}/networking_hub"
+rover -lz /tf/caf/public/landingzones/caf_networking/ \
+      -tfstate networking_hub.tfstate \
+      -var-file ${networking_hub}/configuration.tfvars \
+      -var-file ${networking_hub}/firewalls.tfvars \
+      -var-file ${networking_hub}/nsgs.tfvars \
+      -var-file ${networking_hub}/public_ips.tfvars \
+      -a apply
+
+networking_spoke="/tf/caf/examples/aks/${example}/networking_spoke"
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
       -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
+      -var-file ${networking_spoke}/configuration.tfvars \
+      -var-file ${networking_spoke}/route_tables.tfvars \
+      -var-file ${networking_spoke}/nsgs.tfvars \
+      -var-file ${networking_spoke}/public_ips.tfvars \
+      -var-file ${networking_spoke}/bastion.tfvars \
       -var tags={example=\"${example}\"} \
       -a apply
 # Run AKS landing zone deployment
