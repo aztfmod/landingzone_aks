@@ -1,10 +1,19 @@
-landingzone_name="networking_aks"
-tfstates = {
-  caf_foundations = {
-    tfstate = "caf_foundations.tfstate"
+landingzone = {
+  backend_type = "azurerm"
+  current = {
+    level = "level2"
+    key   = "networking_aks"
   }
-  networking = {
-    tfstate = "caf_foundations.tfstate"
+  lower = {
+    foundations = {
+      tfstate = "caf_foundations.tfstate"
+    }
+    networking = {
+      launchpad = {
+        tfstate = "caf_foundations.tfstate"
+      }
+
+    }
   }
 }
 

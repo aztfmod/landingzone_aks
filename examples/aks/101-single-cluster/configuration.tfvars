@@ -1,10 +1,19 @@
-landingzone_name = "101-single-cluster_aks"
-tfstates = {
-  caf_foundations = {
-    tfstate = "caf_foundations.tfstate"
+landingzone = {
+  backend_type = "azurerm"
+  current = {
+    level = "level3"
+    key   = "101-single-cluster_aks"
   }
-  networking = {
-    tfstate = "101-single-cluster_landingzone_networking.tfstate"
+  lower = {
+    shared_services = {
+      tfstate = "caf_shared_services.tfstate"
+    }
+    networking = {
+      networking_aks = {
+        tfstate = "101-single-cluster_landingzone_networking.tfstate"
+      }
+
+    }
   }
 }
 
@@ -27,16 +36,14 @@ aks_clusters = {
     }
 
     kubernetes_version = "1.17.11"
-
+    lz_key = "networking_aks"
+      vnet_key    = "spoke_aks_rg1"
     networking = {
 
       #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
-      remote_tfstate = {
-        tfstate_key = "networking_aks"
-        output_key  = "vnets"
-        lz_key      = "networking_aks"
-        vnet_key    = "spoke_aks_rg1"
-      }
+      lz_key = "networking_aks"
+      vnet_key    = "spoke_aks_rg1"
+
     }
 
     network_policy = {

@@ -1,8 +1,7 @@
 # Map of the remote data state for lower level
-variable lowerlevel_storage_account_name {}
-variable lowerlevel_container_name {}
-variable lowerlevel_key {}
-variable lowerlevel_resource_group_name {}
+variable lower_storage_account_name {}
+variable lower_container_name {}
+variable lower_resource_group_name {}
 
 variable tfstate_storage_account_name {}
 variable tfstate_container_name {}
@@ -21,21 +20,25 @@ variable global_settings {
   default = {}
 }
 
-variable landingzone_name {
-  default = "aks"
+variable landingzone {
+  default = {
+    backend_type = "azurerm"
+    current = {
+      level = "level3"
+      key   = "aks"
+    }
+    lower = {
+    }
+  }
 }
-variable level {
-  default = "level3"
-}
+
 variable environment {
   default = "sandpit"
 }
 variable rover_version {
   default = null
 }
-variable max_length {
-  default = 40
-}
+
 variable logged_user_objectId {
   default = null
 }
@@ -118,3 +121,4 @@ variable aks_clusters {
 variable azure_container_registries {
   default = {}
 }
+variable tenant_id {}
