@@ -9,13 +9,8 @@ resource_groups = {
   }
 }
 
-helms = {
-  flux        = { version = "1.0" }
-  podIdentity = {}
-}
 clusters = {
   seacluster = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-001"
     resource_group_key = "aks1"
     os_type            = "Linux"

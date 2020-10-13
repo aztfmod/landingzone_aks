@@ -17,7 +17,6 @@ resource_groups = {
 
 aks_clusters = {
   cluster_rg1 = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-001"
     resource_group_key = "aks_rg1"
     os_type            = "Linux"
