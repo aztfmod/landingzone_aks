@@ -1,12 +1,12 @@
 module "caf" {
-  # source = "git@github.com:aztfmod/terraform-azurerm-caf.git"
-  source = "./modules"
+  # source = "./modules"
+  source  = "aztfmod/caf/azurerm"
+  version = "~>0.3"
 
   tfstates                    = local.tfstates
   tags                        = local.tags
   global_settings             = local.global_settings
   diagnostics                 = local.diagnostics
-  diagnostic_storage_accounts = var.diagnostic_storage_accounts
   logged_user_objectId        = var.logged_user_objectId
   logged_aad_app_objectId     = var.logged_aad_app_objectId
   resource_groups             = var.resource_groups

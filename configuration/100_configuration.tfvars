@@ -467,6 +467,20 @@ network_security_group_definition = {
 # Different profiles to target different operational teams
 #
 diagnostics_definition = {
+  default_all = {
+    name = "operational_logs_and_metrics"
+    categories = {
+      log = [
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        ["AuditEvent", true, false, 7],
+      ]
+      metric = [
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
+        ["AllMetrics", true, false, 7],
+      ]
+    }
+  }
+
   azurerm_firewall = {
     name = "operational_logs_and_metrics"
     categories = {
@@ -508,21 +522,6 @@ diagnostics_definition = {
     }
 
   }
-
-  azure_container_registry = {
-    name = "operational_logs_and_metrics"
-    categories = {
-      log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
-        ["ContainerRegistryRepositoryEvents", true, false, 7],
-        ["ContainerRegistryLoginEvents", true, false, 7],
-      ]
-      metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
-        ["AllMetrics", true, false, 7],
-      ]
-    }
-  }
 }
 
 diagnostics_destinations = {
@@ -563,5 +562,55 @@ diagnostic_storage_accounts = {
     account_tier             = "Standard"
     account_replication_type = "LRS"
     access_tier              = "Cool"
+  }
+}
+
+
+#
+# Define the settings for log analytics workspace and solution map
+#
+log_analytics = {
+  central_logs_region1 = {
+    region             = "region1"
+    name               = "logs"
+    resource_group_key = "ops"
+    # you can setup up to 5 key
+    # diagnostic_profiles = {
+    #   central_logs_region1 = {
+    #     definition_key   = "log_analytics"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
+    solutions_maps = {
+      NetworkMonitoring = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/NetworkMonitoring"
+      },
+      ADAssessment = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/ADAssessment"
+      },
+      ADReplication = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/ADReplication"
+      },
+      AgentHealthAssessment = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/AgentHealthAssessment"
+      },
+      DnsAnalytics = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/DnsAnalytics"
+      },
+      ContainerInsights = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/ContainerInsights"
+      },
+      KeyVaultAnalytics = {
+        "publisher" = "Microsoft"
+        "product"   = "OMSGallery/KeyVaultAnalytics"
+      }
+    }
   }
 }

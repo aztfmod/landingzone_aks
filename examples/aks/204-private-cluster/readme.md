@@ -51,6 +51,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
       -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+      -var-file /tf/caf/examples/aks/${example}/diagnostics.tfvars \
       -var tags={example=\"${example}\"} \
       -a apply    
 ```

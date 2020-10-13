@@ -71,6 +71,14 @@ azure_container_registries = {
     name               = "acr-test"
     resource_group_key = "aks1_rg1"
     sku                = "Premium"
+    diagnostic_profiles = {
+      operations = {
+        name             = "operations"
+        definition_key   = "azure_container_registry"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
     # georeplication_region_keys = ["region2"]
 
     private_endpoints = {
@@ -109,7 +117,14 @@ aks_clusters = {
     name               = "akscluster-001"
     resource_group_key = "aks1_rg1"
     os_type            = "Linux"
-
+    diagnostic_profiles = {
+      operations = {
+        name             = "aksoperations"
+        definition_key   = "azure_kubernetes_cluster"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
     identity = {
       type = "SystemAssigned"
     }

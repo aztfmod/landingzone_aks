@@ -81,7 +81,7 @@ locals {
     storage_accounts         = data.terraform_remote_state.caf_foundations.outputs.diagnostics.storage_accounts
     log_analytics            = data.terraform_remote_state.caf_foundations.outputs.diagnostics.log_analytics
   }
-
+  
   tfstates = merge(
     map(var.landingzone_name,
       map(
