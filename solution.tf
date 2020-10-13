@@ -1,4 +1,5 @@
 module "caf" {
+  # source = "./modules"
   source  = "aztfmod/caf/azurerm"
   version = "~>0.3"
 
@@ -6,7 +7,6 @@ module "caf" {
   tags                        = local.tags
   global_settings             = local.global_settings
   diagnostics                 = local.diagnostics
-  diagnostic_storage_accounts = var.diagnostic_storage_accounts
   logged_user_objectId        = var.logged_user_objectId
   logged_aad_app_objectId     = var.logged_aad_app_objectId
   resource_groups             = var.resource_groups

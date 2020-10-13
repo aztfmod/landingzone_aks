@@ -18,7 +18,7 @@ example=204-private-cluster
 # Add the lower dependency landingzones
 # rover --clone-landingzones --clone-branch vnext13
 git clone --branch vnext https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
-git clone --branch HN-aks git@github.com:aztfmod/terraform-azurerm-caf-enterprise-scale.git /tf/caf/modules
+git clone --branch HN-aks git@github.com:aztfmod/terraform-azurerm-caf.git /tf/caf/modules
 
 # Deploy the launchpad light to store the tfstates
 rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/100_configuration.tfvars -a apply
@@ -51,6 +51,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
       -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+      -var-file /tf/caf/examples/aks/${example}/diagnostics.tfvars \
       -var tags={example=\"${example}\"} \
       -a apply    
 ```
