@@ -74,7 +74,7 @@ aks_clusters = {
     }
 
     node_pools = {
-      pool1 = {
+      pool_blue = {
         name                 = "nodepool1"
         mode                 = "User"
         subnet_key           = "aks_nodepool_user1"

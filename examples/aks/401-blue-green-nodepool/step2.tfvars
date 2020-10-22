@@ -17,7 +17,8 @@ resource_groups = {
 
 aks_clusters = {
   cluster_rg1 = {
-        name               = "akscluster-001"
+    helm_keys          = ["flux", "podIdentify"]
+    name               = "akscluster-001"
     resource_group_key = "aks_rg1"
     os_type            = "Linux"
 
@@ -74,7 +75,7 @@ aks_clusters = {
     }
 
     node_pools = {
-      pool2 = {
+      pool_green = {
         name                 = "nodepool2"
         mode                 = "User"
         subnet_key           = "aks_nodepool_user2"
