@@ -47,7 +47,7 @@ variable logged_aad_app_objectId {
 }
 variable tags {
   default = null
-  type = map
+  type    = map
 }
 variable app_service_environments {
   default = {}

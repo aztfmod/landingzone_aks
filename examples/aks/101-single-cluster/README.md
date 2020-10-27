@@ -21,9 +21,10 @@ example=101-single-cluster
 
 # Run AKS landing zone deployment
 
+```bash
 rover -lz /tf/caf/ \
   -tfstate ${example}_landingzone_aks.tfstate \
-  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
@@ -37,15 +38,10 @@ Have fun playing with the landing zone an once you are done, you can simply dele
 ```bash
 rover -lz /tf/caf/ \
   -tfstate ${example}_landingzone_aks.tfstate \
-  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
+  -env ${environment} \
   -level level3 \
   -a destroy -auto-approve
 
-# Only destroy foundations & Launchpad if you have no other landing zones dependent on them.
-rover -lz /tf/caf/public/landingzones/caf_foundations -a destroy
-
-# to destroy the launchpad you need to confirm you are connected with your user. If not reconnect with
-rover login -t [tenand ID] -s [subscription GUID]
-
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/
+```
