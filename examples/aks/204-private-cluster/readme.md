@@ -9,43 +9,35 @@ Ensure the below is set prior to apply or destroy.
 # Login the Azure subscription
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
-export TF_VAR_environment=[YOUR_ENVIRONMENT]
+environment=[YOUR_ENVIRONMENT]
 # Set the folder name of this example
 example=204-private-cluster
 ```
 ### 2. Apply Landingzones
 ```bash
-# Add the lower dependency landingzones
-# rover --clone-landingzones --clone-branch vnext13
-git clone --branch vnext https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
-git clone --branch HN-aks git@github.com:aztfmod/terraform-azurerm-caf.git /tf/caf/modules
-
-# Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/100_configuration.tfvars -a apply
-## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
-rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
 
 # Deploy networking
 # Deploy networking hub services
-networking_hub="/tf/caf/examples/aks/${example}/networking_hub"
-rover -lz /tf/caf/public/landingzones/caf_networking/ \
-      -tfstate networking_hub.tfstate \
-      -var-file ${networking_hub}/configuration.tfvars \
-      -var-file ${networking_hub}/firewalls.tfvars \
-      -var-file ${networking_hub}/nsgs.tfvars \
-      -var-file ${networking_hub}/public_ips.tfvars \
-      -a apply
+#
+# The following command extends the networking hub 101-multi-region-hub 
 
-networking_spoke="/tf/caf/examples/aks/${example}/networking_spoke"
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
-      -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file ${networking_spoke}/configuration.tfvars \
-      -var-file ${networking_spoke}/route_tables.tfvars \
-      -var-file ${networking_spoke}/nsgs.tfvars \
-      -var-file ${networking_spoke}/public_ips.tfvars \
-      -var-file ${networking_spoke}/bastion.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a apply
+  -tfstate networking_hub.tfstate \
+  -var-folder /tf/caf/public/landingzones/caf_networking/scenario/101-multi-region-hub \
+  -var-folder /tf/caf/examples/aks/204-private-cluster/networking_hub \
+  -env ${environment} \
+  -level level2 \
+  -a [plan|apply]
+
+
+rover -lz /tf/caf/public/landingzones/caf_networking/ \
+  -tfstate networking_spoke_aks.tfstate \
+  -var-folder /tf/caf/examples/1-dependencies/networking/spoke_aks_single_region \
+  -var-folder /tf/caf/examples/aks/204-private-cluster/networking_spoke \
+  -env ${environment} \
+  -level level3 \
+  -a [plan|apply]
+
 # Run AKS landing zone deployment
 
 rover -lz /tf/caf/ \

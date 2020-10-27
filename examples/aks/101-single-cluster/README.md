@@ -23,7 +23,7 @@ example=101-single-cluster
 
 ```bash
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
@@ -37,7 +37,7 @@ Have fun playing with the landing zone an once you are done, you can simply dele
 
 ```bash
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \

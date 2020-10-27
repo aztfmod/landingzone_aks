@@ -1,7 +1,7 @@
 landingzone = {
   backend_type        = "azurerm"
   level               = "level3"
-  key                 = "101-single-cluster_aks"
+  key                 = "cluster_aks"
   global_settings_key = "shared_services"
   tfstates = {
     shared_services = {
@@ -17,10 +17,6 @@ landingzone = {
 resource_groups = {
   aks_re1 = {
     name   = "aks-re1"
-    region = "region1"
-  }
-  aks_nodes_re1 = {
-    name   = "aks-nodes-re1"
     region = "region1"
   }
 }
@@ -64,7 +60,7 @@ aks_clusters = {
     default_node_pool = {
       name                  = "sharedsvc"
       vm_size               = "Standard_F4s_v2"
-      subnet_key            = "aks_nodepool_user1"
+      subnet_key            = "aks_nodepool_system"
       enabled_auto_scaling  = false
       enable_node_public_ip = false
       max_pods              = 30
@@ -76,7 +72,7 @@ aks_clusters = {
       }
     }
 
-    node_resource_group_name = "aks_nodes_re1"
+    node_resource_group_name = "aks-nodes-re1"
   }
 }
 

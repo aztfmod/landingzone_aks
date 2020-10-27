@@ -4,37 +4,8 @@
 #
 network_security_group_definition = {
   # This entry is applied to all subnets with no NSG defined
-  empty_nsg = {
-    diagnostic_profiles = {
-      nsg = {
-        definition_key   = "network_security_group"
-        destination_type = "storage"
-        destination_key  = "all_regions"
-      }
-      operations = {
-        name             = "operations"
-        definition_key   = "network_security_group"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
-  }
-
+  
   azure_bastion_nsg = {
-    diagnostic_profiles = {
-      nsg = {
-        definition_key   = "network_security_group"
-        destination_type = "storage"
-        destination_key  = "all_regions"
-      }
-      operations = {
-        name             = "operations"
-        definition_key   = "network_security_group"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
-
     nsg = [
       {
         name                       = "bastion-in-allow",
@@ -104,7 +75,7 @@ network_security_group_definition = {
       }
     ]
   }
-
+  
   application_gateway = {
 
     # diagnostic_profiles = {
@@ -366,19 +337,19 @@ network_security_group_definition = {
   }
 
   jumpbox = {
-    diagnostic_profiles = {
-      nsg = {
-        definition_key   = "network_security_group"
-        destination_type = "storage"
-        destination_key  = "all_regions"
-      }
-      operations = {
-        name             = "operations"
-        definition_key   = "network_security_group"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
+    # diagnostic_profiles = {
+    #   nsg = {
+    #     definition_key   = "network_security_group"
+    #     destination_type = "storage"
+    #     destination_key  = "all_regions"
+    #   }
+    #   operations = {
+    #     name             = "operations"
+    #     definition_key   = "network_security_group"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
     nsg = [
       {
         name                       = "ssh-inbound-22",
