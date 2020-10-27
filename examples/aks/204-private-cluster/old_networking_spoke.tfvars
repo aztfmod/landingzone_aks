@@ -1,4 +1,4 @@
-level = "level2"
+level            = "level2"
 landingzone_name = "aks_networking_spoke"
 
 tfstates = {
@@ -207,16 +207,16 @@ azurerm_routes = {
     address_prefix     = "0.0.0.0/0"
     next_hop_type      = "VirtualAppliance"
     remote_tfstate = {
-      tfstate_key = "networking_hub"
-      output_key  = "azurerm_firewalls"
-      fw_key      = "fw_rg1"
+      tfstate_key     = "networking_hub"
+      output_key      = "azurerm_firewalls"
+      fw_key          = "fw_rg1"
       interface_index = 0
     }
 
     # To be set when next_hop_type = "VirtualAppliance"
     private_ip_keys = {
       azurerm_firewall = {
-        
+
         key             = "fw_rg1"
         interface_index = 0
       }

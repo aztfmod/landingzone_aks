@@ -347,7 +347,7 @@ azuread_groups = {
     description = "Provide read and write access to the keyvault secrets / level0."
     members = {
       user_principal_names = [
-        
+
       ]
       group_names = []
       object_ids  = []

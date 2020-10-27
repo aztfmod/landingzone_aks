@@ -1,7 +1,7 @@
 landingzone_name = "101-single-cluster_dapr"
 
 remote_tfstate = "101-single-cluster_landingzone_aks.tfstate"
-cluster_key = "cluster_rg1"
+cluster_key    = "cluster_rg1"
 
 namespaces = {
   fluxcd = {
@@ -23,19 +23,19 @@ helm_charts = {
   #   namespace  = "default"
   # }
   flux = {
-    name = "flux"
+    name       = "flux"
     repository = "https://charts.fluxcd.io"
     chart      = "flux"
     namespace  = "fluxcd"
   }
   flux_helm_operator = {
-    name = "helm-operator"
+    name       = "helm-operator"
     repository = "https://charts.fluxcd.io"
     chart      = "helm-operator"
     namespace  = "fluxcd"
     sets = {
       "git.ssh.secretName" = "flux-git-deploy"
-      "helm.versions" = "v3"
+      "helm.versions"      = "v3"
     }
   }
 }

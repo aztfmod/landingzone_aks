@@ -1,7 +1,7 @@
 landingzone_name = "101-single-cluster_argocd"
 
 remote_tfstate = "101-single-cluster_landingzone_aks.tfstate"
-cluster_key = "cluster_rg1"
+cluster_key    = "cluster_rg1"
 
 namespaces = {
   argocd = {
@@ -11,7 +11,7 @@ namespaces = {
 
 helm_charts = {
   argocd = {
-    name = "argo"
+    name       = "argo"
     repository = "https://argoproj.github.io/argo-helm"
     chart      = "argo-cd"
     namespace  = "argocd"

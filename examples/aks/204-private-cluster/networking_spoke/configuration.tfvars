@@ -1,4 +1,4 @@
-level = "level2"
+level            = "level2"
 landingzone_name = "aks_networking_spoke"
 
 tfstates = {

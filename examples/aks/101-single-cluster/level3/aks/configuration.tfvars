@@ -36,13 +36,13 @@ aks_clusters = {
     }
 
     kubernetes_version = "1.17.11"
-    lz_key = "networking_aks"
-      vnet_key    = "spoke_aks_rg1"
+    lz_key             = "networking_aks"
+    vnet_key           = "spoke_aks_rg1"
     networking = {
 
       #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
-      lz_key = "networking_aks"
-      vnet_key    = "spoke_aks_rg1"
+      lz_key   = "networking_aks"
+      vnet_key = "spoke_aks_rg1"
 
     }
 
@@ -51,7 +51,7 @@ aks_clusters = {
       load_balancer_sku = "Standard"
     }
 
-    enable_rbac             = true
+    enable_rbac = true
 
     admin_groups = {
       # ids = []

@@ -341,9 +341,9 @@ azurerm_firewall_application_rule_collection_definition = {
           "*",
         ]
         target_fqdns = [
-          "download.docker.com",                # Docker
-          "*.docker.io",                        # Docker images
-          "*.docker.com"                        # Docker registry
+          "download.docker.com", # Docker
+          "*.docker.io",         # Docker images
+          "*.docker.com"         # Docker registry
         ]
         protocol = {
           http = {

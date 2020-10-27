@@ -42,7 +42,7 @@ aks_clusters = {
       load_balancer_sku = "Standard"
     }
 
-    enable_rbac             = true
+    enable_rbac = true
 
     admin_groups = {
       # ids = []

@@ -5,12 +5,12 @@ terraform {
       version = "~> 2.28.0"
     }
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
       version = "~> 1.13.2"
     }
     helm = {
-      source = "hashicorp/helm"
-    version = "~> 1.3.0"
+      source  = "hashicorp/helm"
+      version = "~> 1.3.0"
     }
   }
   required_version = ">= 0.13"
@@ -27,12 +27,12 @@ provider "azurerm" {
 }
 
 provider "kubernetes" {
-  load_config_file       = false
+  load_config_file = false
 
-  host                   = local.host
-  username               = local.username
-  password               = local.password
-  
+  host     = local.host
+  username = local.username
+  password = local.password
+
   client_certificate     = local.client_certificate
   client_key             = local.client_key
   cluster_ca_certificate = local.cluster_ca_certificate
@@ -40,12 +40,12 @@ provider "kubernetes" {
 
 provider "helm" {
   kubernetes {
-    load_config_file       = false
+    load_config_file = false
 
-    host                   = local.host
-    username               = local.username
-    password               = local.password
-    
+    host     = local.host
+    username = local.username
+    password = local.password
+
     client_certificate     = local.client_certificate
     client_key             = local.client_key
     cluster_ca_certificate = local.cluster_ca_certificate
@@ -65,7 +65,7 @@ data "terraform_remote_state" "aks" {
 
 locals {
   landingzone_tag = {
-    "landingzone" = "aks"//basename(abspath(path.module))
+    "landingzone" = "aks" //basename(abspath(path.module))
   }
   tags = merge(var.tags, { "level" = var.level }, { "environment" = var.environment }, { "rover_version" = var.rover_version })
 
@@ -86,7 +86,7 @@ locals {
     data.terraform_remote_state.aks.outputs.tfstates
   )
 
-  cluster         = data.terraform_remote_state.aks.outputs.aks_clusters[var.cluster_key]
+  cluster = data.terraform_remote_state.aks.outputs.aks_clusters[var.cluster_key]
 
   host                   = local.cluster.enable_rbac ? local.cluster.kube_admin_config.0.host : local.cluster.kube_config.0.host
   username               = local.cluster.enable_rbac ? local.cluster.kube_admin_config.0.username : local.cluster.kube_config.0.username

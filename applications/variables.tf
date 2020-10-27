@@ -22,7 +22,7 @@ variable remote_tfstate {
 
 variable tags {
   default = null
-  type = map
+  type    = map
 }
 
 variable helm_charts {

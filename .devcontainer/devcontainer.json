@@ -1,8 +1,11 @@
 {
-    "name": "Azure Landingzone AKS",
+    "name": "Azure CAF AKS landing zones",
  
     // Update the 'dockerComposeFile' list if you have more compose files or use different names.
     "dockerComposeFile": "docker-compose.yml",
+ 
+    // Container user to use in VSCode Online and GitHub Codespaces
+    "containerUser" : "vscode",
  
     // The 'service' property is the name of the service for the container that VS Code should
     // use. Update this value and .devcontainer/docker-compose.yml to the real service name.
@@ -18,7 +21,7 @@
         "files.eol": "\n",
         "terminal.integrated.shell.linux": "/bin/bash",
         "editor.tabSize": 2,
-        "terminal.integrated.scrollback": 4000,
+        "terminal.integrated.scrollback": 8000,
     },
  
     // Uncomment the next line if you want start specific services in your Docker Compose config.
@@ -28,7 +31,7 @@
     // "shutdownAction": "none",
  
     // Uncomment the next line to run commands after the container is created.
-    "postCreateCommand": "cp -R /tmp/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+    "postCreateCommand": "cp -R /tmp/.ssh-localhost/* ~/.ssh && sudo chmod 600 ~/.ssh/* && sudo chown -R $(whoami) /tf/caf && git config --global core.editor vi",
  
     // Add the IDs of extensions you want installed when the container is created in the array below.
     "extensions": [
