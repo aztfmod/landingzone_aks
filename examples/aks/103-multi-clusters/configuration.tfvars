@@ -1,159 +1,45 @@
-landingzone_name = "101-single-cluster_aks"
-tfstates = {
-  caf_foundations = {
-    tfstate = "caf_foundations.tfstate"
-  }
-  networking = {
-    tfstate = "103-multi-clusters_landingzone_networking.tfstate"
+landingzone = {
+  backend_type        = "azurerm"
+  level               = "level3"
+  key                 = "cluster_aks"
+  global_settings_key = "shared_services"
+  tfstates = {
+    shared_services = {
+      level   = "lower"
+      tfstate = "caf_shared_services.tfstate"
+    }
+    networking_spoke_aks = {
+      tfstate = "networking_spoke_aks.tfstate"
+    }
   }
 }
 
 resource_groups = {
-  aks_rg1 = {
-    name   = "aks-rg1"
+  aks_re1 = {
+    name   = "aks-re1"
     region = "region1"
   }
-  aks_rg2 = {
-    name   = "aks-rg2"
+  aks_re2 = {
+    name   = "aks-re2"
     region = "region2"
-  }
-}
-
-aks_clusters = {
-  cluster_rg1 = {
-    name               = "akscluster-001"
-    resource_group_key = "aks_rg1"
-    os_type            = "Linux"
-
-    identity = {
-      type = "SystemAssigned"
-    }
-
-    kubernetes_version = "1.17.7"
-
-    networking = {
-
-      #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
-      remote_tfstate = {
-        tfstate_key = "networking_aks"
-        output_key  = "vnets"
-        lz_key      = "networking_aks"
-        vnet_key    = "spoke_aks_rg1"
-      }
-    }
-
-    network_policy = {
-      network_plugin    = "azure"
-      load_balancer_sku = "Standard"
-    }
-
-    enable_rbac = true
-
-    admin_groups = {
-      # ids = []
-      azuread_group_keys = []
-    }
-
-    load_balancer_profile = {
-      # Only one option can be set
-      managed_outbound_ip_count = 1
-      # outbound_ip_prefix_ids = []
-      # outbound_ip_address_ids = []
-    }
-
-    default_node_pool = {
-      name                  = "sharedsvc"
-      vm_size               = "Standard_F4s_v2"
-      subnet_key            = "aks_nodepool_system"
-      enabled_auto_scaling  = false
-      enable_node_public_ip = false
-      max_pods              = 30
-      node_count            = 1
-      os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.7"
-      tags = {
-        "project" = "system services"
-      }
-    }
-
-    node_resource_group_name = "aks-nodes-rg1"
-  }
-
-  cluster_rg2 = {
-    name               = "akscluster-002"
-    resource_group_key = "aks_rg2"
-    os_type            = "Linux"
-
-    identity = {
-      type = "SystemAssigned"
-    }
-
-    kubernetes_version = "1.17.7"
-
-    networking = {
-
-      #  vnet_key    = "spoke_aks_rg1", if vnets is defined in this LZ
-      remote_tfstate = {
-        tfstate_key = "networking_aks"
-        output_key  = "vnets"
-        lz_key      = "networking_aks"
-        vnet_key    = "spoke_aks_rg2"
-      }
-    }
-
-    network_policy = {
-      network_plugin    = "azure"
-      load_balancer_sku = "Standard"
-    }
-
-    enable_rbac = true
-
-    admin_groups = {
-      # ids = []
-      azuread_group_keys = []
-    }
-
-    load_balancer_profile = {
-      # Only one option can be set
-      managed_outbound_ip_count = 1
-      # outbound_ip_prefix_ids = []
-      # outbound_ip_address_ids = []
-    }
-
-    default_node_pool = {
-      name                  = "sharedsvc"
-      vm_size               = "Standard_F4s_v2"
-      subnet_key            = "aks_nodepool_system"
-      enabled_auto_scaling  = false
-      enable_node_public_ip = false
-      max_pods              = 30
-      node_count            = 1
-      os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.7"
-      tags = {
-        "project" = "system services"
-      }
-    }
-
-    node_resource_group_name = "aks-nodes-rg1"
   }
 }
 
 azure_container_registries = {
   acr1 = {
     name               = "acr-test"
-    resource_group_key = "aks_rg1"
+    resource_group_key = "aks_re1"
     sku                = "Premium"
     # georeplication_region_keys = ["region2"]
 
     # you can setup up to 5 key
-    diagnostic_profiles = {
-      central_logs_region1 = {
-        definition_key   = "azure_container_registry"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
+    # diagnostic_profiles = {
+    #   central_logs_region1 = {
+    #     definition_key   = "azure_container_registry"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
   }
 }
 
@@ -165,9 +51,9 @@ role_mapping = {
     azure_container_registries = {
       acr1 = {
         "AcrPull" = {
-          aks_clusters = [
-            "cluster_rg1"
-          ]
+          aks_clusters = {
+            keys = ["cluster_re1"]
+          }
         }
       }
     }

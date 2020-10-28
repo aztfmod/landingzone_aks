@@ -18,8 +18,12 @@ landingzone = {
 
 resource_groups = {
   aks_spoke_re1 = {
-    name   = "aks-vnet-spoke-re1"
+    name   = "vnet-spoke-aks-re1"
     region = "region1"
+  }
+  aks_spoke_re2 = {
+    name   = "vnet-spoke-aks-re2"
+    region = "region2"
   }
 }
 

@@ -11,8 +11,6 @@ Ensure the below is set prior to apply or destroy.
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export environment=[YOUR_ENVIRONMENT]
-# Set the folder name of this example
-example=101-single-cluster
 ```
 ### 2. Deploy the dependency landingzones
 
@@ -22,6 +20,9 @@ example=101-single-cluster
 # Run AKS landing zone deployment
 
 ```bash
+# Set the folder name of this example
+example=101-single-cluster
+
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
@@ -36,6 +37,9 @@ rover -lz /tf/caf/ \
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
 
 ```bash
+# Set the folder name of this example
+example=101-single-cluster
+
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
