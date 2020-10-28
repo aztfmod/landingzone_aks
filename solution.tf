@@ -23,12 +23,6 @@ module "caf" {
     aks_clusters               = var.aks_clusters
     azure_container_registries = var.azure_container_registries
   }
-  # networking = {
-  #   vnets                             = var.vnets
-  #   network_security_group_definition = var.network_security_group_definition
-  #   public_ip_addresses               = var.public_ip_addresses
-  #   private_dns                       = var.private_dns
-  # }
   remote_objects = {
     vnets = local.remote.vnets
   }

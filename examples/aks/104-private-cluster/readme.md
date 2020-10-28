@@ -18,7 +18,7 @@ environment=[YOUR_ENVIRONMENT]
 # Deploy networking
 # Deploy networking hub services
 #
-# The following command extends the networking hub 101-multi-region-hub 
+# The following command extends the networking hub 101-multi-region-hub
 
 example="104-private-cluster"
 
@@ -51,22 +51,19 @@ rover -lz /tf/caf/ \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
-  -a apply    
+  -a [plan|apply]
 ```
 ### 3. Destroy Landingzones
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
 
 ```bash
 rover -lz /tf/caf/ \
-      -tfstate ${example}_landingzone_aks.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a destroy -auto-approve
-rover -lz /tf/caf/public/landingzones/caf_networking/ \
-      -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a destroy -auto-approve
+  -tfstate ${example}_landingzone_aks.tfstate \
+  -var-folder /tf/caf/examples/aks/${example} \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
+  -a destroy
 
 # Only destroy Foundation & Launchpad if you have no other Landingzones dependent on them.
 rover -lz /tf/caf/public/landingzones/caf_foundations -a destroy
