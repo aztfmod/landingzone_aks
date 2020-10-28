@@ -9,11 +9,11 @@ output aks_clusters_kubeconfig {
 }
 
 output aks_clusters {
-  value     = module.caf.aks_clusters
+  value     = map(var.landingzone.key, module.caf.aks_clusters)
   sensitive = true
 }
 
-output virtual_machines {
-  value     = module.caf.virtual_machines
+output global_settings {
+  value     = local.global_settings
   sensitive = true
 }

@@ -1,7 +1,18 @@
-landingzone_name = "101-single-cluster_argocd"
+landingzone = {
+  backend_type        = "azurerm"
+  level               = "level4"
+  key                 = "kafka"
+  global_settings_key = "cluster_aks" # Update accordingly based on the configuration file of your AKS cluster landingzone.key
+  tfstates = {
+    cluster_aks = {
+      level   = "lower"                                       # Update accordingly based on the configuration file of your AKS cluster landingzone.key
+      tfstate = "204-private-cluster_landingzone_aks.tfstate" # Update accordingly based on the value you used to deploy you aks cluster with the rover -tfstate <value>
+    }
+  }
+}
 
-remote_tfstate = "101-single-cluster_landingzone_aks.tfstate"
-cluster_key    = "cluster_rg1"
+landingzone_key = "cluster_aks"
+cluster_key     = "cluster_re1"
 
 namespaces = {
   fluxcd = {

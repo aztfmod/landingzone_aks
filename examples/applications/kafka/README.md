@@ -11,31 +11,35 @@ Ensure the below is set prior to apply or destroy.
 # Login the Azure subscription
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
-export TF_VAR_environment=[YOUR_ENVIRONMENT]
-# Set the folder name of this example
-example=101-single-cluster
-app_example=argocd
+environment=[YOUR_ENVIRONMENT]
 ```
 ## 2. Apply Landing zone
 
 Please make sure to change the cluster_key in /tf/caf/examples/applications/{app_example}/configuration.tfvars to choose the cluster to deploy this Application LZ to.
 
 ```bash
+# Set the folder name of this example
+app_example=kafka
+
 rover -lz /tf/caf/applications \
-      -tfstate ${example}_dapr.tfstate \
-      -var-file /tf/caf/examples/applications/${app_example}/configuration.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a apply     
+  -tfstate ${app_example}.tfstate \
+  -var-folder /tf/caf/examples/applications/${app_example} \
+  -var tags={application=\"${app_example}\"} \
+  -level level4 \
+  -a apply
 ```
 ## 3. Destroy Landing zone
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
 
 ```bash
+app_example=kafka
+
 rover -lz /tf/caf/applications \
-      -tfstate ${example}_dapr.tfstate \
-      -var-file /tf/caf/examples/applications/flux/configuration.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a destroy -auto-approve
+  -tfstate ${app_example}.tfstate \
+  -var-folder /tf/caf/examples/applications/${app_example}/yamls \
+  -var tags={application=\"${app_example}\"} \
+  -level level4 \
+  -a destroy -auto-approve
 ```
 
 More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.

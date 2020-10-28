@@ -37,13 +37,6 @@ resource "helm_release" "charts" {
     }
   }
 
-  dynamic "set_string" {
-    for_each = try(each.value.sets_string, {})
-    content {
-      name  = set_string.key
-      value = set_string.value
-    }
-  }
   depends_on = [kubernetes_namespace.namespaces]
   #   values = [
   #     "${file("values.yaml")}"
