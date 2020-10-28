@@ -5,32 +5,14 @@ variable lower_resource_group_name {}
 
 variable tfstate_storage_account_name {}
 variable tfstate_container_name {}
-variable tfstate_key {}
 variable tfstate_resource_group_name {}
-
-variable tfstates {
-  default = {
-    caf_foundations = {
-      tfstate = "caf_foundations.tfstate"
-    }
-  }
-}
+variable tfstate_key {}
 
 variable global_settings {
   default = {}
 }
 
-variable landingzone {
-  default = {
-    backend_type = "azurerm"
-    current = {
-      level = "level3"
-      key   = "aks"
-    }
-    lower = {
-    }
-  }
-}
+variable landingzone {}
 
 variable environment {
   default = "sandpit"

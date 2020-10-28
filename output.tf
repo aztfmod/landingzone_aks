@@ -10,10 +10,10 @@ output aks_clusters_kubeconfig {
 
 output aks_clusters {
   value     = module.caf.aks_clusters
-  sensitive = false
+  sensitive = true
 }
 
 output virtual_machines {
   value     = module.caf.virtual_machines
-  sensitive = false
+  sensitive = true
 }

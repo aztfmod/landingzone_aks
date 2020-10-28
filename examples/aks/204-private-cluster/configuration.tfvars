@@ -36,37 +36,37 @@ storage_accounts = {
 }
 
 keyvaults = {
-  secrets = {
-    name                = "secrets"
+  jumpbox = {
+    name                = "jumpbox"
     resource_group_key  = "aks_jumpbox_re1"
     convention          = "cafrandom"
     sku_name            = "premium"
     soft_delete_enabled = true
 
-    # you can setup up to 5 profiles
-    diagnostic_profiles = {
-      operations = {
-        definition_key   = "default_all"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
+    creation_policies = {
+      logged_in_user = {
+        # if the key is set to "logged_in_user" add the user running terraform in the keyvault policy
+        # More examples in /examples/keyvault
+        secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
+      }
+      logged_in_aad_app = {
+        secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
+      }
+      aks_admins = {
+        azuread_group_key  = "aks_admins"
+        secret_permissions = ["Get", "List"]
       }
     }
 
-  }
-}
+    # # you can setup up to 5 profiles
+    # diagnostic_profiles = {
+    #   operations = {
+    #     definition_key   = "default_all"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
 
-keyvault_access_policies = {
-  secrets = {
-    logged_in_user = {
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
-    }
-    logged_in_aad_app = {
-      secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
-    }
-    aks_admins = {
-      azuread_group_key  = "aks_admins"
-      secret_permissions = ["Get", "List"]
-    }
   }
 }
 
@@ -76,14 +76,14 @@ azure_container_registries = {
     name               = "acr-test"
     resource_group_key = "aks1_re1"
     sku                = "Premium"
-    diagnostic_profiles = {
-      operations = {
-        name             = "operations"
-        definition_key   = "azure_container_registry"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
+    # diagnostic_profiles = {
+    #   operations = {
+    #     name             = "operations"
+    #     definition_key   = "azure_container_registry"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
     # georeplication_region_keys = ["region2"]
 
     private_endpoints = {
@@ -92,7 +92,7 @@ azure_container_registries = {
         name               = "acr-test-private-link"
         resource_group_key = "aks1_re1"
           
-        lz_key      = "aks_networking_spoke"
+        lz_key      = "networking_spoke_aks"
         vnet_key    = "spoke_aks_re1"
         subnet_key  = "private_endpoints"
 
@@ -105,13 +105,13 @@ azure_container_registries = {
     }
 
     # you can setup up to 5 key
-    diagnostic_profiles = {
-      central_logs_region1 = {
-        definition_key   = "azure_container_registry"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
+    # diagnostic_profiles = {
+    #   central_logs_region1 = {
+    #     definition_key   = "azure_container_registry"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
   }
 }
 
@@ -120,21 +120,21 @@ aks_clusters = {
     name               = "akscluster-001"
     resource_group_key = "aks1_re1"
     os_type            = "Linux"
-    diagnostic_profiles = {
-      operations = {
-        name             = "aksoperations"
-        definition_key   = "azure_kubernetes_cluster"
-        destination_type = "log_analytics"
-        destination_key  = "central_logs"
-      }
-    }
+    # diagnostic_profiles = {
+    #   operations = {
+    #     name             = "aksoperations"
+    #     definition_key   = "azure_kubernetes_cluster"
+    #     destination_type = "log_analytics"
+    #     destination_key  = "central_logs"
+    #   }
+    # }
     identity = {
       type = "SystemAssigned"
     }
 
     kubernetes_version = "1.17.11"
 
-    lz_key      = "aks_networking_spoke"
+    lz_key      = "networking_spoke_aks"
     vnet_key    = "spoke_aks_re1"
 
     network_policy = {
@@ -148,7 +148,7 @@ aks_clusters = {
 
     admin_groups = {
       # ids = []
-      azuread_group_keys = ["aks_admins"]
+      # azuread_group_keys = ["aks_admins"]
     }
 
     load_balancer_profile = {
@@ -207,14 +207,14 @@ virtual_machines = {
     os_type = "linux"
 
     # the auto-generated ssh key in keyvault secret. Secret name being {VM name}-ssh-public and {VM name}-ssh-private
-    keyvault_key = "secrets"
+    keyvault_key = "jumpbox"
 
     # Define the number of networking cards to attach the virtual machine
     networking_interfaces = {
       nic0 = {
         # AKS rely on a remote network and need the details of the tfstate to connect (tfstate_key), assuming RBAC authorization.
 
-        lz_key      = "aks_networking_spoke"
+        lz_key      = "networking_spoke_aks"
         vnet_key    = "spoke_aks_re1"
         subnet_key  = "jumpbox"
         name                    = "0"
@@ -222,13 +222,13 @@ virtual_machines = {
         internal_dns_name_label = "nic0"
 
         # you can setup up to 5 profiles
-        diagnostic_profiles = {
-          operations = {
-            definition_key   = "nic"
-            destination_type = "log_analytics"
-            destination_key  = "central_logs"
-          }
-        }
+        # diagnostic_profiles = {
+        #   operations = {
+        #     definition_key   = "nic"
+        #     destination_type = "log_analytics"
+        #     destination_key  = "central_logs"
+        #   }
+        # }
 
       }
     }
@@ -259,9 +259,7 @@ virtual_machines = {
 
         identity = {
           type = "UserAssigned"
-          managed_identity_keys = {
-            keys = ["jumpbox"]
-          }
+          managed_identity_keys = ["jumpbox"]
         }
 
       }
@@ -311,9 +309,9 @@ role_mapping = {
     aks_clusters = {
       seacluster = {
         "Azure Kubernetes Service Cluster Admin Role" = {
-          azuread_groups = {
-            # keys = ["aks_admins"]
-          }
+          # azuread_groups = {
+          #   # keys = ["aks_admins"]
+          # }
           managed_identities = {
             keys = ["jumpbox"]
           }
