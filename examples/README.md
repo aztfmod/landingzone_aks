@@ -38,14 +38,14 @@ rover -lz /tf/caf/public/landingzones/caf_launchpad \
   -var-folder /tf/caf/examples/1-dependencies/launchpad/150 \
   -level level0 \
   -env ${environment} \
-  -a apply
+  -a [plan|apply]
 
 # Level1
 ## To deploy AKS some dependencies are required to like networking and some accounting, security and governance services are required.
 rover -lz /tf/caf/public/landingzones/caf_foundations \
   -level level1 \
   -env ${environment} \
-  -a apply
+  -a [plan|apply]
 
 # Deploy shared_services
 rover -lz /tf/caf/public/landingzones/caf_shared_services/ \
@@ -53,7 +53,7 @@ rover -lz /tf/caf/public/landingzones/caf_shared_services/ \
   -parallelism 30 \
   -level level2 \
   -env ${environment} \
-  -a apply
+  -a [plan|apply]
 
 # Deploy networking hub
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
@@ -61,15 +61,15 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -var-folder /tf/caf/public/landingzones/caf_networking/scenario/101-multi-region-hub \
   -env ${environment} \
   -level level2 \
-  -a apply
+  -a [plan|apply]
 
 # Deploy networking spoke for AKS
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -tfstate networking_spoke_aks.tfstate \
-  -var-folder /tf/caf/examples/1-dependencies/level3/networking_spoke_aks \
+  -var-folder /tf/caf/examples/1-dependencies/networking/spoke_aks/single_region \
   -env ${environment} \
   -level level3 \
-  -a plan
+  -a [plan|apply]
 
 ```
 
@@ -88,7 +88,7 @@ You can find detailed steps for each of the following scenario:
 | [101-single-cluster](./aks/101-single-cluster)| Provision single AKS cluster within open virtual network |
 | [102-multi-nodepools](./aks/102-multi-nodepools)| Provision single AKS cluster with multiple node pool within separate subnet (1 open virtual network)|
 | [103-multi-clusters](./aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions (different open virtual network)                     |
-| [204-private-cluster](./aks/204-private-cluster)| Provision private AKS clusters within private virtual network with Hub & Spoke UDR to Azure Firewall |
+| [104-private-cluster](./aks/104-private-cluster)| Provision private AKS clusters within private virtual network with Hub & Spoke UDR to Azure Firewall |
 
 ### AKS Application landing zone
 
