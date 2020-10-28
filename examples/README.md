@@ -85,10 +85,10 @@ You can find detailed steps for each of the following scenario:
 
 | AKS landing zone example                                                                                              | Description                                                |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| [101-single-cluster](./examples/aks/101-single-cluster)| Provision single AKS cluster within open VNET |
-| [102-multi-nodepools](./examples/aks/102-multi-nodepools)| Provision single AKS cluster with multiple nodepool within separate subnet (1 open VNET)|
-| [103-multi-clusters](./examples/aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions (different open VNETs)                     |
-| [204-private-cluster](./examples/aks/204-private-cluster)| Provision private AKS clusters within private VNET with Hub & Spoke UDR to Azure Firewall |
+| [101-single-cluster](./aks/101-single-cluster)| Provision single AKS cluster within open virtual network |
+| [102-multi-nodepools](./aks/102-multi-nodepools)| Provision single AKS cluster with multiple node pool within separate subnet (1 open virtual network)|
+| [103-multi-clusters](./aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions (different open virtual network)                     |
+| [204-private-cluster](./aks/204-private-cluster)| Provision private AKS clusters within private virtual network with Hub & Spoke UDR to Azure Firewall |
 
 ### AKS Application landing zone
 
