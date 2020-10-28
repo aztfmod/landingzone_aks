@@ -36,7 +36,7 @@ role_mapping = {
       acr1 = {
         "AcrPull" = {
           aks_clusters = {
-            keys = ["cluster_re1"]
+            keys = ["cluster_re1", "cluster_re2"]
           }
         }
       }
