@@ -26,6 +26,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -tfstate networking_hub.tfstate \
   -var-folder /tf/caf/public/landingzones/caf_networking/scenario/101-multi-region-hub \
   -var-folder /tf/caf/examples/aks/${example}/networking_hub/single_region \
+  # -var-folder /tf/caf/examples/aks/${example}/networking_hub/diagnostics \                # Uncomment to enable diagnotics
   -env ${environment} \
   -level level2 \
   -a [plan|apply]
@@ -42,12 +43,11 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 # Run AKS landing zone deployment
 
 # Set the folder name of this example
-example=204-private-cluster
+example=104-private-cluster
 
 rover -lz /tf/caf/ \
   -tfstate ${example}_landingzone_aks.tfstate \
-  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
-  -var-file /tf/caf/examples/aks/${example}/diagnostics.tfvars \
+  -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
