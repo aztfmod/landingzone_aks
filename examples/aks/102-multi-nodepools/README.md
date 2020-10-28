@@ -13,6 +13,7 @@ rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 environment=[YOUR_ENVIRONMENT]
 # Set the folder name of this example
 example=102-multi-nodepools
+
 ```
 ### 2. Deploy the dependency landingzones
 

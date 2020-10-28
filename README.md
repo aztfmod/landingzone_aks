@@ -1,42 +1,52 @@
-# Azure AKS landing zone
+# Cloud Adoption Framework for Azure - Landing zones on Terraform - Azure Kubernetes Services
 
+Microsoft Cloud Adoption Framework for Azure provides you with guidance and best practices to adopt Azure.
+
+A landing zone is a segment of a cloud environment, that has been preprovisioned through code, and is dedicated to the support of one or more workloads. Landing zones provide access to foundational tools and controls to establish a compliant place to innovate and build new workloads in the cloud, or to migrate existing workloads to the cloud. Landing zones use defined sets of cloud services and best practices to set you up for success.
+
+## Goals
+
+The Azure Kubernetes Services landing zones sits on top of Cloud Adoption Framework for Azure foundational landing zones and enables the deployment of Azure Kubernetes Services on top of it.
+
+You can find the core landing zones here: [CAF landing zones](https://github.com/Azure/caf-terraform-landingzones/)
+
+The AKS landing zone fits in the following picture:
+
+![solutions](./_pictures/solutions.png)
 
 ## Getting Started
 
-To deploy a landing zone, use the execution environnement as described at the root of the landing zone repository.
+Clone this repo on your local machine and follow the to [examples section](./examples) to get started and deploy an AKS landing zone.
 
-## Deploy AKS (Level 3) Landing zone
+## Related repositories
 
-Those are the minimum steps to allow a single devops engineer. 
-
-If the subscription is shared across multiple devops engineer is it recommended each devops engineer use their own launchpad to avoid any conflicts between devops engineers. This can be achieved by setting a specific environment variable value. In the following script we use the environment value of "asia".
-
-The scripts in example folders below can be used shared environment multiple devops engineer can get access and collaborate.
-
-We are currently using <em>bicycle</em> environment to deploy Landing zones.
-
-```
-export TF_VAR_environment=bicycle
-```
-| AKS Landing Zone Example                                                                                              | Description                                                |
+| Repo                                                                                              | Description                                                |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| [101-single-cluster](./examples/aks/101-single-cluster)| Provision single AKS cluster within open VNET |
-| [102-multi-nodepools](./examples/aks/102-multi-nodepools)| Provision single AKS cluster with multiple nodepool within separate subnet (1 open VNET)|
-| [103-multi-clusters](./examples/aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions (different open VNETs)                     |
-| [204-private-cluster](./examples/aks/204-private-cluster)| Provision private AKS clusters within private VNET with Hub & Spoke UDR to Azure Firewall |
+| [caf-terraform-landingzones](https://github.com/azure/caf-terraform-landingzones) | landing zones repo with sample and core documentations     |
+| [rover](https://github.com/aztfmod/rover)                                                         | devops toolset for operating landing zones                 |
+| [azure_caf_provider](https://github.com/aztfmod/terraform-provider-azurecaf)                      | custom provider for naming conventions                     |
+| [modules](https://registry.terraform.io/modules/aztfmod)                                          | set of curated modules available in the Terraform registry |
 
-## Deploy Application (Level 4) Landing zone
-Deploys Applications Landing zone on top of an AKS Landing zone
-| Application Landing Zone Example                                                                                              | Description                                                |
-|---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| [Flux](./examples/applications/flux)| Provision Flux helm charts on AKS LZ |
-| [ArgoCD](./examples/applications/argocd)| Provision ArgoCD helm charts on AKS LZ |
+## Community
 
+Feel free to open an issue for feature or bug, or to submit a PR.
 
+In case you have any question, you can reach out to tf-landingzones at microsoft dot com.
 
-## Contribute
+You can also reach us on [Gitter](https://gitter.im/aztfmod/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-More details about this landing zone can also be found in the landing zone folder and its blueprints sub-folders.
+## Contributing
 
-Pull requests are welcome to evolve the framework and integrate new features.
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
+the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repos using our CLA.
+
+## Code of conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
