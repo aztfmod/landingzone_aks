@@ -1,7 +1,6 @@
 module "caf" {
-  # source  = "aztfmod/caf/azurerm"
-  # version = "~> 0.4"
-  source = "./aztfmod"
+  source  = "aztfmod/caf/azurerm"
+  version = "~> 0.4"
 
   current_landingzone_key  = var.landingzone.key
   tfstates                 = local.tfstates
@@ -31,6 +30,6 @@ module "caf" {
   #   private_dns                       = var.private_dns
   # }
   remote_objects = {
-    vnets                            = local.remote.vnets
+    vnets = local.remote.vnets
   }
 }

@@ -91,10 +91,10 @@ azure_container_registries = {
       spoke_aks_re1-aks_nodepool_system = {
         name               = "acr-test-private-link"
         resource_group_key = "aks1_re1"
-          
-        lz_key      = "networking_spoke_aks"
-        vnet_key    = "spoke_aks_re1"
-        subnet_key  = "private_endpoints"
+
+        lz_key     = "networking_spoke_aks"
+        vnet_key   = "spoke_aks_re1"
+        subnet_key = "private_endpoints"
 
         private_service_connection = {
           name                 = "acr-test-private-link-psc"
@@ -134,8 +134,8 @@ aks_clusters = {
 
     kubernetes_version = "1.17.11"
 
-    lz_key      = "networking_spoke_aks"
-    vnet_key    = "spoke_aks_re1"
+    lz_key   = "networking_spoke_aks"
+    vnet_key = "spoke_aks_re1"
 
     network_policy = {
       network_plugin    = "azure"
@@ -214,9 +214,9 @@ virtual_machines = {
       nic0 = {
         # AKS rely on a remote network and need the details of the tfstate to connect (tfstate_key), assuming RBAC authorization.
 
-        lz_key      = "networking_spoke_aks"
-        vnet_key    = "spoke_aks_re1"
-        subnet_key  = "jumpbox"
+        lz_key                  = "networking_spoke_aks"
+        vnet_key                = "spoke_aks_re1"
+        subnet_key              = "jumpbox"
         name                    = "0"
         enable_ip_forwarding    = false
         internal_dns_name_label = "nic0"
@@ -258,7 +258,7 @@ virtual_machines = {
         }
 
         identity = {
-          type = "UserAssigned"
+          type                  = "UserAssigned"
           managed_identity_keys = ["jumpbox"]
         }
 
