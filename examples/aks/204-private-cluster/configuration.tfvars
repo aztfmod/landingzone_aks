@@ -1,28 +1,33 @@
-landingzone_name = "aks_private_cluster"
-
-tfstates = {
-  caf_foundations = {
-    tfstate = "caf_foundations.tfstate"
-  }
-  networking = {
-    tfstate = "204-private-cluster_landingzone_networking.tfstate"
+landingzone = {
+  backend_type        = "azurerm"
+  level               = "level3"
+  key                 = "cluster_aks"
+  global_settings_key = "shared_services"
+  tfstates = {
+    shared_services = {
+      level   = "lower"
+      tfstate = "caf_shared_services.tfstate"
+    }
+    networking_spoke_aks = {
+      tfstate = "networking_spoke_aks.tfstate"
+    }
   }
 }
 
 resource_groups = {
-  aks1_rg1 = {
-    name   = "aks-rg1"
+  aks1_re1 = {
+    name   = "aks-re1"
     region = "region1"
   }
-  aks_jumpbox_rg1 = {
-    name = "aks-jumpbox-rg1"
+  aks_jumpbox_re1 = {
+    name = "aks-jumpbox-re1"
   }
 }
 
 storage_accounts = {
   bootdiag_re1 = {
     name                     = "bootdiag"
-    resource_group_key       = "aks_jumpbox_rg1"
+    resource_group_key       = "aks_jumpbox_re1"
     account_kind             = "BlobStorage"
     account_tier             = "Standard"
     account_replication_type = "LRS"
@@ -33,7 +38,7 @@ storage_accounts = {
 keyvaults = {
   secrets = {
     name                = "secrets"
-    resource_group_key  = "aks_jumpbox_rg1"
+    resource_group_key  = "aks_jumpbox_re1"
     convention          = "cafrandom"
     sku_name            = "premium"
     soft_delete_enabled = true
@@ -69,7 +74,7 @@ keyvault_access_policies = {
 azure_container_registries = {
   acr1 = {
     name               = "acr-test"
-    resource_group_key = "aks1_rg1"
+    resource_group_key = "aks1_re1"
     sku                = "Premium"
     diagnostic_profiles = {
       operations = {
@@ -83,16 +88,14 @@ azure_container_registries = {
 
     private_endpoints = {
       # Require enforce_private_link_endpoint_network_policies set to true on the subnet
-      spoke_aks_rg1-aks_nodepool_system = {
+      spoke_aks_re1-aks_nodepool_system = {
         name               = "acr-test-private-link"
-        resource_group_key = "aks1_rg1"
-        remote_tfstate = {
-          tfstate_key = "aks_networking_spoke"
-          lz_key      = "aks_networking_spoke"
-          output_key  = "vnets"
-          vnet_key    = "spoke_aks_rg1"
-          subnet_key  = "private_endpoints"
-        }
+        resource_group_key = "aks1_re1"
+          
+        lz_key      = "aks_networking_spoke"
+        vnet_key    = "spoke_aks_re1"
+        subnet_key  = "private_endpoints"
+
         private_service_connection = {
           name                 = "acr-test-private-link-psc"
           is_manual_connection = false
@@ -115,7 +118,7 @@ azure_container_registries = {
 aks_clusters = {
   seacluster = {
     name               = "akscluster-001"
-    resource_group_key = "aks1_rg1"
+    resource_group_key = "aks1_re1"
     os_type            = "Linux"
     diagnostic_profiles = {
       operations = {
@@ -131,14 +134,8 @@ aks_clusters = {
 
     kubernetes_version = "1.17.11"
 
-    networking = {
-      remote_tfstate = {
-        tfstate_key = "aks_networking_spoke"
-        output_key  = "vnets"
-        lz_key      = "aks_networking_spoke"
-        vnet_key    = "spoke_aks_rg1"
-      }
-    }
+    lz_key      = "aks_networking_spoke"
+    vnet_key    = "spoke_aks_re1"
 
     network_policy = {
       network_plugin    = "azure"
@@ -151,7 +148,7 @@ aks_clusters = {
 
     admin_groups = {
       # ids = []
-      azuread_group_keys = [] #["aks_admins"]
+      azuread_group_keys = ["aks_admins"]
     }
 
     load_balancer_profile = {
@@ -176,7 +173,7 @@ aks_clusters = {
       }
     }
 
-    node_resource_group_name = "aks-nodes-rg1"
+    node_resource_group_name = "aks-nodes-re1"
 
     node_pools = {
       pool1 = {
@@ -203,7 +200,7 @@ virtual_machines = {
 
   # Configuration to deploy a bastion host linux virtual machine
   bastion_host = {
-    resource_group_key                   = "aks_jumpbox_rg1"
+    resource_group_key                   = "aks_jumpbox_re1"
     boot_diagnostics_storage_account_key = "bootdiag_re1"
     provision_vm_agent                   = true
 
@@ -216,15 +213,10 @@ virtual_machines = {
     networking_interfaces = {
       nic0 = {
         # AKS rely on a remote network and need the details of the tfstate to connect (tfstate_key), assuming RBAC authorization.
-        networking = {
-          remote_tfstate = {
-            tfstate_key = "aks_networking_spoke"
-            output_key  = "vnets"
-            lz_key      = "aks_networking_spoke"
-            vnet_key    = "spoke_aks_rg1"
-            subnet_key  = "jumpbox"
-          }
-        }
+
+        lz_key      = "aks_networking_spoke"
+        vnet_key    = "spoke_aks_re1"
+        subnet_key  = "jumpbox"
         name                    = "0"
         enable_ip_forwarding    = false
         internal_dns_name_label = "nic0"
@@ -267,9 +259,9 @@ virtual_machines = {
 
         identity = {
           type = "UserAssigned"
-          managed_identity_keys = [
-            "jumpbox"
-          ]
+          managed_identity_keys = {
+            keys = ["jumpbox"]
+          }
         }
 
       }
@@ -285,27 +277,27 @@ virtual_machines = {
 managed_identities = {
   jumpbox = {
     name               = "aks-jumpbox"
-    resource_group_key = "aks_jumpbox_rg1"
+    resource_group_key = "aks_jumpbox_re1"
   }
 }
 
-# azuread_groups = {
-#   aks_admins = {
-#     name        = "aks-admins"
-#     description = "Provide access to the AKS cluster and the jumpbox Keyvault secret."
-#     members = {
-#       user_principal_names = [
-#       ]
-#       group_names = []
-#       object_ids  = []
-#       group_keys  = []
+azuread_groups = {
+  aks_admins = {
+    name        = "aks-admins"
+    description = "Provide access to the AKS cluster and the jumpbox Keyvault secret."
+    members = {
+      user_principal_names = [
+      ]
+      group_names = []
+      object_ids  = []
+      group_keys  = []
 
-#       service_principal_keys = [
-#       ]
-#     }
-#     prevent_duplicate_name = false
-#   }
-# }
+      service_principal_keys = [
+      ]
+    }
+    prevent_duplicate_name = false
+  }
+}
 
 
 #
@@ -319,21 +311,21 @@ role_mapping = {
     aks_clusters = {
       seacluster = {
         "Azure Kubernetes Service Cluster Admin Role" = {
-          azuread_groups = [
-            # "aks_admins"
-          ]
-          managed_identities = [
-            "jumpbox"
-          ]
+          azuread_groups = {
+            # keys = ["aks_admins"]
+          }
+          managed_identities = {
+            keys = ["jumpbox"]
+          }
         }
       }
     }
     azure_container_registries = {
       acr1 = {
         "AcrPull" = {
-          aks_clusters = [
-            "seacluster"
-          ]
+          aks_clusters = {
+            keys = ["seacluster"]
+          }
         }
       }
     }

@@ -1,6 +1,6 @@
-# Single Cluster example
+# Deployment of the landing zones to support AKS clusters
 
-Deploys a Single AKS cluster in a virtual network.
+The following steps guides you with the deployment of the landing zones required to run the examples.
 
 ### 1. Rover login, Environment & example set
 

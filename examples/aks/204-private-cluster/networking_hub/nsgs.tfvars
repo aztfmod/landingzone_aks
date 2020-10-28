@@ -4,7 +4,7 @@
 #
 network_security_group_definition = {
   # This entry is applied to all subnets with no NSG defined
-  
+
   azure_bastion_nsg = {
     nsg = [
       {
@@ -75,7 +75,7 @@ network_security_group_definition = {
       }
     ]
   }
-  
+
   application_gateway = {
 
     # diagnostic_profiles = {
