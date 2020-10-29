@@ -9,16 +9,11 @@ output aks_clusters_kubeconfig {
 }
 
 output aks_clusters {
-  value = module.caf.aks_clusters
-  sensitive = false
+  value     = map(var.landingzone.key, module.caf.aks_clusters)
+  sensitive = true
 }
 
-output virtual_machines {
-  value = module.caf.virtual_machines
-  sensitive = false
-}
-
-output tfstates {
-  value     = local.tfstates
-  sensitive = false
+output global_settings {
+  value     = local.global_settings
+  sensitive = true
 }
