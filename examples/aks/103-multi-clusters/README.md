@@ -43,7 +43,7 @@ export example=103-multi-clusters
 
 ### Deploy networking for multi region model
 
-/!\ Please make sure you run the multi region network model before applying this landing zones, this will enable virtual networks in both region1 and region2, with network peering enabled:
+/!\ Please make sure you run the multi region spoke model before applying this landing zones, this will enable virtual networks in both region1 and region2, with network peering enabled:
 
 ```bash
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
@@ -72,7 +72,8 @@ Have fun playing with the landing zone an once you are done, you can simply dele
 
 ```bash
 # Set the folder name of this example
-export example=102-multi-nodepools
+export environment=[YOUR_ENVIRONMENT]
+export example=103-multi-clusters
 
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
@@ -83,7 +84,7 @@ rover -lz /tf/caf/ \
   -a destroy -auto-approve
 ```
 
-You can also destroy the network model:
+If you also want to destroy the network:
 ```bash
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -tfstate networking_spoke_aks.tfstate \

@@ -1,6 +1,7 @@
 aks_clusters = {
   cluster_re1 = {
-    name               = "re1-001"
+    helm_keys          = ["flux", "podIdentify"]
+    name               = "akscluster-re1-001"
     resource_group_key = "aks_re1"
     os_type            = "Linux"
 
@@ -50,10 +51,19 @@ aks_clusters = {
     }
 
     node_resource_group_name = "aks-nodes-re1"
+
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "aks_cluster"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
   }
 
   cluster_re2 = {
-    name               = "re2-001"
+    helm_keys          = ["flux", "podIdentify"]
+    name               = "akscluster-re2-001"
     resource_group_key = "aks_re2"
     os_type            = "Linux"
 
@@ -101,5 +111,13 @@ aks_clusters = {
     }
 
     node_resource_group_name = "aks-nodes-re2"
+
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "aks_cluster"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
   }
 }

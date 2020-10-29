@@ -1,7 +1,7 @@
 aks_clusters = {
   cluster_re1 = {
     helm_keys          = ["flux", "podIdentify"]
-    name               = "akscluster-001"
+    name               = "akscluster-re1-001"
     resource_group_key = "aks_re1"
     os_type            = "Linux"
 
@@ -66,6 +66,12 @@ aks_clusters = {
         }
       }
     }
-
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "aks_cluster"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
   }
 }

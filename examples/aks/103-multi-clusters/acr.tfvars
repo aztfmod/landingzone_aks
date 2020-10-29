@@ -6,13 +6,13 @@ azure_container_registries = {
     georeplication_region_keys = ["region2"]
 
     # you can setup up to 5 key
-    # diagnostic_profiles = {
-    #   central_logs_region1 = {
-    #     definition_key   = "azure_container_registry"
-    #     destination_type = "log_analytics"
-    #     destination_key  = "central_logs"
-    #   }
-    # }
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "azure_container_registry"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
 
     private_endpoints = {
       # Require enforce_private_link_endpoint_network_policies set to true on the subnet
