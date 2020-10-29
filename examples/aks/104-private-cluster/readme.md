@@ -46,7 +46,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 example=104-private-cluster
 
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
@@ -58,18 +58,12 @@ Have fun playing with the landing zone an once you are done, you can simply dele
 
 ```bash
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
   -a destroy
 
-# Only destroy Foundation & Launchpad if you have no other Landingzones dependent on them.
-rover -lz /tf/caf/public/landingzones/caf_foundations -a destroy
 
-# to destroy the launchpad you need to conifrm you are connected with your user. If not reconnect with
-rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
-
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a destroy
 ```

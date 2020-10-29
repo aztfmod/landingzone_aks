@@ -62,14 +62,14 @@ rover -lz /tf/caf/public/landingzones/caf_launchpad \
   -var-folder /tf/caf/examples/1-dependencies/launchpad/150 \
   -level level0 \
   -env ${environment} \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 # Level1
 ## To deploy AKS some dependencies, some accounting, security and governance services are required.
 rover -lz /tf/caf/public/landingzones/caf_foundations \
   -level level1 \
   -env ${environment} \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 # Deploy shared_services typically monitoring, site recovery services, azure image gallery. In this example we dont deploy anything but it will expose the Terraform state to level 3 landing zones, so is required.
 rover -lz /tf/caf/public/landingzones/caf_shared_services/ \
@@ -105,7 +105,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -var-folder /tf/caf/examples/1-dependencies/networking/spoke_aks/single_region \
   -env ${environment} \
   -level level3 \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 ```
 

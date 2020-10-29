@@ -51,19 +51,18 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -var-folder /tf/caf/examples/1-dependencies/networking/spoke_aks/multi_region \
   -env ${environment} \
   -level level3 \
-  -a [plan|apply]
-```
+  -a [plan|apply|destroy]
+# Run AKS landing zone deployment
 
 ### Run AKS landing zone deployment
 
-```bash
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 ```
 
 ## Destroy this example
