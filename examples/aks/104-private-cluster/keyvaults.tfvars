@@ -1,8 +1,7 @@
 keyvaults = {
   jumpbox = {
-    name                = "jumpbox"
+    name                = "jumpbox_akv"
     resource_group_key  = "aks_jumpbox_re1"
-    convention          = "cafrandom"
     sku_name            = "premium"
     soft_delete_enabled = true
 
@@ -15,20 +14,20 @@ keyvaults = {
       logged_in_aad_app = {
         secret_permissions = ["Set", "Get", "List", "Delete", "Purge", "Recover"]
       }
-      aks_admins = {
-        azuread_group_key  = "aks_admins"
-        secret_permissions = ["Get", "List"]
-      }
+      # aks_admins = {
+      #   azuread_group_key  = "aks_admins"
+      #   secret_permissions = ["Get", "List"]
+      # }
     }
 
     # # you can setup up to 5 profiles
-    # diagnostic_profiles = {
-    #   operations = {
-    #     definition_key   = "default_all"
-    #     destination_type = "log_analytics"
-    #     destination_key  = "central_logs"
-    #   }
-    # }
+    diagnostic_profiles = {
+      operations = {
+        definition_key   = "default_all"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
 
   }
 }

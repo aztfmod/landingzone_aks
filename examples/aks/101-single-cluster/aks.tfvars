@@ -53,7 +53,7 @@ aks_clusters = {
 
     diagnostic_profiles = {
       central_logs_region1 = {
-        definition_key   = "aks_cluster"
+        definition_key   = "azure_kubernetes_cluster"
         destination_type = "log_analytics"
         destination_key  = "central_logs"
       }

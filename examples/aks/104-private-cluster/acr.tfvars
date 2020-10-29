@@ -3,14 +3,14 @@ azure_container_registries = {
     name               = "acr-test"
     resource_group_key = "aks1_re1"
     sku                = "Premium"
-    # diagnostic_profiles = {
-    #   operations = {
-    #     name             = "operations"
-    #     definition_key   = "azure_container_registry"
-    #     destination_type = "log_analytics"
-    #     destination_key  = "central_logs"
-    #   }
-    # }
+    diagnostic_profiles = {
+      operations = {
+        name             = "acr_logs"
+        definition_key   = "azure_container_registry"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
     # georeplication_region_keys = ["region2"]
 
     private_endpoints = {
@@ -31,13 +31,5 @@ azure_container_registries = {
       }
     }
 
-    # you can setup up to 5 key
-    # diagnostic_profiles = {
-    #   central_logs_region1 = {
-    #     definition_key   = "azure_container_registry"
-    #     destination_type = "log_analytics"
-    #     destination_key  = "central_logs"
-    #   }
-    # }
   }
 }

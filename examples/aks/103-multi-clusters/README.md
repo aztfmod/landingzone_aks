@@ -8,6 +8,10 @@ AKS landing zone operates at **level 3**.
 
 For a review of the hierarchy approach of Cloud Adoption Framework for Azure landing zones on Terraform, you can refer to [the following documentation](../../../../documentation/code_architecture/hierarchy.md).
 
+## Prerequisites
+
+Before running this example, please make sure you have setup your environment as described in the [following guide](../../readme.md)
+
 ## Architecture diagram
 
 This example will sit on the [prerequisites environment](../../readme.md) and will allow you to deploy the following additional topology:
@@ -37,8 +41,8 @@ Ensure the below is set prior to apply or destroy.
 # Login the Azure subscription
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
-export environment=[YOUR_ENVIRONMENT]
-export example=103-multi-clusters
+environment=[YOUR_ENVIRONMENT]
+example=103-multi-clusters
 ```
 
 ### Deploy networking for multi region model
@@ -53,9 +57,11 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -level level3 \
   -a [plan|apply|destroy]
 # Run AKS landing zone deployment
+```
 
 ### Run AKS landing zone deployment
 
+```bash
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \

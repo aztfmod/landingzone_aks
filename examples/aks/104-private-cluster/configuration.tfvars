@@ -47,23 +47,23 @@ managed_identities = {
   }
 }
 
-azuread_groups = {
-  aks_admins = {
-    name        = "aks-admins"
-    description = "Provide access to the AKS cluster and the jumpbox Keyvault secret."
-    members = {
-      user_principal_names = [
-      ]
-      group_names = []
-      object_ids  = []
-      group_keys  = []
+# azuread_groups = {
+#   aks_admins = {
+#     name        = "aks-admins"
+#     description = "Provide access to the AKS cluster and the jumpbox Keyvault secret."
+#     members = {
+#       user_principal_names = [
+#       ]
+#       group_names = []
+#       object_ids  = []
+#       group_keys  = []
 
-      service_principal_keys = [
-      ]
-    }
-    prevent_duplicate_name = false
-  }
-}
+#       service_principal_keys = [
+#       ]
+#     }
+#     prevent_duplicate_name = false
+#   }
+# }
 
 
 #
@@ -75,10 +75,13 @@ role_mapping = {
 
   built_in_role_mapping = {
     aks_clusters = {
-      seacluster = {
+      cluster_re1 = {
         "Azure Kubernetes Service Cluster Admin Role" = {
-          azuread_groups = {
-            keys = ["aks_admins"]
+          # azuread_groups = {
+          #   keys = ["aks_admins"]
+          # }
+          logged_in = {
+            keys = ["user"]
           }
           managed_identities = {
             keys = ["jumpbox"]

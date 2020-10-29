@@ -115,7 +115,7 @@ diagnostics_definition = {
     }
   }
 
-  aks_cluster = {
+  azure_kubernetes_cluster = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
