@@ -40,14 +40,14 @@ rover -lz /tf/caf/public/landingzones/caf_launchpad \
   -var-folder /tf/caf/examples/1-dependencies/launchpad/150 \
   -level level0 \
   -env ${environment} \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 # Level1
 ## To deploy AKS some dependencies are required to like networking and some accounting, security and governance services are required.
 rover -lz /tf/caf/public/landingzones/caf_foundations \
   -level level1 \
   -env ${environment} \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 # Deploy shared_services
 rover -lz /tf/caf/public/landingzones/caf_shared_services/ \
@@ -55,7 +55,7 @@ rover -lz /tf/caf/public/landingzones/caf_shared_services/ \
   -parallelism 30 \
   -level level2 \
   -env ${environment} \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 # Deploy networking hub
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
@@ -63,7 +63,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -var-folder /tf/caf/public/landingzones/caf_networking/scenario/101-multi-region-hub \
   -env ${environment} \
   -level level2 \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 # Deploy networking spoke for AKS
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
@@ -71,7 +71,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
   -var-folder /tf/caf/examples/1-dependencies/networking/spoke_aks/single_region \
   -env ${environment} \
   -level level3 \
-  -a [plan|apply]
+  -a [plan|apply|destroy]
 
 ```
 
@@ -97,5 +97,5 @@ You can find detailed steps for each of the following scenario:
 Deploys Applications Landing zone on top of an AKS Landing zone
 | Application Landing Zone Example                                                                                              | Description                                                |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
-| [Flux](./examples/applications/flux)| Provision Flux helm charts on AKS LZ |
 | [ArgoCD](./examples/applications/argocd)| Provision ArgoCD helm charts on AKS LZ |
+| [Flux](./examples/applications/flux)| Provision Flux helm charts on AKS LZ |

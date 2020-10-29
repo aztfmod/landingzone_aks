@@ -56,7 +56,6 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 
 ### Run AKS landing zone deployment
 
-```bash
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
