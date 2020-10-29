@@ -1,6 +1,6 @@
 # CAF landing zones for Terraform - AKS Single Cluster example
 
-Deploys a Single AKS cluster in a virtual network.
+Deploys a Single AKS cluster in a virtual network, with one node pool.
 
 AKS landing zone operates at **level 3**.
 
@@ -8,7 +8,7 @@ For a review of the hierarchy approach of Cloud Adoption Framework for Azure lan
 
 ## Architecture diagram
 
-This example will sit on the prerequisites environment and will allow you to deploy the following additional topology:
+This example will sit on the [prerequisites environment](../../readme.md) and will allow you to deploy the following additional topology:
 
 ![solutions](../../../_pictures/examples/101-single-cluster.PNG)
 
@@ -19,7 +19,7 @@ This example will sit on the prerequisites environment and will allow you to dep
 | aks_re1, aks_nodes_re1   | Resource group                   | resource group to host the cluster and the node pool resources |
 | akscluster-001           | AKS Cluster                      | AKS Cluster                                                    |
 | acr                      | Azure Container Registry         | Azure Container Registry to store containers                   |
-| sharedsvc                | AKS node pool                    | Initial AKS node pool for AKS cluster                          |
+| sharedsvc                | AKS node pool                    | Default node pool for AKS cluster                              |
 | managed public IP        | Public IP                        | Public IP address for the node pool.                           |
 | managed VMSS             | Virtual Machines Scale Set       | Scale set for the node pool.                                   |
 | managed load balancer    | Load balancer                    | Load balancer for the node pool.                               |
@@ -35,6 +35,7 @@ rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export environment=[YOUR_ENVIRONMENT]
 ```
+
 ## Run AKS landing zone deployment
 
 ```bash
@@ -47,7 +48,7 @@ rover -lz /tf/caf/ \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
-  -a apply
+  -a [plan|apply]
 ```
 
 ## Destroy an AKS landing zone deployment
