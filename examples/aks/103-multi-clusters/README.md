@@ -28,7 +28,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 # Run AKS landing zone deployment
 
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
   -level level3 \

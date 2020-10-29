@@ -56,6 +56,16 @@ role_mapping = {
           }
         }
       }
+      level4 = {
+        "Storage Blob Data Contributor" = {
+          logged_in = {
+            keys = ["user"]
+          }
+          managed_identities = {
+            keys = ["level4"]
+          }
+        }
+      }
     }
   }
 
