@@ -49,7 +49,7 @@ Once into the development environment, please use the following steps:
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export environment=[YOUR_ENVIRONMENT]
-git clone [--branch 0.4] https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
+git clone --branch 0.4 https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
 
 ```
 
@@ -94,7 +94,7 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 ```
 
 This deployment adds the following components:
-![caf_layers](../_pictures/examples/101-multi-region-hub.PNG)
+![caf_layers](../_pictures/examples/101-multi-region-hub.png)
 
 ### Apply level 3 - network spoke
 
