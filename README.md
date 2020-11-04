@@ -4,15 +4,14 @@ Microsoft Cloud Adoption Framework for Azure provides you with guidance and best
 
 A landing zone is a segment of a cloud environment, that has been preprovisioned through code, and is dedicated to the support of one or more workloads. Landing zones provide access to foundational tools and controls to establish a compliant place to innovate and build new workloads in the cloud, or to migrate existing workloads to the cloud. Landing zones use defined sets of cloud services and best practices to set you up for success.
 
+You can find the core Cloud Adoption Framework for Azure - Terraform landing zones here: [CAF landing zones](https://github.com/Azure/caf-terraform-landingzones/)
+
 ## Goals
 
 The Azure Kubernetes Services landing zones sits on top of Cloud Adoption Framework for Azure foundational landing zones and enables the deployment of Azure Kubernetes Services on top of it.
+With this solution, you can deploy various combinations following the examples available, including a private cluster as follow:
 
-You can find the core landing zones here: [CAF landing zones](https://github.com/Azure/caf-terraform-landingzones/)
-
-The AKS landing zone fits in the following picture:
-
-![solutions](./_pictures/solutions.png)
+![solutions](./_pictures/examples/104-full.PNG)
 
 ## Getting Started
 
