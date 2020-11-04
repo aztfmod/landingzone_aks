@@ -1,6 +1,5 @@
 aks_clusters = {
   cluster_re1 = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-re1-001"
     resource_group_key = "aks_re1"
     os_type            = "Linux"
@@ -62,7 +61,6 @@ aks_clusters = {
   }
 
   cluster_re2 = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-re2-001"
     resource_group_key = "aks_re2"
     os_type            = "Linux"

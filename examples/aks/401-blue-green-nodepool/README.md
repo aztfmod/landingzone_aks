@@ -1,70 +1,115 @@
-# Cluster Upgrade Blue Green Nodepool example
+# CAF landing zones for Terraform - AKS Single Cluster example
 
-Deploys a Single AKS cluster with Blue and Green nodepools in a VNET, within different subnets:
-- Simulate upgrade with Green nodepool.
-- Apply taint & toleration to migrate from Blue to Green.
+Deploys a Single AKS cluster in a virtual network, with one node pool.
 
+AKS landing zone operates at **level 3**.
 
-### 1. Rover login, Environment & example set
+For a review of the hierarchy approach of Cloud Adoption Framework for Azure landing zones on Terraform, you can refer to [the following documentation](../../../../documentation/code_architecture/hierarchy.md).
+
+## Prerequisites
+
+Before running this example, please make sure you have setup your environment as described in the [following guide](../../readme.md)
+
+## Architecture diagram
+
+This example will sit on the [prerequisites environment](../../readme.md) and will allow you to deploy the following additional topology:
+
+![solutions](../../../_pictures/examples/101-single-cluster.PNG)
+
+## Components deployed by this example
+
+| Component                | Type of resource                 | Purpose                                                        |
+|--------------------------|----------------------------------|----------------------------------------------------------------|
+| aks_re1, aks_nodes_re1   | Resource group                   | resource group to host the cluster and the node pool resources |
+| akscluster-001           | AKS Cluster                      | AKS Cluster                                                    |
+| acr                      | Azure Container Registry         | Azure Container Registry to store containers                   |
+| sharedsvc                | AKS node pool                    | Default node pool for AKS cluster                              |
+| managed public IP        | Public IP                        | Public IP address for the node pool.                           |
+| managed VMSS             | Virtual Machines Scale Set       | Scale set for the node pool.                                   |
+| managed load balancer    | Load balancer                    | Load balancer for the node pool.                               |
+| akscluster-001-agentpool | System Assigned Managed Identity | Managed identity for the node pool.                            |
+
+## Deploying this example
+
 Ensure the below is set prior to apply or destroy.
+
 ```bash
 # Login the Azure subscription
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
-export TF_VAR_environment=[YOUR_ENVIRONMENT]
+export environment=[YOUR_ENVIRONMENT]
 # Set the folder name of this example
-example=WIP-105-blue-green
+example=401-blue-green-nodepool
+
 ```
-### 2. Apply Landingzones
+
+## Run AKS landing zone deployment
+
+### Step 0: Deploy Blue Nodepool
 ```bash
-# Add the lower dependency landingzones
-# rover --clone-landingzones --clone-branch vnext13
-git clone git@github.com:aztfmod/terraform-azurerm-caf-landingzone-modules.git /tf/caf/public
-
-# Deploy the launchpad light to store the tfstates
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a apply
-## To deploy AKS some dependencies are required to like networking and some acounting, security and governance services are required.
-rover -lz /tf/caf/public/landingzones/caf_foundations -a apply
-
-# Deploy networking
-rover -lz /tf/caf/public/landingzones/caf_networking/ \
-      -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a apply
-# Run AKS landing zone deployment
-
 rover -lz /tf/caf/ \
-      -tfstate ${example}_landingzone_aks.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/blue.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a apply      
+  -tfstate ${example}_landingzone_aks.tfstate \
+  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-file /tf/caf/examples/aks/${example}/aks_step0.tfvars \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
+  -a [plan|apply]
 ```
-### 3. Destroy Landingzones
+
+### Step 1: Upgrade Control Plane, system Nodepool and adding Green Nodepool
+```bash
+rover -lz /tf/caf/ \
+  -tfstate ${example}_landingzone_aks.tfstate \
+  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-file /tf/caf/examples/aks/${example}/aks_step1.tfvars \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
+  -a [plan|apply]
+
+```
+
+### Step 2: Cordon, Drain & Delete Blue Nodepool
+Login to the cluster using *aks_kubeconfig_admin_cmd* or *aks_kubeconfig_cmd* output: *"az aks get-credentials..."* 
+
+
+Cordon Blue NodePool
+
+```bash
+kubectl cordon -l agentpool=nodepool1
+```
+
+Drain Blue NodePool
+```bash
+kubectl drain -l agentpool=nodepool1 --ignore-daemonsets --delete-local-data
+```
+
+Delete Blue NodePool
+```bash
+rover -lz /tf/caf/ \
+  -tfstate ${example}_landingzone_aks.tfstate \
+  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-file /tf/caf/examples/aks/${example}/aks_step2.tfvars \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
+  -a [plan|apply]
+```
+
+## Destroy an AKS landing zone deployment
+
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
 
 ```bash
+# Set the folder name of this example
+example=101-single-cluster
+
 rover -lz /tf/caf/ \
-      -tfstate ${example}_landingzone_aks.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/blue.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a destroy -auto-approve
-rover -lz /tf/caf/public/landingzones/caf_networking/ \
-      -tfstate ${example}_landingzone_networking.tfstate \
-      -var-file /tf/caf/examples/aks/${example}/landingzone_networking.tfvars \
-      -var tags={example=\"${example}\"} \
-      -a destroy -auto-approve
-
-# Only destroy Foundation & Launchpad if you have no other Landingzones dependent on them.
-rover -lz /tf/caf/public/landingzones/caf_foundations -a destroy
-
-# to destroy the launchpad you need to conifrm you are connected with your user. If not reconnect with
-rover login -t terraformdev.onmicrosoft.com -s [subscription GUID]
-
-rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-file /tf/caf/configuration/bicycle_launchpad_configuration.tfvars -a destroy
+  -tfstate landingzone_aks.tfstate \
+  -var-folder /tf/caf/examples/aks/${example} \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
+  -a destroy -auto-approve
 ```
-
-
-## Contribute
-
-Pull requests are welcome to evolve the framework and integrate new features.
