@@ -14,7 +14,7 @@ Before running this example, please make sure you have setup your environment /!
 
 This example will sit on the [prerequisites environment](../../readme.md) and will allow you to deploy the following additional topology:
 
-![solutions](../../../_pictures/examples/104-privatecluster.PNG)
+![solutions](../../../_pictures/examples/104-full.PNG)
 
 ## Components deployed by this example
 
