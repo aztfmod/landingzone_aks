@@ -1,7 +1,19 @@
-landingzone_name = "101-single-cluster_dapr"
+landingzone = {
+  backend_type        = "azurerm"
+  level               = "level4"
+  key                 = "flux"
+  global_settings_key = "cluster_aks" # Update accordingly based on the configuration file of your AKS cluster landingzone.key
+  tfstates = {
+    cluster_aks = {
+      level   = "lower"                                       # Update accordingly based on the configuration file of your AKS cluster landingzone.key
+      tfstate = "104-private-cluster_landingzone_aks.tfstate" # Update accordingly based on the value you used to deploy you aks cluster with the rover -tfstate <value>
+    }
+  }
+}
 
-remote_tfstate = "101-single-cluster_landingzone_aks.tfstate"
-cluster_key = "cluster_rg1"
+landingzone_key = "cluster_aks"
+cluster_key     = "cluster_re1"
+
 
 namespaces = {
   fluxcd = {
@@ -23,19 +35,19 @@ helm_charts = {
   #   namespace  = "default"
   # }
   flux = {
-    name = "flux"
+    name       = "flux"
     repository = "https://charts.fluxcd.io"
     chart      = "flux"
     namespace  = "fluxcd"
   }
   flux_helm_operator = {
-    name = "helm-operator"
+    name       = "helm-operator"
     repository = "https://charts.fluxcd.io"
     chart      = "helm-operator"
     namespace  = "fluxcd"
     sets = {
       "git.ssh.secretName" = "flux-git-deploy"
-      "helm.versions" = "v3"
+      "helm.versions"      = "v3"
     }
   }
 }
