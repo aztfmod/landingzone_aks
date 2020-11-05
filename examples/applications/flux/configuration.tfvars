@@ -6,7 +6,7 @@ landingzone = {
   tfstates = {
     cluster_aks = {
       level   = "lower"                                       # Update accordingly based on the configuration file of your AKS cluster landingzone.key
-      tfstate = "104-private-cluster_landingzone_aks.tfstate" # Update accordingly based on the value you used to deploy you aks cluster with the rover -tfstate <value>
+      tfstate = "landingzone_aks.tfstate" # Update accordingly based on the value you used to deploy you aks cluster with the rover -tfstate <value>
     }
   }
 }

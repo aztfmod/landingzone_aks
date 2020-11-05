@@ -48,7 +48,7 @@ example=401-blue-green-nodepool
 ### Step 0: Deploy Blue Nodepool
 ```bash
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
   -var-file /tf/caf/examples/aks/${example}/aks_step0.tfvars \
   -var tags={example=\"${example}\"} \
@@ -60,7 +60,7 @@ rover -lz /tf/caf/ \
 ### Step 1: Upgrade Control Plane, system Nodepool and adding Green Nodepool
 ```bash
 rover -lz /tf/caf/ \
-  -tfstate ${example}_landingzone_aks.tfstate \
+  -tfstate landingzone_aks.tfstate \
   -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
   -var-file /tf/caf/examples/aks/${example}/aks_step1.tfvars \
   -var tags={example=\"${example}\"} \
@@ -73,6 +73,16 @@ rover -lz /tf/caf/ \
 ### Step 2: Cordon, Drain & Delete Blue Nodepool
 Login to the cluster using *aks_kubeconfig_admin_cmd* or *aks_kubeconfig_cmd* output: *"az aks get-credentials..."* 
 
+```bash
+rover -lz /tf/caf/ \
+  -tfstate landingzone_aks.tfstate \
+  -level level3 \
+  -a output \
+  -json \
+  -o output.json
+  
+cat output.json | jq -r .aks_clusters.value.cluster_aks.cluster_re1.aks_kubeconfig_admin_cmd | bash
+```
 
 Cordon Blue NodePool
 
