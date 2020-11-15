@@ -214,7 +214,7 @@ jobs:
     name: aks_clusters
     runs-on: ubuntu-latest
 
-    needs: [networking_hub, shared_services]
+    needs: [networking_hub, networking_spoke, shared_services]
 
     strategy:
       fail-fast: false
@@ -269,7 +269,7 @@ jobs:
     name: private_cluster
     runs-on: ubuntu-latest
 
-    needs: [networking_hub, shared_services, aks_clusters]
+    needs: [aks_clusters]
 
     env:
       example: "104-private-cluster"
@@ -413,7 +413,7 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
 
-    needs: [aks_clusters, private_cluster]
+    needs: [destroy_networking_spoke]
 
     container:
       image: aztfmod/rover:2010.2808
