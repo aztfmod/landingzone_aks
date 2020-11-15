@@ -296,7 +296,7 @@ jobs:
       - name: upgrade networking_hub
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/landingzones/caf_networking -a apply \
-            -level level3 \
+            -level level2 \
             -tfstate networking_hub.tfstate \
             -var-folder ${GITHUB_WORKSPACE}/public/landingzones/caf_networking/scenario/101-multi-region-hub \
             -var-folder ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/networking_hub/single_region \
