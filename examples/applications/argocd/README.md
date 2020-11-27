@@ -26,11 +26,9 @@ landingzone_key="cluster_aks"
 cluster_key="cluster_re1"
 
 rover -lz /tf/caf/applications \
-  -tfstate ${landingzone_key}_${cluster_key}_${application}.tfstate \
+  -tfstate ${application}1.tfstate \
   -var-folder /tf/caf/examples/applications/${application} \
   -var tags={application=\"${application}\"} \
-  -var landingzone_key=${landingzone_key} \
-  -var cluster_key=${cluster_key} \
   -level level4 \
   -a apply
 ```

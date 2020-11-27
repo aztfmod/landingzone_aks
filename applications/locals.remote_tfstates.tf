@@ -40,14 +40,15 @@ locals {
     }
   }
 
-  cluster = local.remote.aks_clusters[var.landingzone_key][var.cluster_key]
-
-  host                   = local.cluster.enable_rbac ? local.cluster.kube_admin_config.0.host : local.cluster.kube_config.0.host
-  username               = local.cluster.enable_rbac ? local.cluster.kube_admin_config.0.username : local.cluster.kube_config.0.username
-  password               = local.cluster.enable_rbac ? local.cluster.kube_admin_config.0.password : local.cluster.kube_config.0.password
-  client_certificate     = local.cluster.enable_rbac ? base64decode(local.cluster.kube_admin_config.0.client_certificate) : base64decode(local.cluster.kube_config.0.client_certificate)
-  client_key             = local.cluster.enable_rbac ? base64decode(local.cluster.kube_admin_config.0.client_key) : base64decode(local.cluster.kube_config.0.client_key)
-  cluster_ca_certificate = local.cluster.enable_rbac ? base64decode(local.cluster.kube_admin_config.0.cluster_ca_certificate) : base64decode(local.cluster.kube_config.0.cluster_ca_certificate)
-
+  clusters = local.remote.aks_clusters[var.landingzone.global_settings_key]
+  k8sconfigs = { for key, value in values(local.clusters) : key => {
+    host                   = value.enable_rbac ? value.kube_admin_config.0.host : value.kube_config.0.host
+    username               = value.enable_rbac ? value.kube_admin_config.0.username : value.kube_config.0.username
+    password               = value.enable_rbac ? value.kube_admin_config.0.password : value.kube_config.0.password
+    client_certificate     = value.enable_rbac ? base64decode(value.kube_admin_config.0.client_certificate) : base64decode(value.kube_config.0.client_certificate)
+    client_key             = value.enable_rbac ? base64decode(value.kube_admin_config.0.client_key) : base64decode(value.kube_config.0.client_key)
+    cluster_ca_certificate = value.enable_rbac ? base64decode(value.kube_admin_config.0.cluster_ca_certificate) : base64decode(value.kube_config.0.cluster_ca_certificate)
+    }
+  }
 
 }

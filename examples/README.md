@@ -49,6 +49,7 @@ Once into the development environment, please use the following steps:
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export environment=[YOUR_ENVIRONMENT]
+export random_length=5
 git clone --branch 2010.0.preview1 https://github.com/Azure/caf-terraform-landingzones.git /tf/caf/public
 
 ```
@@ -62,6 +63,7 @@ rover -lz /tf/caf/public/landingzones/caf_launchpad \
   -var-folder /tf/caf/examples/1-dependencies/launchpad/150 \
   -level level0 \
   -env ${environment} \
+  -var random_length=${random_length} \
   -a [plan|apply|destroy]
 
 # Level1

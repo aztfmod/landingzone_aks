@@ -71,7 +71,7 @@ rover -lz /tf/caf/ \
 ```
 
 ### Step 2: Cordon, Drain & Delete Blue Nodepool
-Login to the cluster using *aks_kubeconfig_admin_cmd* or *aks_kubeconfig_cmd* output: *"az aks get-credentials..."* 
+Login to the cluster using *aks_kubeconfig_admin_cmd* or *aks_kubeconfig_cmd* output: *"az aks get-credentials..."*
 
 ```bash
 rover -lz /tf/caf/ \
@@ -80,7 +80,7 @@ rover -lz /tf/caf/ \
   -a output \
   -json \
   -o output.json
-  
+
 cat output.json | jq -r .aks_clusters.value.cluster_aks.cluster_re1.aks_kubeconfig_admin_cmd | bash
 ```
 

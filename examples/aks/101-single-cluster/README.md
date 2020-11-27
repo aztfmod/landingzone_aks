@@ -38,6 +38,7 @@ Ensure the below is set prior to apply or destroy.
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export environment=[YOUR_ENVIRONMENT]
+export random_length=10
 ```
 
 ## Run AKS landing zone deployment
@@ -52,6 +53,7 @@ rover -lz /tf/caf/ \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
+  -var random_length=10 \
   -a [plan|apply]
 ```
 

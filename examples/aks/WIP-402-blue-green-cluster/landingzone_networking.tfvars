@@ -1,4 +1,4 @@
-landingzone_name="networking_aks"
+landingzone_name = "networking_aks"
 tfstates = {
   caf_foundations = {
     tfstate = "caf_foundations.tfstate"
@@ -25,16 +25,16 @@ vnets = {
     specialsubnets = {}
     subnets = {
       aks_nodepool_system = {
-        name            = "aks_nodepool_system"
-        cidr            = ["100.64.48.0/24"]
+        name = "aks_nodepool_system"
+        cidr = ["100.64.48.0/24"]
       }
       aks_nodepool_user1 = {
-        name            = "aks_nodepool_user1"
-        cidr            = ["100.64.49.0/25"]
+        name = "aks_nodepool_user1"
+        cidr = ["100.64.49.0/25"]
       }
       aks_nodepool_user2 = {
-        name            = "aks_nodepool_user2"
-        cidr            = ["100.64.49.128/25"]
+        name = "aks_nodepool_user2"
+        cidr = ["100.64.49.128/25"]
       }
     }
   }

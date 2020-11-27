@@ -27,7 +27,7 @@ vnets = {
         route_table_key = "default_to_firewall_re1"
       }
       AzureBastionSubnet = {
-        name    = "AzureBastionSubnet" #Must be called AzureBastionSubnet 
+        name    = "AzureBastionSubnet" #Must be called AzureBastionSubnet
         cidr    = ["100.64.51.64/27"]
         nsg_key = "azure_bastion_nsg"
       }

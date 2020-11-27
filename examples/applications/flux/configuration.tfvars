@@ -5,14 +5,14 @@ landingzone = {
   global_settings_key = "cluster_aks" # Update accordingly based on the configuration file of your AKS cluster landingzone.key
   tfstates = {
     cluster_aks = {
-      level   = "lower"                                       # Update accordingly based on the configuration file of your AKS cluster landingzone.key
+      level   = "lower"                   # Update accordingly based on the configuration file of your AKS cluster landingzone.key
       tfstate = "landingzone_aks.tfstate" # Update accordingly based on the value you used to deploy you aks cluster with the rover -tfstate <value>
     }
   }
 }
 
-landingzone_key = "cluster_aks"
-cluster_key     = "cluster_re1"
+cluster_re1_key = "cluster_re1"
+# cluster_re2_key = "cluster_re2"
 
 
 namespaces = {
@@ -39,6 +39,9 @@ helm_charts = {
     repository = "https://charts.fluxcd.io"
     chart      = "flux"
     namespace  = "fluxcd"
+    sets = {
+      "git.url" = "git@github.com:hieumoscow/flux-get-started"
+    }
   }
   flux_helm_operator = {
     name       = "helm-operator"

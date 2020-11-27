@@ -53,7 +53,7 @@ aks_clusters = {
 
     diagnostic_profiles = {
       central_logs_region1 = {
-        definition_key   = "aks_cluster"
+        definition_key   = "azure_kubernetes_cluster"
         destination_type = "log_analytics"
         destination_key  = "central_logs"
       }
@@ -111,7 +111,7 @@ aks_clusters = {
     node_resource_group_name = "aks-nodes-re2"
 
     diagnostic_profiles = {
-      central_logs_region1 = {
+      central_logs_region2 = {
         definition_key   = "azure_kubernetes_cluster"
         destination_type = "log_analytics"
         destination_key  = "central_logs"

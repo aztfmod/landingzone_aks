@@ -5,6 +5,8 @@ resource "kubernetes_namespace" "namespaces" {
     labels      = try(each.value.labels, null)
     name        = each.value.name
   }
+
+  provider = kubernetes.k8s
 }
 
 # https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release
@@ -36,6 +38,8 @@ resource "helm_release" "charts" {
       value = set_sensitive.value
     }
   }
+
+  provider = helm.helm
 
   depends_on = [kubernetes_namespace.namespaces]
   #   values = [

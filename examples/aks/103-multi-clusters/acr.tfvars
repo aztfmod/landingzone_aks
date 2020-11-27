@@ -45,6 +45,5 @@ azure_container_registries = {
         }
       }
     }
-
   }
 }
