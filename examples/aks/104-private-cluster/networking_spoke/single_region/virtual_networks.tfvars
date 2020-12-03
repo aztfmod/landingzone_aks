@@ -11,19 +11,19 @@ vnets = {
       aks_nodepool_system = {
         name            = "aks_nodepool_system"
         cidr            = ["100.64.48.0/24"]
-        nsg_key         = "azure_bastion_nsg"
+        nsg_key         = "azure_kubernetes_cluster_nsg"
         route_table_key = "default_to_firewall_re1"
       }
       aks_nodepool_user1 = {
         name            = "aks_nodepool_user1"
         cidr            = ["100.64.49.0/24"]
-        nsg_key         = "azure_bastion_nsg"
+        nsg_key         = "azure_kubernetes_cluster_nsg"
         route_table_key = "default_to_firewall_re1"
       }
       aks_nodepool_user2 = {
         name            = "aks_nodepool_user2"
         cidr            = ["100.64.50.0/24"]
-        nsg_key         = "azure_bastion_nsg"
+        nsg_key         = "azure_kubernetes_cluster_nsg"
         route_table_key = "default_to_firewall_re1"
       }
       AzureBastionSubnet = {
