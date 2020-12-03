@@ -227,7 +227,7 @@ jobs:
           ]
 
     container:
-      image: aztfmod/roverdev:2011.050225
+      image: aztfmod/rover:2010.2808
       options: --user 0
 
     steps:
@@ -275,7 +275,7 @@ jobs:
       example: "401-blue-green-nodepool"
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/roverdev:2011.050225
       options: --user 0
 
     steps:
