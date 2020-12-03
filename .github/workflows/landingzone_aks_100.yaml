@@ -73,7 +73,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -119,7 +119,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -155,7 +155,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -173,7 +173,7 @@ jobs:
             -parallelism=30 \
             --environment ${{ github.run_id }} \
             '-var tags={testing_job_id="${{ github.run_id }}"}'
-  
+
   networking_spoke:
     name: networking_spoke
     runs-on: ubuntu-latest
@@ -191,7 +191,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -237,7 +237,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -286,13 +286,13 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
           az login --service-principal -u '${{ env.ARM_CLIENT_ID }}' -p '${{ env.ARM_CLIENT_SECRET }}' --tenant '${{ env.ARM_TENANT_ID }}'
           az account set -s  ${{ env.ARM_SUBSCRIPTION_ID }}
-      
+
       - name: upgrade networking_hub
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/landingzones/caf_networking -a apply \
@@ -302,7 +302,7 @@ jobs:
             -var-folder ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/networking_hub/single_region \
             '-var tags={testing_job_id="${{ github.run_id }}"}' \
             --environment ${{ github.run_id }}
-      
+
       - name: upgrade networking_spoke
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/landingzones/caf_networking -a apply \
@@ -351,7 +351,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -389,7 +389,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -427,7 +427,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.0'
+          ref: '2010.0.2'
 
       - name: Login azure
         run: |
@@ -462,7 +462,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: "2010.0.0"
+          ref: "2010.0.2"
 
       - name: Login azure
         run: |
