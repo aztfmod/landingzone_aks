@@ -312,6 +312,9 @@ jobs:
             '-var tags={testing_job_id="${{ github.run_id }}"}' \
             --environment ${{ github.run_id }}
 
+      - uses: azure/setup-kubectl@v1
+        id: install
+
       - name: cordon and drain nodepool1
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a apply \
