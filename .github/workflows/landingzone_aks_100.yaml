@@ -265,6 +265,84 @@ jobs:
             --environment ${{ github.run_id }} \
             -auto-approve
 
+blue_green_nodepool_cluster:
+    name: aks_clusters
+    runs-on: ubuntu-latest
+
+    needs: [networking_hub, networking_spoke, shared_services]
+
+    env:
+      example: "401-blue-green-nodepool"
+
+    container:
+      image: aztfmod/rover:2010.2808
+      options: --user 0
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+        with:
+          repository: Azure/caf-terraform-landingzones
+          path: public
+          ref: '2010.0.2'
+
+      - name: Login azure
+        run: |
+          az login --service-principal -u '${{ env.ARM_CLIENT_ID }}' -p '${{ env.ARM_CLIENT_SECRET }}' --tenant '${{ env.ARM_TENANT_ID }}'
+          az account set -s  ${{ env.ARM_SUBSCRIPTION_ID }}
+
+      - name: deploy aks_cluster step0
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a apply \
+            -level level3 \
+            -tfstate ${{ env.example }}.tfstate \
+            -var-file ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/aks_step0.tfvars \
+            '-var tags={testing_job_id="${{ github.run_id }}"}' \
+            --environment ${{ github.run_id }}
+            
+      - name: deploy aks_cluster step1
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a apply \
+            -level level3 \
+            -tfstate ${{ env.example }}.tfstate \
+            -var-file ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/aks_step1.tfvars  \
+            '-var tags={testing_job_id="${{ github.run_id }}"}' \
+            --environment ${{ github.run_id }}
+
+      - name: cordon and drain nodepool1
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a apply \
+            -level level3 \
+            -tfstate ${{ env.example }}.tfstate \
+            -a output  \
+            -json \
+            -o output.json
+            --environment ${{ github.run_id }}
+          cat output.json | jq -r .aks_clusters.value.cluster_aks.cluster_re1.aks_kubeconfig_admin_cmd | bash
+          kubectl cordon -l agentpool=nodepool1
+          kubectl drain -l agentpool=nodepool1 --ignore-daemonsets --delete-local-data
+
+      - name: deploy aks_cluster step2
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a apply \
+            -level level3 \
+            -tfstate ${{ env.example }}.tfstate \
+            -var-file ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/aks_step2.tfvars \
+            '-var tags={testing_job_id="${{ github.run_id }}"}' \
+            --environment ${{ github.run_id }}
+
+      - name: destroy aks_cluster
+        if: always()
+        run: |
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a destroy \
+            -level level3 \
+            -tfstate ${{ env.example }}.tfstate \
+            -var-file ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/aks_step2.tfvars \
+            '-var tags={testing_job_id="${{ github.run_id }}"}' \
+            --environment ${{ github.run_id }} \
+            -auto-approve
+
   private_cluster:
     name: private_cluster
     runs-on: ubuntu-latest
