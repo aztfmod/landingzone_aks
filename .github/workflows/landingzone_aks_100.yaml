@@ -322,7 +322,7 @@ jobs:
             -tfstate ${{ env.example }}.tfstate \
             -a output  \
             -json \
-            -o output.json \ 
+            -o output.json \
             --environment ${{ github.run_id }}
           cat output.json | jq -r .aks_clusters.value.cluster_aks.cluster_re1.aks_kubeconfig_admin_cmd | bash
           kubectl cordon -l agentpool=nodepool1
