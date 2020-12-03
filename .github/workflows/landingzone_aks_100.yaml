@@ -342,7 +342,7 @@ blue_green_nodepool_cluster:
             '-var tags={testing_job_id="${{ github.run_id }}"}' \
             --environment ${{ github.run_id }} \
             -auto-approve
-
+            
   private_cluster:
     name: private_cluster
     runs-on: ubuntu-latest
