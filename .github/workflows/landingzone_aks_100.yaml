@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -109,7 +109,7 @@ jobs:
     needs: foundations
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -145,7 +145,7 @@ jobs:
     needs: foundations
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -181,7 +181,7 @@ jobs:
     needs: [foundations, networking_hub]
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -218,7 +218,7 @@ jobs:
 
     strategy:
       fail-fast: false
-      max-parallel: 1
+      max-parallel: 3
       matrix:
           example: [
             "101-single-cluster",
@@ -227,7 +227,7 @@ jobs:
           ]
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -275,7 +275,7 @@ jobs:
       example: "401-blue-green-nodepool"
 
     container:
-      image: aztfmod/roverdev:2011.050225
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -361,7 +361,7 @@ jobs:
       example: "104-private-cluster"
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -426,7 +426,7 @@ jobs:
     needs: [aks_clusters, private_cluster]
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -464,7 +464,7 @@ jobs:
     needs: [aks_clusters, private_cluster]
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -502,7 +502,7 @@ jobs:
     needs: [destroy_networking_spoke]
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
@@ -539,7 +539,7 @@ jobs:
     needs: [destroy_shared_services, destroy_networking_hub]
 
     container:
-      image: aztfmod/rover:2010.2808
+      image: aztfmod/rover:2011.3012
       options: --user 0
 
     steps:
