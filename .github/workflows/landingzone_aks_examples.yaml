@@ -3,7 +3,7 @@
 # Licensed under the MIT License.
 #
 
-name: landingzone_aks_100
+name: landingzone_aks_example
 
 on:
   pull_request:
