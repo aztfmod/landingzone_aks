@@ -1,6 +1,5 @@
 aks_clusters = {
   cluster_re1 = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-re1-001"
     resource_group_key = "aks_re1"
     os_type            = "Linux"
@@ -52,17 +51,16 @@ aks_clusters = {
 
     node_resource_group_name = "aks-nodes-re1"
 
-    # diagnostic_profiles = {
-    #   central_logs_region1 = {
-    #     definition_key   = "aks_cluster"
-    #     destination_type = "log_analytics"
-    #     destination_key  = "central_logs"
-    #   }
-    # }
+    diagnostic_profiles = {
+      central_logs_region1 = {
+        definition_key   = "azure_kubernetes_cluster"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
   }
 
   cluster_re2 = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-re2-001"
     resource_group_key = "aks_re2"
     os_type            = "Linux"
@@ -102,7 +100,7 @@ aks_clusters = {
       enabled_auto_scaling  = false
       enable_node_public_ip = false
       max_pods              = 30
-      node_count            = 1
+      node_count            = 3
       os_disk_size_gb       = 512
       orchestrator_version  = "1.17.11"
       tags = {
@@ -112,12 +110,12 @@ aks_clusters = {
 
     node_resource_group_name = "aks-nodes-re2"
 
-    # diagnostic_profiles = {
-    #   central_logs_region1 = {
-    #     definition_key   = "azure_kubernetes_cluster"
-    #     destination_type = "log_analytics"
-    #     destination_key  = "central_logs"
-    #   }
-    # }
+    diagnostic_profiles = {
+      central_logs_region2 = {
+        definition_key   = "azure_kubernetes_cluster"
+        destination_type = "log_analytics"
+        destination_key  = "central_logs"
+      }
+    }
   }
 }

@@ -8,9 +8,10 @@ aks_clusters = {
       type = "SystemAssigned"
     }
 
-    kubernetes_version = "1.17.11"
-    lz_key             = "networking_spoke_aks"
-    vnet_key           = "spoke_aks_re1"
+    kubernetes_version = "1.18.8"
+
+    lz_key   = "networking_spoke_aks"
+    vnet_key = "spoke_aks_re1"
 
     network_policy = {
       network_plugin    = "azure"
@@ -19,12 +20,10 @@ aks_clusters = {
 
     enable_rbac = true
 
-    # admin_groups = {
-    #   # ids = []
-    #   # azuread_groups = {
-    #   #   keys = []
-    #   # }
-    # }
+    admin_groups = {
+      # ids = []
+      azuread_group_keys = []
+    }
 
     load_balancer_profile = {
       # Only one option can be set
@@ -42,7 +41,7 @@ aks_clusters = {
       max_pods              = 30
       node_count            = 1
       os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.11"
+      orchestrator_version  = "1.18.8"
       tags = {
         "project" = "system services"
       }
@@ -50,6 +49,36 @@ aks_clusters = {
 
     node_resource_group_name = "aks-nodes-re1"
 
+    node_pools = {
+      pool_blue = {
+        name                 = "nodepool1"
+        mode                 = "User"
+        subnet_key           = "aks_nodepool_user1"
+        max_pods             = 30
+        vm_size              = "Standard_DS2_v2"
+        node_count           = 1
+        enable_auto_scaling  = false
+        os_disk_size_gb      = 512
+        orchestrator_version = "1.17.11"
+        tags = {
+          "project" = "user services"
+        }
+      }
+      pool_green = {
+        name                 = "nodepool2"
+        mode                 = "User"
+        subnet_key           = "aks_nodepool_user1"
+        max_pods             = 30
+        vm_size              = "Standard_DS2_v2"
+        node_count           = 1
+        enable_auto_scaling  = false
+        os_disk_size_gb      = 512
+        orchestrator_version = "1.18.8"
+        tags = {
+          "project" = "user services"
+        }
+      }
+    }
     diagnostic_profiles = {
       central_logs_region1 = {
         definition_key   = "azure_kubernetes_cluster"

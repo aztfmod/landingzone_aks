@@ -24,10 +24,13 @@ variable tags {
 
 variable helm_charts {}
 
-variable landingzone_key {}
-variable cluster_key {}
-
 variable rover_version {
   default = null
 }
 
+variable cluster_re1_key {
+  default = null
+}
+variable cluster_re2_key {
+  default = null
+}

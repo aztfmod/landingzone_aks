@@ -17,7 +17,6 @@ resource_groups = {
 
 aks_clusters = {
   cluster_rg1 = {
-    helm_keys          = ["flux", "podIdentify"]
     name               = "akscluster-001"
     resource_group_key = "aks_rg1"
     os_type            = "Linux"
@@ -26,7 +25,7 @@ aks_clusters = {
       type = "SystemAssigned"
     }
 
-    kubernetes_version = "1.17.7"
+    kubernetes_version = "1.18.8"
 
     networking = {
 
@@ -68,7 +67,7 @@ aks_clusters = {
       node_count            = 3
       node_taint            = ["CriticalAddonsOnly=true:NoSchedule"]
       os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.7"
+      orchestrator_version  = "1.18.8"
       tags = {
         "project" = "system services"
       }
@@ -84,18 +83,7 @@ aks_clusters = {
         node_count           = 3
         enable_auto_scaling  = false
         os_disk_size_gb      = 64
-        orchestrator_version = "1.16.10"
-      }
-      pool2 = {
-        name                 = "nodepool2"
-        mode                 = "User"
-        subnet_key           = "aks_nodepool_user2"
-        max_pods             = 10
-        vm_size              = "Standard_DS2_v2"
-        node_count           = 3
-        enable_auto_scaling  = false
-        os_disk_size_gb      = 64
-        orchestrator_version = "1.17.7"
+        orchestrator_version = "1.17.11"
       }
     }
 

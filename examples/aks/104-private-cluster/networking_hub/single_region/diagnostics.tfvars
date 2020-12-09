@@ -8,7 +8,7 @@
 #     name = "operational_logs_and_metrics"
 #     categories = {
 #       log = [
-#         #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+#         #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
 #         ["AzureFirewallApplicationRule", true, true, 7],
 #         ["AzureFirewallNetworkRule", true, true, 7],
 #         ["AzureFirewallDnsProxy", true, true, 7],
@@ -23,7 +23,7 @@
 #     name = "operational_logs_and_metrics"
 #     categories = {
 #       log = [
-#         #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+#         #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
 #         ["DDoSProtectionNotifications", true, true, 7],
 #         ["DDoSMitigationFlowLogs", true, true, 7],
 #         ["DDoSMitigationReports", true, true, 7],

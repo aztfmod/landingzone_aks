@@ -38,22 +38,72 @@ Ensure the below is set prior to apply or destroy.
 rover login -t [TENANT_ID/TENANT_NAME] -s [SUBSCRIPTION_GUID]
 # Environment is needed to be defined, otherwise the below LZs will land into sandpit which someone else is working on
 export environment=[YOUR_ENVIRONMENT]
-export random_length=10
+# Set the folder name of this example
+example=401-blue-green-nodepool
+
 ```
 
 ## Run AKS landing zone deployment
 
+### Step 0: Deploy Blue Nodepool
 ```bash
-# Set the folder name of this example
-example=101-single-cluster
-
 rover -lz /tf/caf/ \
   -tfstate landingzone_aks.tfstate \
-  -var-folder /tf/caf/examples/aks/${example} \
+  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-file /tf/caf/examples/aks/${example}/aks_step0.tfvars \
   -var tags={example=\"${example}\"} \
   -env ${environment} \
   -level level3 \
-  -var random_length=10 \
+  -a [plan|apply]
+```
+
+### Step 1: Upgrade Control Plane, system Nodepool and adding Green Nodepool
+```bash
+rover -lz /tf/caf/ \
+  -tfstate landingzone_aks.tfstate \
+  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-file /tf/caf/examples/aks/${example}/aks_step1.tfvars \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
+  -a [plan|apply]
+
+```
+
+### Step 2: Cordon, Drain & Delete Blue Nodepool
+Login to the cluster using *aks_kubeconfig_admin_cmd* or *aks_kubeconfig_cmd* output: *"az aks get-credentials..."*
+
+```bash
+rover -lz /tf/caf/ \
+  -tfstate landingzone_aks.tfstate \
+  -level level3 \
+  -a output \
+  -json \
+  -o output.json
+
+cat output.json | jq -r .aks_clusters.value.cluster_aks.cluster_re1.aks_kubeconfig_admin_cmd | bash
+```
+
+Cordon Blue NodePool
+
+```bash
+kubectl cordon -l agentpool=nodepool1
+```
+
+Drain Blue NodePool
+```bash
+kubectl drain -l agentpool=nodepool1 --ignore-daemonsets --delete-local-data
+```
+
+Delete Blue NodePool
+```bash
+rover -lz /tf/caf/ \
+  -tfstate ${example}_landingzone_aks.tfstate \
+  -var-file /tf/caf/examples/aks/${example}/configuration.tfvars \
+  -var-file /tf/caf/examples/aks/${example}/aks_step2.tfvars \
+  -var tags={example=\"${example}\"} \
+  -env ${environment} \
+  -level level3 \
   -a [plan|apply]
 ```
 

@@ -11,9 +11,8 @@ landingzone = {
   }
 }
 
-landingzone_key = "cluster_aks"
-cluster_key     = "cluster_re1"
-
+cluster_re1_key = "cluster_re1"
+cluster_re2_key = "cluster_re2"
 
 namespaces = {
   argocd = {

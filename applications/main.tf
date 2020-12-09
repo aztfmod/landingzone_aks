@@ -27,27 +27,49 @@ provider "azurerm" {
 
 
 provider "kubernetes" {
-  load_config_file = false
-
-  host     = local.host
-  username = local.username
-  password = local.password
-
-  client_certificate     = local.client_certificate
-  client_key             = local.client_key
-  cluster_ca_certificate = local.cluster_ca_certificate
+  load_config_file       = false
+  host                   = try(local.k8sconfigs[0].host, null)
+  username               = try(local.k8sconfigs[0].username, null)
+  password               = try(local.k8sconfigs[0].password, null)
+  client_certificate     = try(local.k8sconfigs[0].client_certificate, null)
+  client_key             = try(local.k8sconfigs[0].client_key, null)
+  cluster_ca_certificate = try(local.k8sconfigs[0].cluster_ca_certificate, null)
+  alias                  = "k8s1"
 }
 
 provider "helm" {
   kubernetes {
-    load_config_file = false
-
-    host     = local.host
-    username = local.username
-    password = local.password
-
-    client_certificate     = local.client_certificate
-    client_key             = local.client_key
-    cluster_ca_certificate = local.cluster_ca_certificate
+    load_config_file       = false
+    host                   = try(local.k8sconfigs[0].host, null)
+    username               = try(local.k8sconfigs[0].username, null)
+    password               = try(local.k8sconfigs[0].password, null)
+    client_certificate     = try(local.k8sconfigs[0].client_certificate, null)
+    client_key             = try(local.k8sconfigs[0].client_key, null)
+    cluster_ca_certificate = try(local.k8sconfigs[0].cluster_ca_certificate, null)
   }
+  alias = "helm1"
+}
+
+provider "kubernetes" {
+  load_config_file       = false
+  host                   = try(local.k8sconfigs[1].host, null)
+  username               = try(local.k8sconfigs[1].username, null)
+  password               = try(local.k8sconfigs[1].password, null)
+  client_certificate     = try(local.k8sconfigs[1].client_certificate, null)
+  client_key             = try(local.k8sconfigs[1].client_key, null)
+  cluster_ca_certificate = try(local.k8sconfigs[1].cluster_ca_certificate, null)
+  alias                  = "k8s2"
+}
+
+provider "helm" {
+  kubernetes {
+    load_config_file       = false
+    host                   = try(local.k8sconfigs[1].host, null)
+    username               = try(local.k8sconfigs[1].username, null)
+    password               = try(local.k8sconfigs[1].password, null)
+    client_certificate     = try(local.k8sconfigs[1].client_certificate, null)
+    client_key             = try(local.k8sconfigs[1].client_key, null)
+    cluster_ca_certificate = try(local.k8sconfigs[1].cluster_ca_certificate, null)
+  }
+  alias = "helm2"
 }

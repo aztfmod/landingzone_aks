@@ -8,12 +8,12 @@ diagnostics_definition = {
     name = "operational_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
         ["ContainerRegistryRepositoryEvents", true, false, 7],
         ["ContainerRegistryLoginEvents", true, false, 7],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
         ["AllMetrics", true, false, 7],
       ]
     }
@@ -22,7 +22,7 @@ diagnostics_definition = {
     name = "aks_logs_and_metrics"
     categories = {
       log = [
-        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period] 
+        # ["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
         ["kube-apiserver", true, false, 7],
         ["kube-audit", true, false, 7],
         ["kube-audit-admin", true, false, 7],
@@ -32,7 +32,7 @@ diagnostics_definition = {
         ["guard", true, false, 7],
       ]
       metric = [
-        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]                 
+        #["Category name",  "Diagnostics Enabled(true/false)", "Retention Enabled(true/false)", Retention_period]
         ["AllMetrics", true, false, 7],
       ]
     }

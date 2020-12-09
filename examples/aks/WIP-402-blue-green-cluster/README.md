@@ -38,7 +38,7 @@ rover -lz /tf/caf/ \
       -tfstate ${example}_landingzone_aks.tfstate \
       -var-file /tf/caf/examples/aks/${example}/blue.tfvars \
       -var tags={example=\"${example}\"} \
-      -a apply      
+      -a apply
 ```
 ### 3. Destroy Landingzones
 Have fun playing with the landing zone an once you are done, you can simply delete the deployment using:
