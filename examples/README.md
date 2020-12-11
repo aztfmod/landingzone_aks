@@ -22,6 +22,7 @@ For a review of the hierarchy approach of Cloud Adoption Framework for Azure lan
 | [102-multi-nodepools](./aks/102-multi-nodepools)| Provision single AKS cluster with multiple node pool within separate subnet (1 open virtual network). |
 | [103-multi-clusters](./aks/103-multi-clusters)| Provision multiple AKS clusters in separate regions, using availability zones.                     |
 | [104-private-cluster](./aks/104-private-cluster)| Provision private AKS clusters within private virtual network with Hub & Spoke UDR to Azure Firewall |
+| [401-blue-green-nodepool](./aks/401-blue-green-nodepool)| Provision single AKS cluster and perform blue green nodepool upgrade with 0 downtime |
 
 ### AKS Application landing zone  (level 4)
 
