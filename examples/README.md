@@ -31,7 +31,6 @@ Deploys Applications Landing zone on top of an AKS Landing zone
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | [Flux](./examples/applications/flux)| Provision Flux helm charts on AKS LZ |
 | [ArgoCD](./examples/applications/argocd)| Provision ArgoCD helm charts on AKS LZ |
-| [Kafka](./examples/applications/kafa)| Provision Kafka helm charts on AKS LZ |
 
 ## Setting up your test environment
 
