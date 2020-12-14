@@ -73,7 +73,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.0.0'
 
       - name: Login azure
         run: |

@@ -5,7 +5,7 @@ landingzone = {
 }
 
 enable = {
-  bastion_hosts    = false
+  bastion_hosts    = true
   virtual_machines = false
 }
 

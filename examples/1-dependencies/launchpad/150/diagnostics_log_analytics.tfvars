@@ -1,7 +1,7 @@
 #
 # Define the settings for log analytics workspace and solution map
 #
-log_analytics = {
+diagnostic_log_analytics = {
   central_logs_region1 = {
     region             = "region1"
     name               = "logs"
