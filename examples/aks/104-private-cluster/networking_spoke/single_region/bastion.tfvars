@@ -1,5 +1,3 @@
-
-
 bastion_hosts = {
   bastion_hub_re1 = {
     name               = "bastion-rg1"
