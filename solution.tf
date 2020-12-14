@@ -1,7 +1,7 @@
 module "caf" {
-  source = "git::https://github.com/aztfmod/terraform-azurerm-caf.git?ref=HN-aks-addons"
-  # source  = "aztfmod/caf/azurerm"
-  # version = "~> 0.4"
+  # source = "git::https://github.com/aztfmod/terraform-azurerm-caf.git?ref=HN-aks-addons"
+  source  = "aztfmod/caf/azurerm"
+  version = "~> 0.4"
 
   current_landingzone_key  = var.landingzone.key
   tfstates                 = local.tfstates
