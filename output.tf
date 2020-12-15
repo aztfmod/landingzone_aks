@@ -17,7 +17,7 @@ output global_settings {
   value     = local.global_settings
   sensitive = true
 }
- 
+
 output virtual_machines {
   value     = module.caf.virtual_machines
   sensitive = false

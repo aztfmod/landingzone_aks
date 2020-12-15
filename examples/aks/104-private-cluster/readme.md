@@ -66,7 +66,12 @@ rover -lz /tf/caf/public/landingzones/caf_networking/ \
 #### Deploy networking spoke services
 
 ```bash
+TF_VAR_tfstate_subscription_id="<id of the launchpad subscription>"
+target_subscription="<name of the subscription to deploy AKS>"
+
 rover -lz /tf/caf/public/landingzones/caf_networking/ \
+  -tfstate_subscription_id ${TF_VAR_tfstate_subscription_id} \
+  -target_subscription "${target_subscription}" \
   -tfstate networking_spoke_aks.tfstate \
   -var-folder /tf/caf/examples/1-dependencies/networking/spoke_aks/single_region \
   -var-folder /tf/caf/examples/aks/${example}/networking_spoke/single_region \
@@ -83,8 +88,12 @@ Once deployed, you should have the following network topology:
 ```bash
 #Set the folder name of this example
 example=104-private-cluster
+TF_VAR_tfstate_subscription_id="<id of the launchpad subscription>"
+target_subscription="<name of the subscription to deploy AKS>"
 
 rover -lz /tf/caf/ \
+  -tfstate_subscription_id ${TF_VAR_tfstate_subscription_id} \
+  -target_subscription "${target_subscription}" \
   -tfstate landingzone_aks.tfstate \
   -var-folder /tf/caf/examples/aks/${example} \
   -var tags={example=\"${example}\"} \
