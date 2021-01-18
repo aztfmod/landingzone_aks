@@ -59,7 +59,7 @@ aks_clusters = {
         node_count           = 1
         enable_auto_scaling  = false
         os_disk_size_gb      = 512
-        orchestrator_version = "1.17.11"
+        orchestrator_version = "1.19.6"
         tags = {
           "project" = "user services"
         }

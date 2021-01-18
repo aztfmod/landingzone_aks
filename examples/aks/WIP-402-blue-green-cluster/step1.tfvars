@@ -83,7 +83,7 @@ aks_clusters = {
         node_count           = 3
         enable_auto_scaling  = false
         os_disk_size_gb      = 64
-        orchestrator_version = "1.17.11"
+        orchestrator_version = "1.19.6"
       }
     }
 

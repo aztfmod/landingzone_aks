@@ -25,7 +25,7 @@ aks_clusters = {
       type = "SystemAssigned"
     }
 
-    kubernetes_version = "1.17.11"
+    kubernetes_version = "1.19.6"
 
     networking = {
 
@@ -67,7 +67,7 @@ aks_clusters = {
       node_count            = 3
       node_taint            = ["CriticalAddonsOnly=true:NoSchedule"]
       os_disk_size_gb       = 512
-      orchestrator_version  = "1.17.11"
+      orchestrator_version  = "1.19.6"
       tags = {
         "project" = "system services"
       }
@@ -83,7 +83,7 @@ aks_clusters = {
         node_count           = 3
         enable_auto_scaling  = false
         os_disk_size_gb      = 64
-        orchestrator_version = "1.17.11"
+        orchestrator_version = "1.19.6"
       }
     }
 
