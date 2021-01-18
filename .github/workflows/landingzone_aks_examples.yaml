@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -109,7 +109,7 @@ jobs:
     needs: foundations
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -119,7 +119,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -145,7 +145,7 @@ jobs:
     needs: foundations
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -155,7 +155,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -181,7 +181,7 @@ jobs:
     needs: [foundations, networking_hub]
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -191,7 +191,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -227,7 +227,7 @@ jobs:
           ]
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -237,7 +237,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -275,7 +275,7 @@ jobs:
       example: "401-blue-green-nodepool"
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -285,7 +285,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -301,7 +301,7 @@ jobs:
             -var-file ${GITHUB_WORKSPACE}/examples/aks/${{ env.example }}/aks_step0.tfvars \
             '-var tags={testing_job_id="${{ github.run_id }}"}' \
             --environment ${{ github.run_id }}
-            
+
       - name: deploy aks_cluster step1
         run: |
           /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE} -a apply \
@@ -361,7 +361,7 @@ jobs:
       example: "104-private-cluster"
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -371,7 +371,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -426,7 +426,7 @@ jobs:
     needs: [aks_clusters, private_cluster]
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -436,7 +436,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -464,7 +464,7 @@ jobs:
     needs: [aks_clusters, private_cluster]
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -474,7 +474,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -502,7 +502,7 @@ jobs:
     needs: [destroy_networking_spoke]
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -512,7 +512,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: '2010.0.2'
+          ref: '2012.1.0'
 
       - name: Login azure
         run: |
@@ -539,7 +539,7 @@ jobs:
     needs: [destroy_shared_services, destroy_networking_hub]
 
     container:
-      image: aztfmod/rover:2011.3012
+      image: aztfmod/rover:2012.1109
       options: --user 0
 
     steps:
@@ -547,7 +547,7 @@ jobs:
         with:
           repository: Azure/caf-terraform-landingzones
           path: public
-          ref: "2010.0.2"
+          ref: "2012.1.0"
 
       - name: Login azure
         run: |
